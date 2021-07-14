@@ -16,10 +16,6 @@
   <dependencies>
     <dependency>
       <groupId>com.azure.spring</groupId>
-      <artifactId>spring-cloud-azure-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.azure.spring</groupId>
       <artifactId>spring-cloud-azure-autoconfigure</artifactId>
     </dependency>
     <dependency>
