@@ -25,6 +25,11 @@
       <name>GitHub Packages</name>
       <url>https://maven.pkg.github.com/stliu/spring-cloud-azure</url>
     </repository>
+      <snapshotRepository>
+        <id>github</id>
+        <name>GitHub Packages</name>
+        <url>https://maven.pkg.github.com/stliu/spring-cloud-azure</url>
+      </snapshotRepository>
   </distributionManagement>
 
   <properties>
