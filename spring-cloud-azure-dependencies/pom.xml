@@ -16,7 +16,13 @@
   <name>Spring Cloud Azure Dependencies</name>
   <description>Spring Cloud Azure Dependencies</description>
   <packaging>pom</packaging>
-
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+      <name>GitHub Packages</name>
+      <url>https://maven.pkg.github.com/stliu/spring-cloud-azure</url>
+    </repository>
+  </distributionManagement>
   <properties>
     <azure.sdk.bom>1.0.3</azure.sdk.bom>
     <azure.management.sdk>2.6.0</azure.management.sdk>
