@@ -19,6 +19,13 @@
     <module>spring-cloud-azure-resourcemanager</module>
     <module>spring-cloud-azure-starter</module>
   </modules>
+    <distributionManagement>
+    <repository>
+      <id>github</id>
+      <name>GitHub Packages</name>
+      <url>https://maven.pkg.github.com/stliu/spring-cloud-azure</url>
+    </repository>
+  </distributionManagement>
 
   <properties>
     <app-engine-maven-plugin.version>2.4.0</app-engine-maven-plugin.version>
