@@ -3,10 +3,10 @@ package com.azure.spring.autoconfigure.messaging.eventhub;
 import com.azure.messaging.eventhubs.EventHubClientBuilder;
 import com.azure.spring.autoconfigure.core.ServiceClientBuilderCustomizer;
 
-public class EventhubBuilderCustomizer  implements ServiceClientBuilderCustomizer<EventHubClientBuilder> {
+public interface EventhubBuilderCustomizer  extends ServiceClientBuilderCustomizer<EventHubClientBuilder> {
 
     @Override
-    public void customize(EventHubClientBuilder builder) {
+    default void customize(EventHubClientBuilder builder) {
 
     }
 }

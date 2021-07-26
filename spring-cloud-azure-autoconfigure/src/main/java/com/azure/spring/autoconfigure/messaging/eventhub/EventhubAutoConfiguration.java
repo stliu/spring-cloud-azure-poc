@@ -5,6 +5,7 @@ import com.azure.messaging.eventhubs.EventHubConsumerAsyncClient;
 import com.azure.messaging.eventhubs.EventHubConsumerClient;
 import com.azure.messaging.eventhubs.EventHubProducerAsyncClient;
 import com.azure.messaging.eventhubs.EventHubProducerClient;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -23,16 +24,16 @@ public class EventhubAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public EventhubBuilderCustomizer eventhubBuilderCustomizer() {
-        return new EventhubBuilderCustomizer();
+        return new EventhubBuilderCustomizer(){};
     }
 
     @Bean
     @ConditionalOnMissingBean
     public EventHubClientBuilder eventHubClientBuilder(EventHubProperties properties,
-        EventhubBuilderCustomizer customizer) {
+        ObjectProvider<EventhubBuilderCustomizer> configurers) {
         EventHubClientBuilder builder = new EventHubClientBuilder();
 
-        customizer.customize(builder);
+        configurers.orderedStream().forEach(c -> c.customize(builder));
         return builder;
     }
 

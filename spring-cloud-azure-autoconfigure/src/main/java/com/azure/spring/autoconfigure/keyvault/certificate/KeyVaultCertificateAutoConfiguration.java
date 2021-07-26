@@ -1,8 +1,8 @@
-package com.azure.spring.autoconfigure.keyvault.secret;
+package com.azure.spring.autoconfigure.keyvault.certificate;
 
-import com.azure.security.keyvault.secrets.SecretAsyncClient;
-import com.azure.security.keyvault.secrets.SecretClient;
-import com.azure.security.keyvault.secrets.SecretClientBuilder;
+import com.azure.security.keyvault.certificates.CertificateAsyncClient;
+import com.azure.security.keyvault.certificates.CertificateClient;
+import com.azure.security.keyvault.certificates.CertificateClientBuilder;
 import com.azure.spring.autoconfigure.keyvault.KeyVaultAutoConfiguration;
 import com.azure.spring.autoconfigure.keyvault.KeyVaultProperties;
 import org.springframework.beans.factory.ObjectProvider;
@@ -16,36 +16,35 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnClass(SecretClientBuilder.class)
-@ConditionalOnProperty(prefix = "spring.cloud.azure.keyvault.secret", name = "enabled", matchIfMissing = true)
-@EnableConfigurationProperties(KeyVaultSecretProperties.class)
+@ConditionalOnClass(CertificateClientBuilder.class)
+@ConditionalOnProperty(prefix = "spring.cloud.azure.keyvault.certificate", name = "enabled", matchIfMissing = true)
+@EnableConfigurationProperties(KeyVaultCertificateProperties.class)
 @AutoConfigureAfter({KeyVaultAutoConfiguration.class})
-public class KeyVaultSecretAutoConfiguration {
+public class KeyVaultCertificateAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public SecretClient azureKeyVaultSecretClient(SecretClientBuilder builder) {
+    public CertificateClient azureKeyVaultSecretClient(CertificateClientBuilder builder) {
         return builder.buildClient();
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public SecretAsyncClient azureKeyVaultSecretAsyncClient(SecretClientBuilder builder) {
+    public CertificateAsyncClient azureKeyVaultSecretAsyncClient(CertificateClientBuilder builder) {
         return builder.buildAsyncClient();
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public SecretClientBuilder secretClientBuilder(KeyVaultProperties keyVaultProperties,
-        KeyVaultSecretProperties keyVaultSecretProperties,
-        ObjectProvider<KeyVaultSecretBuilderCustomizer> configurers) {
-        SecretClientBuilder builder = new SecretClientBuilder();
+    public CertificateClientBuilder secretClientBuilder(KeyVaultProperties keyVaultProperties,
+        KeyVaultCertificateProperties keyVaultCertificateProperties,
+        ObjectProvider<KeyVaultCertificateBuilderCustomizer> configurers) {
+        CertificateClientBuilder builder = new CertificateClientBuilder();
         PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
 
         map.from(keyVaultProperties.getEndpoint()).to(builder::vaultUrl);
-        map.from(keyVaultSecretProperties.getServiceVersion()).to(builder::serviceVersion);
+        map.from(keyVaultCertificateProperties.getServiceVersion()).to(builder::serviceVersion);
         configurers.orderedStream().forEach(c -> c.customize(builder));
         return builder;
     }
-
 }
