@@ -1,7 +1,7 @@
 package com.azure.spring.autoconfigure.core;
 
 @FunctionalInterface
-public interface ServiceClientBuilderCustomizer<BUILDER> {
+public interface ServiceClientBuilderCustomizer<T extends AzureServiceClientBuilder<?>> {
 
-    void customize(BUILDER builder);
+    void customize(T builder);
 }

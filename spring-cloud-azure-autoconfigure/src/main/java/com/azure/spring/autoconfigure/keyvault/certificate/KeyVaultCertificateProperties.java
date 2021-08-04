@@ -3,10 +3,11 @@ package com.azure.spring.autoconfigure.keyvault.certificate;
 import com.azure.security.keyvault.certificates.CertificateServiceVersion;
 import com.azure.security.keyvault.secrets.SecretServiceVersion;
 import com.azure.spring.autoconfigure.core.ServiceVersionProvider;
+import com.azure.spring.core.identify.AzureProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "spring.cloud.azure.keyvault.certificate")
-public class KeyVaultCertificateProperties implements ServiceVersionProvider<CertificateServiceVersion> {
+public class KeyVaultCertificateProperties extends AzureProperties implements ServiceVersionProvider<CertificateServiceVersion> {
 
     private CertificateServiceVersion serviceVersion;
 
