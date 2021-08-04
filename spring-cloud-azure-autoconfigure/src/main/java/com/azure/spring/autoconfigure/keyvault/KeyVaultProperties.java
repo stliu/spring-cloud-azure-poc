@@ -1,6 +1,6 @@
 package com.azure.spring.autoconfigure.keyvault;
 
-import com.azure.spring.autoconfigure.core.ServiceEndpointProvider;
+import com.azure.spring.core.ServiceEndpointProvider;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "spring.cloud.azure.keyvault")

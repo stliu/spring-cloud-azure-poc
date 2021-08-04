@@ -40,8 +40,10 @@ public class KeyVaultSecretAutoConfiguration {
         KeyVaultSecretProperties keyVaultSecretProperties,
         ObjectProvider<KeyVaultSecretBuilderCustomizer> configurers) {
         SecretClientBuilder builder = new SecretClientBuilder();
-        PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
 
+
+
+        PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
         map.from(keyVaultProperties.getEndpoint()).to(builder::vaultUrl);
         map.from(keyVaultSecretProperties.getServiceVersion()).to(builder::serviceVersion);
         configurers.orderedStream().forEach(c -> c.customize(builder));

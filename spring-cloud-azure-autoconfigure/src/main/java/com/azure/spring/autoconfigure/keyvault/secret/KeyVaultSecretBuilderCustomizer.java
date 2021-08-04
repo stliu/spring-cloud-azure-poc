@@ -1,7 +1,7 @@
 package com.azure.spring.autoconfigure.keyvault.secret;
 
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
-import com.azure.spring.autoconfigure.core.ServiceClientBuilderCustomizer;
+import com.azure.spring.core.ServiceClientBuilderCustomizer;
 
 public interface KeyVaultSecretBuilderCustomizer extends ServiceClientBuilderCustomizer<SecretClientBuilder> {
 

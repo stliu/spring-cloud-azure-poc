@@ -1,6 +1,6 @@
 package com.azure.spring.autoconfigure.storage.blob;
 
-import com.azure.spring.autoconfigure.core.ServiceVersionProvider;
+import com.azure.spring.core.ServiceVersionProvider;
 import com.azure.storage.blob.BlobServiceVersion;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
