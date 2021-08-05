@@ -2,6 +2,7 @@ package com.azure.spring.autoconfigure.core;
 
 import com.azure.spring.autoconfigure.keyvault.certificate.KeyVaultCertificateProperties;
 import com.azure.spring.autoconfigure.keyvault.certificate.KeyVaultCertificateServiceClientBuilder;
+import com.azure.spring.autoconfigure.keyvault.secret.KeyVaultSecretServiceClientBuilder;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -16,10 +17,15 @@ public abstract class AbstractSpringPostProcessor implements ApplicationContextA
 
     ApplicationContext applicationContext;
     static final String DEFAULT_CHAINED_TOKEN_CREDENTIAL_BEAN_NAME = "defaultChainedTokenCredential";
+    /**
+     * Client builder class and the properties class which extends AzureProperties.
+     */
     static final Map<Class, Class> MODULAR_BUILDER_PROPERTIES_CLASS_MAPPING = new HashMap<>();
 
     static {
         MODULAR_BUILDER_PROPERTIES_CLASS_MAPPING.put(KeyVaultCertificateServiceClientBuilder.class, KeyVaultCertificateProperties.class);
+        MODULAR_BUILDER_PROPERTIES_CLASS_MAPPING.put(KeyVaultSecretServiceClientBuilder.class, KeyVaultCertificateProperties.class);
+        // other relationships
     }
 
     @Override
