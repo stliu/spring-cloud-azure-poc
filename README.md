@@ -45,3 +45,26 @@ graph TD
 * spring security
 * spring integration
 * spring cloud stream
+
+
+## Service Builder Design
+
+There are two kinds of sdk client libraries from transport perspective, and they share some common infrastructure from the core, for example like
+
+* azure environment configuration
+* proxy config
+
+```mermaid
+graph TD
+
+core --> http
+core --> amqp
+
+```
+
+Spring design
+```mermaid
+graph TD
+HttpBuilderFactory --> BuilderFactory
+AMQPBuilderFactory --> BuilderFactory
+```
