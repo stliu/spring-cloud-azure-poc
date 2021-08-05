@@ -1,15 +1,35 @@
 package com.azure.spring.core;
 
-public class SpringKeyCredentialBuilder {
+import java.util.Optional;
+import java.util.function.Supplier;
 
-    private String keyCredential;
+public class SpringKeyCredentialBuilder<T> {
 
-    SpringKeyCredentialBuilder keyCredential(String keyCredential) {
-        this.keyCredential = keyCredential;
+    private T keyCredential;
+    private IAzureKeyCredentialResolver<T> credentialResolver;
+    Supplier<T> keyCredentialSupplier;
+
+    public SpringKeyCredentialBuilder resolve(IAzureKeyCredentialResolver<T> credentialResolver) {
+        this.credentialResolver = credentialResolver;
         return this;
     }
 
-    public SpringKeyCredential build() {
-        return new SpringKeyCredential(keyCredential);
+    public SpringKeyCredentialBuilder supply(Supplier<T> keyCredentialSupplier) {
+        this.keyCredentialSupplier = keyCredentialSupplier;
+        return this;
+    }
+
+    public T build() {
+        Optional.ofNullable(credentialResolver).ifPresent(resolver -> {
+            if (this.keyCredential != null) {
+                this.keyCredential = resolver.resolve();
+            }
+        });
+        Optional.ofNullable(keyCredentialSupplier).ifPresent(supply -> {
+            if (this.keyCredential != null) {
+                this.keyCredential = supply.get();
+            }
+        });
+        return keyCredential;
     }
 }

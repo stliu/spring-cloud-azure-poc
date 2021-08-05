@@ -4,7 +4,9 @@ import com.azure.core.credential.TokenCredential;
 import com.azure.core.http.HttpPipeline;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
 import com.azure.security.keyvault.secrets.SecretServiceVersion;
-import com.azure.spring.core.AzureServiceFeature;
+import com.azure.spring.core.http.HttpClientSupplier;
+import com.azure.spring.core.http.HttpProperties;
+import com.azure.spring.core.identify.AzureServiceFeature;
 import com.azure.spring.core.http.AzureHttpClientBuilderFactory;
 import com.azure.spring.core.http.HttpPipelineAware;
 import com.azure.spring.core.TokenCredentialAware;
@@ -30,11 +32,20 @@ public class KeyVaultSecretServiceClientBuilderFactory implements
         delegated = new SecretClientBuilder();
         PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
         map.from(keyVaultProperties.getEndpoint()).to(this::vaultUrl);
-//        map.from(keyVaultCertificateProperties.getServiceVersion()).to(this::serviceVersion);
+    }
+
+    @Override
+    public HttpProperties getHttpProperties() {
+        return null;
     }
 
     @Override
     public HttpPipelinePoliciesSupplier getHttpPipelinePolicySupplier() {
+        return null;
+    }
+
+    @Override
+    public HttpClientSupplier getHttpClientSupplier() {
         return null;
     }
 

@@ -1,15 +1,40 @@
 package com.azure.spring.core;
 
-public class SpringConnectionStringBuilder {
+import java.util.Optional;
+import java.util.function.Supplier;
 
-    String connectionString;
+public class SpringConnectionStringBuilder<T> {
 
-    SpringConnectionStringBuilder connectionString(String connectionString) {
+    T connectionString;
+    Supplier<T> connectionStringSupplier;
+    ISpringConnectionStringResolver<T> connectionStringResolver;
+
+    SpringConnectionStringBuilder connectionString(T connectionString) {
         this.connectionString = connectionString;
         return this;
     }
 
-    public SpringConnectionString build() {
-        return new SpringConnectionString(connectionString);
+    public SpringConnectionStringBuilder supply(Supplier<T> connectionStringSupplier) {
+        this.connectionStringSupplier = connectionStringSupplier;
+        return this;
+    }
+
+    public SpringConnectionStringBuilder resolve(ISpringConnectionStringResolver connectionStringResolver) {
+        this.connectionStringResolver = connectionStringResolver;
+        return this;
+    }
+
+    public T build() {
+        Optional.ofNullable(connectionStringResolver).ifPresent(resolver -> {
+            if (this.connectionString != null) {
+                this.connectionString = resolver.resolve();
+            }
+        });
+        Optional.ofNullable(connectionStringSupplier).ifPresent(supply -> {
+            if (this.connectionString != null) {
+                this.connectionString = supply.get();
+            }
+        });
+        return connectionString;
     }
 }
