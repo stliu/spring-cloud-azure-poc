@@ -1,31 +1,32 @@
-package com.azure.spring.autoconfigure.keyvault.certificate;
+package com.azure.spring.autoconfigure.keyvault.secret;
 
 import com.azure.core.credential.TokenCredential;
 import com.azure.core.http.HttpPipeline;
 import com.azure.core.http.policy.HttpLogOptions;
-import com.azure.security.keyvault.certificates.CertificateClientBuilder;
-import com.azure.security.keyvault.certificates.CertificateServiceVersion;
+import com.azure.security.keyvault.secrets.SecretClientBuilder;
+import com.azure.security.keyvault.secrets.SecretServiceVersion;
 import com.azure.spring.autoconfigure.core.AzureServiceClientBuilder;
 import com.azure.spring.autoconfigure.core.SpringConnectionString;
 import com.azure.spring.autoconfigure.core.SpringKeyCredential;
 import com.azure.spring.autoconfigure.keyvault.KeyVaultProperties;
+import com.azure.spring.autoconfigure.keyvault.certificate.KeyVaultCertificateProperties;
 import org.springframework.boot.context.properties.PropertyMapper;
 
-public class KeyVaultCertificateServiceClientBuilder implements AzureServiceClientBuilder<CertificateClientBuilder> {
+public class KeyVaultSecretServiceClientBuilder implements AzureServiceClientBuilder<SecretClientBuilder> {
 
-    private CertificateClientBuilder delegated;
+    private SecretClientBuilder delegated;
     private KeyVaultProperties keyVaultProperties;
     private KeyVaultCertificateProperties keyVaultCertificateProperties;
 
-    public KeyVaultCertificateServiceClientBuilder(KeyVaultProperties keyVaultProperties,
-                                                   KeyVaultCertificateProperties keyVaultCertificateProperties) {
+    public KeyVaultSecretServiceClientBuilder(KeyVaultProperties keyVaultProperties,
+                                              KeyVaultCertificateProperties keyVaultCertificateProperties) {
         this.keyVaultProperties = keyVaultProperties;
         this.keyVaultCertificateProperties = keyVaultCertificateProperties;
 
-        delegated = new CertificateClientBuilder();
+        delegated = new SecretClientBuilder();
         PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
         map.from(keyVaultProperties.getEndpoint()).to(this::vaultUrl);
-        map.from(keyVaultCertificateProperties.getServiceVersion()).to(this::serviceVersion);
+//        map.from(keyVaultCertificateProperties.getServiceVersion()).to(this::serviceVersion);
     }
 
     @Override
@@ -54,16 +55,16 @@ public class KeyVaultCertificateServiceClientBuilder implements AzureServiceClie
     }
 
     @Override
-    public CertificateClientBuilder build() {
+    public SecretClientBuilder build() {
         return delegated;
     }
 
-    public KeyVaultCertificateServiceClientBuilder vaultUrl(String vaultUrl) {
+    public KeyVaultSecretServiceClientBuilder vaultUrl(String vaultUrl) {
         delegated.vaultUrl(vaultUrl);
         return this;
     }
 
-    public KeyVaultCertificateServiceClientBuilder serviceVersion(CertificateServiceVersion version) {
+    public KeyVaultSecretServiceClientBuilder serviceVersion(SecretServiceVersion version) {
         delegated.serviceVersion(version);
         return this;
     }

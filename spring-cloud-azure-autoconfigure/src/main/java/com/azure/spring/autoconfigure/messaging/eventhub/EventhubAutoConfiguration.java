@@ -21,21 +21,21 @@ import org.springframework.context.annotation.Configuration;
 @AutoConfigureAfter
 public class EventhubAutoConfiguration {
 
-    @Bean
-    @ConditionalOnMissingBean
-    public EventhubBuilderCustomizer eventhubBuilderCustomizer() {
-        return new EventhubBuilderCustomizer(){};
-    }
+//    @Bean
+//    @ConditionalOnMissingBean
+//    public EventhubBuilderCustomizer eventhubBuilderCustomizer() {
+//        return new EventhubBuilderCustomizer(){};
+//    }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public EventHubClientBuilder eventHubClientBuilder(EventHubProperties properties,
-        ObjectProvider<EventhubBuilderCustomizer> configurers) {
-        EventHubClientBuilder builder = new EventHubClientBuilder();
-
-        configurers.orderedStream().forEach(c -> c.customize(builder));
-        return builder;
-    }
+//    @Bean
+//    @ConditionalOnMissingBean
+//    public EventHubClientBuilder eventHubClientBuilder(EventHubProperties properties,
+//        ObjectProvider<EventhubBuilderCustomizer> configurers) {
+//        EventHubClientBuilder builder = new EventHubClientBuilder();
+//
+//        configurers.orderedStream().forEach(c -> c.customize(builder));
+//        return builder;
+//    }
 
     @Bean
     @ConditionalOnMissingBean

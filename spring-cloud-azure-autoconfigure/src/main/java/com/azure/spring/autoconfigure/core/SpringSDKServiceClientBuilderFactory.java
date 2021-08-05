@@ -4,39 +4,31 @@ import com.azure.core.credential.TokenCredential;
 import com.azure.core.http.HttpPipeline;
 import com.azure.core.http.policy.HttpLogOptions;
 
-import java.util.List;
 import java.util.Optional;
 
-public class AzureSDKServiceClientBuilderFactory<U extends AzureServiceClientBuilder<T>, T>
-    implements HttpLogOptionsAware, HttpPipelineAware, ConnectionStringAware, AzureKeyCredentialAware, TokenCredentialAware {
+public class SpringSDKServiceClientBuilderFactory<U extends AzureServiceClientBuilder<T>, T>
+    implements HttpLogOptionsAware, HttpPipelineAware, SpringConnectionStringAware, SpringKeyCredentialAware, TokenCredentialAware {
 
     private U builder;
-    private List<ServiceClientBuilderCustomizer<U>> builderCustomizerList;
-
     private HttpLogOptions httpLogOptions;
     private HttpPipeline pipeline;
     private TokenCredential tokenCredential;
     private SpringKeyCredential springKeyCredential;
     private SpringConnectionString springConnectionString;
 
-//    public AzureSDKServiceClientBuilderFactory(U builder,
-//                                               List<ServiceClientBuilderCustomizer<U>> builderCustomizerList) {
-//        this.builder = builder;
-//
-//        this.builderCustomizerList = builderCustomizerList;
-//    }
+    public SpringSDKServiceClientBuilderFactory(U builder) {
+        this.builder = builder;
+    }
 
-    public AzureSDKServiceClientBuilderFactory(Class buildClass, List<ServiceClientBuilderCustomizer<U>> builderCustomizerList) {
+    public SpringSDKServiceClientBuilderFactory(Class buildClass) {
         try {
             this.builder = (U) buildClass.getDeclaredConstructor().newInstance();
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
         }
-        this.builderCustomizerList = builderCustomizerList;
     }
 
     public T create() {
-        Optional.ofNullable(builderCustomizerList).ifPresent(list -> list.forEach(c -> c.customize(builder)));
         Optional.ofNullable(httpLogOptions).ifPresent(builder::httpLogOptions);
         Optional.ofNullable(pipeline).ifPresent(builder::pipeline);
         Optional.ofNullable(tokenCredential).ifPresent(builder::tokenCredential);
@@ -46,7 +38,7 @@ public class AzureSDKServiceClientBuilderFactory<U extends AzureServiceClientBui
     }
 
     @Override
-    public void setConnectionString(SpringConnectionString springConnectionString) {
+    public void setSpringConnectionString(SpringConnectionString springConnectionString) {
         this.springConnectionString = springConnectionString;
     }
 
@@ -68,5 +60,9 @@ public class AzureSDKServiceClientBuilderFactory<U extends AzureServiceClientBui
     @Override
     public void setTokenCredential(TokenCredential credential) {
         this.tokenCredential = credential;
+    }
+
+    public Class builderClass() {
+        return builder.getClass();
     }
 }
