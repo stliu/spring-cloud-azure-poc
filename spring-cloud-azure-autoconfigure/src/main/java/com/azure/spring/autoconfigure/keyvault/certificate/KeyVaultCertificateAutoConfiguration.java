@@ -3,10 +3,9 @@ package com.azure.spring.autoconfigure.keyvault.certificate;
 import com.azure.security.keyvault.certificates.CertificateAsyncClient;
 import com.azure.security.keyvault.certificates.CertificateClient;
 import com.azure.security.keyvault.certificates.CertificateClientBuilder;
-import com.azure.spring.autoconfigure.core.SpringSDKServiceClientBuilderFactory;
-import com.azure.spring.autoconfigure.core.AzureServiceClientBuilder;
 import com.azure.spring.autoconfigure.keyvault.KeyVaultAutoConfiguration;
 import com.azure.spring.autoconfigure.keyvault.KeyVaultProperties;
+import com.azure.spring.core.http.HttpProperties;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -36,16 +35,15 @@ public class KeyVaultCertificateAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public SpringSDKServiceClientBuilderFactory<? extends AzureServiceClientBuilder<CertificateClientBuilder>, CertificateClientBuilder>
-        certificateServiceClientBuilderFactory(KeyVaultProperties keyVaultProperties,
-                                               KeyVaultCertificateProperties keyVaultCertificateProperties) {
-        KeyVaultCertificateServiceClientBuilder builder = new KeyVaultCertificateServiceClientBuilder(keyVaultProperties, keyVaultCertificateProperties);
-        return new SpringSDKServiceClientBuilderFactory<>(builder);
+    public KeyVaultCertificateServiceClientBuilderFactory factory(KeyVaultProperties keyVaultProperties,
+                                                       KeyVaultCertificateProperties keyVaultCertificateProperties,
+                                                       HttpProperties httpProperties) {
+        return new KeyVaultCertificateServiceClientBuilderFactory(keyVaultProperties, keyVaultCertificateProperties, httpProperties);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public CertificateClientBuilder secretClientBuilder(SpringSDKServiceClientBuilderFactory<? extends AzureServiceClientBuilder<CertificateClientBuilder>, CertificateClientBuilder> factory) {
-        return factory.create();
+    public CertificateClientBuilder secretClientBuilder(KeyVaultCertificateServiceClientBuilderFactory factory) {
+        return factory.build();
     }
 }

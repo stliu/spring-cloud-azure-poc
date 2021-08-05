@@ -3,11 +3,7 @@ package com.azure.spring.autoconfigure.keyvault.secret;
 import com.azure.security.keyvault.secrets.SecretAsyncClient;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
-import com.azure.spring.autoconfigure.core.AzureServiceClientBuilder;
-import com.azure.spring.autoconfigure.core.SpringSDKServiceClientBuilderFactory;
 import com.azure.spring.autoconfigure.keyvault.KeyVaultAutoConfiguration;
-import com.azure.spring.autoconfigure.keyvault.KeyVaultProperties;
-import com.azure.spring.autoconfigure.keyvault.certificate.KeyVaultCertificateProperties;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -35,18 +31,18 @@ public class KeyVaultSecretAutoConfiguration {
         return builder.buildAsyncClient();
     }
 
-    @Bean
+    /*@Bean
     @ConditionalOnMissingBean
-    public SpringSDKServiceClientBuilderFactory<? extends AzureServiceClientBuilder<SecretClientBuilder>, SecretClientBuilder>
+    public SpringSDKServiceClientBuilderFactory<? extends AzureServiceClientBuilderFactory<SecretClientBuilder>, SecretClientBuilder>
     secretServiceClientBuilderFactory(KeyVaultProperties keyVaultProperties,
                                            KeyVaultCertificateProperties keyVaultCertificateProperties) {
-        KeyVaultSecretServiceClientBuilder builder = new KeyVaultSecretServiceClientBuilder(keyVaultProperties, keyVaultCertificateProperties);
+        KeyVaultSecretServiceClientBuilderFactory builder = new KeyVaultSecretServiceClientBuilderFactory(keyVaultProperties, keyVaultCertificateProperties);
         return new SpringSDKServiceClientBuilderFactory<>(builder);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public SecretClientBuilder secretClientBuilder(SpringSDKServiceClientBuilderFactory<? extends AzureServiceClientBuilder<SecretClientBuilder>, SecretClientBuilder> factory) {
+    public SecretClientBuilder secretClientBuilder(SpringSDKServiceClientBuilderFactory<? extends AzureServiceClientBuilderFactory<SecretClientBuilder>, SecretClientBuilder> factory) {
         return factory.create();
-    }
+    }*/
 }

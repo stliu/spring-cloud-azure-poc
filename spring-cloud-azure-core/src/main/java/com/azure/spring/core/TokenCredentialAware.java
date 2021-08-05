@@ -1,4 +1,4 @@
-package com.azure.spring.autoconfigure.core;
+package com.azure.spring.core;
 
 import com.azure.core.credential.TokenCredential;
 

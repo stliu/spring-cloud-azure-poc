@@ -2,6 +2,7 @@ package com.azure.spring.autoconfigure.core;
 
 import com.azure.core.credential.TokenCredential;
 import com.azure.identity.ChainedTokenCredentialBuilder;
+import com.azure.spring.core.TokenCredentialAware;
 import com.azure.spring.core.identify.AzureProperties;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;

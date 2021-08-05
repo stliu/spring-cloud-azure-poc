@@ -1,5 +1,7 @@
 package com.azure.spring.autoconfigure.core;
 
+import com.azure.spring.core.SpringKeyCredentialAware;
+import com.azure.spring.core.SpringKeyCredentialBuilder;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 

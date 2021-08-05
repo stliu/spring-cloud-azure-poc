@@ -1,4 +1,4 @@
-package com.azure.spring.autoconfigure.core;
+package com.azure.spring.core.http;
 
 import com.azure.core.http.HttpPipeline;
 

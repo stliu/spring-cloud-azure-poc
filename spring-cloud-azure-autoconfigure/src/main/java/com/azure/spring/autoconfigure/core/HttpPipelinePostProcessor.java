@@ -1,6 +1,7 @@
 package com.azure.spring.autoconfigure.core;
 
 import com.azure.core.http.HttpPipelineBuilder;
+import com.azure.spring.core.http.HttpPipelineAware;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 

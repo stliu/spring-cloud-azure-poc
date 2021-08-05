@@ -3,10 +3,16 @@ package com.azure.spring.autoconfigure.core;
 import com.azure.core.credential.TokenCredential;
 import com.azure.core.http.HttpPipeline;
 import com.azure.core.http.policy.HttpLogOptions;
+import com.azure.spring.core.AzureServiceClientBuilderFactory;
+import com.azure.spring.core.HttpLogOptionsAware;
+import com.azure.spring.core.SpringConnectionString;
+import com.azure.spring.core.SpringConnectionStringAware;
+import com.azure.spring.core.SpringKeyCredential;
+import com.azure.spring.core.SpringKeyCredentialAware;
+import com.azure.spring.core.TokenCredentialAware;
+import com.azure.spring.core.http.HttpPipelineAware;
 
-import java.util.Optional;
-
-public class SpringSDKServiceClientBuilderFactory<U extends AzureServiceClientBuilder<T>, T>
+public class SpringSDKServiceClientBuilderFactory<U extends AzureServiceClientBuilderFactory<T>, T>
     implements HttpLogOptionsAware, HttpPipelineAware, SpringConnectionStringAware, SpringKeyCredentialAware, TokenCredentialAware {
 
     private U builder;
@@ -29,11 +35,11 @@ public class SpringSDKServiceClientBuilderFactory<U extends AzureServiceClientBu
     }
 
     public T create() {
-        Optional.ofNullable(httpLogOptions).ifPresent(builder::httpLogOptions);
-        Optional.ofNullable(pipeline).ifPresent(builder::pipeline);
-        Optional.ofNullable(tokenCredential).ifPresent(builder::tokenCredential);
-        Optional.ofNullable(springKeyCredential).ifPresent(builder::springKeyCredential);
-        Optional.ofNullable(springConnectionString).ifPresent(builder::springConnectionString);
+//        Optional.ofNullable(httpLogOptions).ifPresent(builder::httpLogOptions);
+//        Optional.ofNullable(pipeline).ifPresent(builder::pipeline);
+//        Optional.ofNullable(tokenCredential).ifPresent(builder::tokenCredential);
+//        Optional.ofNullable(springKeyCredential).ifPresent(builder::springKeyCredential);
+//        Optional.ofNullable(springConnectionString).ifPresent(builder::springConnectionString);
         return builder.build();
     }
 
