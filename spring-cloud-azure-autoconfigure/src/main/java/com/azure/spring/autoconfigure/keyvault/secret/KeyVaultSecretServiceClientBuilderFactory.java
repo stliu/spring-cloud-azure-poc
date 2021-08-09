@@ -5,7 +5,7 @@ import com.azure.core.http.HttpPipeline;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
 import com.azure.security.keyvault.secrets.SecretServiceVersion;
 import com.azure.spring.core.http.HttpClientSupplier;
-import com.azure.spring.core.http.HttpProperties;
+import com.azure.spring.core.properties.HttpProperties;
 import com.azure.spring.core.identify.AzureServiceFeature;
 import com.azure.spring.core.http.AzureHttpClientBuilderFactory;
 import com.azure.spring.core.http.HttpPipelineAware;
@@ -35,7 +35,12 @@ public class KeyVaultSecretServiceClientBuilderFactory implements
     }
 
     @Override
-    public HttpProperties getHttpProperties() {
+    public HttpProperties getRootHttpProperties() {
+        return null;
+    }
+
+    @Override
+    public HttpProperties getInheritHttpProperties() {
         return null;
     }
 

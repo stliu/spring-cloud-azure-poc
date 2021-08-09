@@ -29,8 +29,6 @@ import static com.azure.spring.core.AzureTokenCredentialResolver.DEFAULT_CHAINED
 //@AutoConfigureAfter(AzureDefaultTokenCredentialAutoConfiguration.class)
 public class CosmosAutoConfiguration extends AbstractCosmosConfiguration {
     private final CosmosProperties properties;
-    private static final String COSMOS_CHAINED_TOKEN_CREDENTIAL_BEAN_NAME = "cosmosChainedTokenCredential";
-    private static final String COSMOS_AZURE_KEY_CREDENTIAL_BEAN_NAME = "cosmosAzureKeyCredential";
 
     public CosmosAutoConfiguration(CosmosProperties properties) {
         this.properties = properties;
@@ -48,6 +46,7 @@ public class CosmosAutoConfiguration extends AbstractCosmosConfiguration {
                            .responseDiagnosticsProcessor(properties.getResponseDiagnosticsProcessor())
                            .build();
     }
+
 
     @Bean
     @ConditionalOnMissingBean

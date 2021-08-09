@@ -1,0 +1,68 @@
+#1 user want to hook their own http policy into the default http pipeline
+
+  user can provide a HttpPolicy bean in the configuration,
+  and we will ensure to pick
+  up this bean and add it into the http pipeline
+
+#2 user want to append a surfix to the user agent
+
+logging.level
+
+spring:
+  cloud:
+    azure:
+
+      # common http configuration
+      http:
+        client:
+          responseTimeout: PT5S
+      application-id: test-alibaba
+      proxy:
+        host: sdfsd
+        port: 32
+      cosmos:
+        endpoint: https://demo-cosmos.documents.azure.com:443/
+        database: demo-cosmos
+        #key: xxx
+
+        # inherit the credential
+        credential:
+          key-or-resource-token: xxx
+          client-id: xxx
+          client-secert: xxx
+      #    certificate-path: C:\\storage\\ca\\202108\\certificate-auth.pem
+        proxy:
+
+
+      storage:
+        blob:
+          endpoint: https://conf.juejin.cn/xdc2021?utm_source=juejinweb
+        file:
+          endpoint: https://teststorage.file.core.windows.net/
+
+        # inherit the credential
+        credential:
+          client-id: xxx
+          client-secert: xxx
+          tenant-id: xxx
+          certificate-path: C:\\storage\\ca\\202108\\certificate-auth.pem
+
+      keyvault:
+        endpoint: ${KEY_VAULT_URI}
+        credential:
+
+          tenant-id: ${SERVICE_PRINCIPAL_TETANT}
+          client-id: ${SERVICE_PRINCIPAL_ID}
+          client-secret: ${SERVICE_PRINCIPAL_SECRET}
+        secret:
+          endpoint: https:ssdklfjsdlfjlsd
+          proxy:
+            host: aaa
+            port: 2323
+          credential:
+
+            tenant-id: ${SERVICE_PRINCIPAL_TETANT}
+            client-id: ${SERVICE_PRINCIPAL_ID}
+            client-secret: ${SERVICE_PRINCIPAL_SECRET}
+        certificates:
+          endpoint: https://xcksdjlf.sdf.dsf

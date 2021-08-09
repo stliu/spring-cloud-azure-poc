@@ -7,13 +7,14 @@ import com.azure.core.http.policy.HttpPipelinePolicy;
 import com.azure.security.keyvault.certificates.CertificateClientBuilder;
 import com.azure.security.keyvault.certificates.CertificateServiceVersion;
 import com.azure.spring.autoconfigure.keyvault.KeyVaultProperties;
+import com.azure.spring.core.http.AzureSpringHttpConfigurationContext;
 import com.azure.spring.core.AzureTokenCredentialResolver;
 import com.azure.spring.core.http.AzureHttpClientBuilderFactory;
-import com.azure.spring.core.http.HttpProperties;
+import com.azure.spring.core.properties.HttpProperties;
 import com.azure.spring.core.identify.AzureServiceFeature;
 import org.springframework.boot.context.properties.PropertyMapper;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,11 +22,15 @@ import java.util.Optional;
 public class KeyVaultCertificateServiceClientBuilderFactory implements
     AzureHttpClientBuilderFactory<CertificateClientBuilder> {
 
-    private CertificateClientBuilder delegated;
-    private KeyVaultProperties keyVaultProperties;
-    private KeyVaultCertificateProperties keyVaultCertificateProperties;
-    private HttpProperties httpProperties;
-    private TokenCredential defaultTokenCredential;
+    private CertificateClientBuilder builder;
+    private final KeyVaultProperties keyVaultProperties;
+    private final KeyVaultCertificateProperties keyVaultCertificateProperties;
+    private final HttpProperties httpProperties;
+    private final TokenCredential defaultTokenCredential;
+
+    private HttpPipeline pipeline;
+
+    private AzureSpringHttpConfigurationContext httpContext;
 
     public KeyVaultCertificateServiceClientBuilderFactory(TokenCredential defaultTokenCredential,
                                                           KeyVaultProperties keyVaultProperties,
@@ -38,58 +43,63 @@ public class KeyVaultCertificateServiceClientBuilderFactory implements
     }
 
     @Override
-    public HttpProperties getHttpProperties() {
-        return httpProperties;
+    public HttpProperties getRootHttpProperties() {
+        return null;
+    }
+
+    @Override
+    public HttpProperties getInheritHttpProperties() {
+        return null;
     }
 
     @Override
     public CertificateClientBuilder build() {
-        delegated = new CertificateClientBuilder();
-        PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
-        map.from(keyVaultProperties.getEndpoint()).to(this::vaultUrl);
-        map.from(keyVaultCertificateProperties.getServiceVersion()).to(this::serviceVersion);
+        builder = new CertificateClientBuilder();
 
-        // Customize the http pipeline
-        Optional.ofNullable(httpProperties)
-                .filter(this::enabledCustomizer)
-                .ifPresent(p -> {
-                    HttpPipeline hp = new HttpPipelineBuilder()
-                        .httpClient(getHttpClientSupplier().get())
-                        .policies(getHttpPipelinePolicySupplier().get().toArray(new HttpPipelinePolicy[0]))
-                        .build();
-                    delegated.pipeline(hp);
-                });
-
-        // apply the credential
-        supportFeatures().forEach(feature -> {
-            switch (feature) {
-                case TOKEN_CREDENTIAL:
-                    delegated.credential(new AzureTokenCredentialResolver().resolve(defaultTokenCredential, keyVaultCertificateProperties));
-                    break;
-                default:
-                    throw new IllegalStateException("KeyVault certificate starter does not "
-                        + "support the feature type" + feature + ".");
-            }
-        });
-        return delegated;
+//        PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
+//        map.from(keyVaultProperties.getEndpoint()).to(this::vaultUrl);
+//        map.from(keyVaultCertificateProperties.getServiceVersion()).to(this::serviceVersion);
+//
+//        // Customize the http pipeline
+//        Optional.ofNullable(httpProperties)
+//                .ifPresent(p -> {
+//                    HttpPipeline hp = new HttpPipelineBuilder()
+//                        .httpClient(getHttpClientSupplier().get())
+//                        .policies(getHttpPipelinePolicySupplier().get().toArray(new HttpPipelinePolicy[0]))
+//                        .build();
+//                    builder.pipeline(hp);
+//                });
+//
+//        // apply the credential
+//        supportFeatures().forEach(feature -> {
+//            if (feature == AzureServiceFeature.TOKEN_CREDENTIAL) {
+//                builder.credential(new AzureTokenCredentialResolver().resolve(defaultTokenCredential,
+//                    keyVaultCertificateProperties));
+//            } else {
+//                throw new IllegalStateException("KeyVault certificate starter does not "
+//                    + "support the feature type " + feature + ".");
+//            }
+//        });
+        return builder;
     }
 
-    public boolean enabledCustomizer(HttpProperties httpProperties) {
-        return httpProperties.getEnabledCustomizer();
+    @Override
+    public void setPipeline(HttpPipeline pipeline) {
+        this.pipeline = pipeline;
     }
 
     @Override
     public List<AzureServiceFeature> supportFeatures() {
-        return Arrays.asList(AzureServiceFeature.TOKEN_CREDENTIAL);
+        return Collections.singletonList(AzureServiceFeature.TOKEN_CREDENTIAL);
     }
 
     public KeyVaultCertificateServiceClientBuilderFactory vaultUrl(String vaultUrl) {
-        delegated.vaultUrl(vaultUrl);
+        builder.vaultUrl(vaultUrl);
         return this;
     }
 
     public KeyVaultCertificateServiceClientBuilderFactory serviceVersion(CertificateServiceVersion version) {
-        delegated.serviceVersion(version);
+        builder.serviceVersion(version);
         return this;
     }
 

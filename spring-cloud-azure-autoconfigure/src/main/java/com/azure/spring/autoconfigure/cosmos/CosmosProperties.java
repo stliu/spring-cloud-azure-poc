@@ -5,10 +5,17 @@ package com.azure.spring.autoconfigure.cosmos;
 
 import com.azure.cosmos.ConnectionMode;
 import com.azure.cosmos.ConsistencyLevel;
+import com.azure.cosmos.DirectConnectionConfig;
+import com.azure.cosmos.GatewayConnectionConfig;
+import com.azure.cosmos.models.CosmosPermissionProperties;
 import com.azure.spring.core.AzureProperties;
+import com.azure.spring.core.properties.ApplicationIdAware;
+import com.azure.spring.core.properties.EndpointAware;
+import com.azure.spring.core.properties.ProxyProperties;
 import com.azure.spring.data.cosmos.core.ResponseDiagnosticsProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
 import org.springframework.validation.annotation.Validated;
@@ -20,21 +27,26 @@ import javax.validation.constraints.NotEmpty;
  */
 @Validated
 @ConfigurationProperties(CosmosProperties.PREFIX)
-public class CosmosProperties extends AzureProperties {
+public class CosmosProperties extends AzureProperties implements
+    EndpointAware, ApplicationIdAware, InitializingBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CosmosProperties.class);
     public static final String PREFIX = "spring.cloud.azure.cosmos";
 
-    /**
-     * Document DB URI.
-     */
-    @NotEmpty
-    private String uri;
+    private String endpoint;
+    private String applicationId;
+
+    private ProxyProperties proxy;
 
     /**
-     * Document DB key.
+     * Override enabled, session capturing is enabled by default for {@link ConsistencyLevel#SESSION}
      */
-    private String key;
+    private boolean sessionCapturingOverrideEnabled;
+    private boolean connectionSharingAcrossClientsEnabled;
+    private boolean contentResponseOnWriteEnabled;
+    private CosmosPermissionProperties permissions;
+    private GatewayConnectionConfig gatewayConnectionConfig;
+    private DirectConnectionConfig directConnectionConfig;
 
     /**
      * Document DB consistency level.
@@ -73,20 +85,35 @@ public class CosmosProperties extends AzureProperties {
             }
         };
 
-    public String getUri() {
-        return uri;
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        // TODO: DB endpoint should be not empty
     }
 
-    public void setUri(String uri) {
-        this.uri = uri;
+    public String getApplicationId() {
+        return applicationId;
     }
 
-    public String getKey() {
-        return key;
+    @Override
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public String getEndpoint() {
+        return endpoint;
+    }
+
+    @Override
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
+    }
+
+    public ProxyProperties getProxy() {
+        return proxy;
+    }
+
+    public void setProxy(ProxyProperties proxy) {
+        this.proxy = proxy;
     }
 
     public String getDatabase() {

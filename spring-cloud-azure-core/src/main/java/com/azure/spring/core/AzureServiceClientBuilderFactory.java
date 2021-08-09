@@ -5,7 +5,7 @@ import com.azure.spring.core.identify.AzureServiceFeature;
 import java.util.List;
 
 /**
- * Wrapper the Azure SDK service client builder.
+ * Azure SDK service client builder factory of all modules.
  * @param <T>
  */
 public interface AzureServiceClientBuilderFactory<T> {

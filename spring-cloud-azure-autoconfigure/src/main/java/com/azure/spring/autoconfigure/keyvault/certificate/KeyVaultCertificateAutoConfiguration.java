@@ -6,7 +6,7 @@ import com.azure.security.keyvault.certificates.CertificateClient;
 import com.azure.security.keyvault.certificates.CertificateClientBuilder;
 import com.azure.spring.autoconfigure.keyvault.KeyVaultAutoConfiguration;
 import com.azure.spring.autoconfigure.keyvault.KeyVaultProperties;
-import com.azure.spring.core.http.HttpProperties;
+import com.azure.spring.core.properties.HttpProperties;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;

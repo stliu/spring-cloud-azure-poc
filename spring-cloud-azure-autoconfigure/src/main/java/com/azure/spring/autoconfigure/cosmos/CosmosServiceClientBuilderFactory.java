@@ -2,6 +2,7 @@ package com.azure.spring.autoconfigure.cosmos;
 
 import com.azure.core.credential.AzureKeyCredential;
 import com.azure.core.credential.TokenCredential;
+import com.azure.core.http.HttpPipeline;
 import com.azure.cosmos.CosmosClientBuilder;
 import com.azure.spring.core.AzureTokenCredentialResolver;
 import com.azure.spring.core.IAzureKeyCredentialResolver;
@@ -17,7 +18,7 @@ import java.util.List;
 public class CosmosServiceClientBuilderFactory implements
     AzureHttpClientBuilderFactory<CosmosClientBuilder>, IAzureKeyCredentialResolver<AzureKeyCredential> {
 
-    private CosmosClientBuilder delegated;
+    private CosmosClientBuilder builder;
     private CosmosProperties cosmosProperties;
     private TokenCredential defaultTokenCredential;
 
@@ -28,38 +29,46 @@ public class CosmosServiceClientBuilderFactory implements
 
     @Override
     public CosmosClientBuilder build() {
-        delegated = new CosmosClientBuilder();
+        builder = new CosmosClientBuilder();
 
         // apply the credential
-        supportFeatures().forEach(feature -> {
-            switch (feature) {
-                case KEY_CREDENTIAL:
-                    AzureKeyCredential keyCredential = new AzureSpringKeyCredentialResolver<AzureKeyCredential>().resolve(this);
-                    if (keyCredential != null) {
-                        delegated.credential(keyCredential);
-                    }
-                    break;
-                case TOKEN_CREDENTIAL:
-                    delegated.credential(new AzureTokenCredentialResolver().resolve(defaultTokenCredential, cosmosProperties));
-                    break;
-                default:
-                    throw new IllegalStateException("Cosmos starter does not "
-                        + "support the feature type" + feature + ".");
-            }
-        });
-        return delegated;
+//        supportFeatures()
+//            .stream()
+//            .sorted()
+//            .forEach(feature -> {
+//                switch (feature) {
+//                    case KEY_CREDENTIAL:
+//                        AzureKeyCredential keyCredential = new AzureSpringKeyCredentialResolver<AzureKeyCredential>().resolve(this);
+//                        if (keyCredential != null) {
+//                            builder.credential(keyCredential);
+//                        }
+//                        break;
+//                    case TOKEN_CREDENTIAL:
+//                        builder.credential(new AzureTokenCredentialResolver().resolve(defaultTokenCredential, cosmosProperties));
+//                        break;
+//                    default:
+//                        throw new IllegalStateException("Cosmos starter does not "
+//                            + "support the feature type " + feature + ".");
+//            }
+//        });
+        return builder;
     }
 
     @Override
-    public com.azure.core.credential.AzureKeyCredential resolve() {
-        if (StringUtils.hasText(cosmosProperties.getKey())) {
-            return new com.azure.core.credential.AzureKeyCredential(cosmosProperties.getKey());
+    public AzureKeyCredential resolve() {
+        if (StringUtils.hasText(cosmosProperties.getCredential().getKeyOrResourceToken())) {
+            return new AzureKeyCredential(cosmosProperties.getCredential().getKeyOrResourceToken());
         }
         return null;
     }
 
     @Override
+    public void setPipeline(HttpPipeline pipeline) {
+
+    }
+
+    @Override
     public List<AzureServiceFeature> supportFeatures() {
-        return Arrays.asList(AzureServiceFeature.TOKEN_CREDENTIAL);
+        return Arrays.asList(AzureServiceFeature.TOKEN_CREDENTIAL, AzureServiceFeature.KEY_CREDENTIAL);
     }
 }

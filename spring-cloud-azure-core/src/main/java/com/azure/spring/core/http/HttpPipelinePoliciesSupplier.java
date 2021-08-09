@@ -6,4 +6,5 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public interface HttpPipelinePoliciesSupplier extends Supplier<List<HttpPipelinePolicy>> {
+
 }

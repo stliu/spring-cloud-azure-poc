@@ -3,8 +3,10 @@
 
 package com.azure.spring.core;
 
-import com.azure.spring.core.identify.CredentialProperties;
 import com.azure.spring.core.identify.EnvironmentProperties;
+import com.azure.spring.core.properties.CredentialProperties;
+import com.azure.spring.core.properties.HttpProperties;
+import com.azure.spring.core.properties.ProxyProperties;
 
 /**
  * Unified properties for Azure SDK clients.
@@ -15,13 +17,28 @@ public class AzureProperties {
 
     public static final String PREFIX = "spring.cloud.azure";
 
+    private HttpProperties http;
+
     private CredentialProperties credential;
 
     private EnvironmentProperties environment;
 
-    public AzureProperties() {
-        this.credential = null;
-        this.environment = null;
+    private ProxyProperties proxy;
+
+    public HttpProperties getHttp() {
+        return http;
+    }
+
+    public void setHttp(HttpProperties http) {
+        this.http = http;
+    }
+
+    public ProxyProperties getProxy() {
+        return proxy;
+    }
+
+    public void setProxy(ProxyProperties proxy) {
+        this.proxy = proxy;
     }
 
     public CredentialProperties getCredential() {
