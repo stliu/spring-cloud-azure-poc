@@ -1,9 +1,7 @@
-package com.azure.spring.core.properties;
+package com.azure.spring.core.properties.http;
 
-/**
- * Http options properties for Azure SDK http pipeline.
- */
-public class HttpOptionsProperties {
+public class HttpProperties {
+
     public static final String PREFIX = "spring.cloud.azure.http";
 
     private HttpClientOptionsProperties client;

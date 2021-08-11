@@ -4,8 +4,8 @@ import com.azure.core.http.HttpClient;
 import com.azure.core.implementation.http.HttpClientProviders;
 import com.azure.core.util.Header;
 import com.azure.core.util.HttpClientOptions;
-import com.azure.spring.core.properties.HttpClientOptionsProperties;
-import com.azure.spring.core.properties.HttpProperties;
+import com.azure.spring.core.properties.http.HttpClientOptionsProperties;
+import com.azure.spring.core.properties.http.HttpProperties;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class HttpClientSupplierImpl implements HttpClientSupplier {
     }
 
     private void buildClientOptions(HttpClientOptions clientOptions, HttpClientOptionsProperties client) {
-        if (StringUtils.hasText(client.getEndpoint())) {
+        if (StringUtils.hasText(client.getApplicationId())) {
             clientOptions.setApplicationId(client.getApplicationId());
 
         }

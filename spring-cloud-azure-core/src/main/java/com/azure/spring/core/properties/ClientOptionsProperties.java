@@ -1,8 +1,10 @@
 package com.azure.spring.core.properties;
 
+import com.azure.spring.core.properties.http.HeaderProperties;
+
 import java.util.List;
 
-public class ClientOptionsProperties implements ApplicationIdAware, HeadersAware {
+public class ClientOptionsProperties {
 
     private String applicationId;
 
@@ -16,12 +18,10 @@ public class ClientOptionsProperties implements ApplicationIdAware, HeadersAware
         return headers;
     }
 
-    @Override
     public void setApplicationId(String applicationId) {
         this.applicationId = applicationId;
     }
 
-    @Override
     public void setHeaders(List<HeaderProperties> headers) {
         this.headers = headers;
     }

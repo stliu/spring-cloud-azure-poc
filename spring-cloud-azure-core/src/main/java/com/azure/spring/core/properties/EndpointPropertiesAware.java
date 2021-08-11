@@ -1,6 +1,6 @@
 package com.azure.spring.core.properties;
 
-public interface EndpointAware {
+public interface EndpointPropertiesAware {
 
     void setEndpoint(String endpoint);
 }

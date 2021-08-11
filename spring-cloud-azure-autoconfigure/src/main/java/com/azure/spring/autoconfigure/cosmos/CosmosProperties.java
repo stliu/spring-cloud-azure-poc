@@ -8,10 +8,9 @@ import com.azure.cosmos.ConsistencyLevel;
 import com.azure.cosmos.DirectConnectionConfig;
 import com.azure.cosmos.GatewayConnectionConfig;
 import com.azure.cosmos.models.CosmosPermissionProperties;
-import com.azure.spring.core.AzureProperties;
-import com.azure.spring.core.properties.ApplicationIdAware;
-import com.azure.spring.core.properties.EndpointAware;
-import com.azure.spring.core.properties.ProxyProperties;
+import com.azure.spring.core.properties.AzureProperties;
+import com.azure.spring.core.properties.EndpointPropertiesAware;
+import com.azure.spring.core.properties.http.HttpProxyOptionsProperties;
 import com.azure.spring.data.cosmos.core.ResponseDiagnosticsProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +27,7 @@ import javax.validation.constraints.NotEmpty;
 @Validated
 @ConfigurationProperties(CosmosProperties.PREFIX)
 public class CosmosProperties extends AzureProperties implements
-    EndpointAware, ApplicationIdAware, InitializingBean {
+    EndpointPropertiesAware, InitializingBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CosmosProperties.class);
     public static final String PREFIX = "spring.cloud.azure.cosmos";
@@ -36,7 +35,7 @@ public class CosmosProperties extends AzureProperties implements
     private String endpoint;
     private String applicationId;
 
-    private ProxyProperties proxy;
+    private HttpProxyOptionsProperties proxy;
 
     /**
      * Override enabled, session capturing is enabled by default for {@link ConsistencyLevel#SESSION}
@@ -94,7 +93,6 @@ public class CosmosProperties extends AzureProperties implements
         return applicationId;
     }
 
-    @Override
     public void setApplicationId(String applicationId) {
         this.applicationId = applicationId;
     }
@@ -108,11 +106,11 @@ public class CosmosProperties extends AzureProperties implements
         this.endpoint = endpoint;
     }
 
-    public ProxyProperties getProxy() {
+    public HttpProxyOptionsProperties getProxy() {
         return proxy;
     }
 
-    public void setProxy(ProxyProperties proxy) {
+    public void setProxy(HttpProxyOptionsProperties proxy) {
         this.proxy = proxy;
     }
 

@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
-package com.azure.spring.core.identify;
+package com.azure.spring.core.properties;
 
 /**
  * Environment properties for endpoints in different Azure Clouds.

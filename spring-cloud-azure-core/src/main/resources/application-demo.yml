@@ -14,7 +14,7 @@ spring:
       # common http configuration
       http:
         client:
-          endpoint: xx
+#          endpoint: xx
           applicationId: storage-blob
           headers:
             - name: test-header1
@@ -25,13 +25,11 @@ spring:
               values:
                 - test11
                 - test22
-        retry:
-          xx: xx
-        pipelinePolicies:
-          xx: xx
-      proxy:
-        host: sdfsd
-        port: 32
+          retry:
+            xx: xx
+          proxy:
+            host: sdfsd
+            port: 32
       credential:
         client-id: xx
         client-secert: xx
@@ -40,11 +38,9 @@ spring:
       storage:
         blob:
           # inherit the properties
-          proxy:
-            xx: xx
+          endpoint: xx
           http:
             client:
-              endpoint: xx
               applicationId: storage-blob
               headers:
                 - name: test-header1
@@ -55,24 +51,11 @@ spring:
                   values:
                     - test11
                     - test22
-            per-call-policies:
-              - policyType:
-                  policy: user_agent
-                http-pipeline-position: per_call
-                additional-parameters:
-                  xx: xx
-            per-retry-policies:
-              - policyType:
-                  policy: add_date
-                http-pipeline-position: per_retry
-                additional-parameters:
-                  xx: xx
-            retry:
-              xx: xx
-            perCallPolicies:
-              - xx: xx
-            perRetryPolicies:
-              - xx: xx
+              retry:
+                xx: xx
+              proxy:
+                host: sdfsd
+                port: 32
           credential:
             client-id: xx
             client-secert: xx

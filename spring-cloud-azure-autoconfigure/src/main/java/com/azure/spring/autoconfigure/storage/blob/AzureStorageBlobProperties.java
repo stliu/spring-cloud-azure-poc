@@ -1,21 +1,30 @@
 package com.azure.spring.autoconfigure.storage.blob;
 
-import com.azure.spring.core.AzureProperties;
-import com.azure.spring.core.properties.ApplicationIdAware;
-import com.azure.spring.core.properties.EndpointAware;
+import com.azure.spring.core.properties.AzureProperties;
+import com.azure.spring.core.properties.AzureSasCredentialPropertiesAware;
+import com.azure.spring.core.properties.ConnectionStringPropertiesAware;
+import com.azure.spring.core.properties.EndpointPropertiesAware;
+import com.azure.spring.core.properties.HttpPropertiesAware;
+import com.azure.spring.core.properties.SasTokenPropertiesAware;
+import com.azure.spring.core.properties.StorageSharedKeyCredentialPropertiesAware;
+import com.azure.spring.core.properties.http.HttpProperties;
 import com.azure.storage.blob.BlobServiceVersion;
+import com.azure.storage.blob.models.CustomerProvidedKey;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "spring.cloud.azure.storage.blob")
-public class AzureStorageBlobProperties extends AzureProperties implements EndpointAware, ApplicationIdAware, InitializingBean {
+public class AzureStorageBlobProperties extends AzureProperties
+    implements EndpointPropertiesAware, StorageSharedKeyCredentialPropertiesAware,
+    SasTokenPropertiesAware, AzureSasCredentialPropertiesAware, ConnectionStringPropertiesAware,
+    HttpPropertiesAware, InitializingBean {
 
-    // common http builder options
+    private HttpProperties http;
+
     private String endpoint;
-    private String applicationId;
 
     // sdk builder options
-    private CPK cpk;
+    private CustomerProvidedKey customerProvidedKey;
     private String encryptionScope;
     private String containerName;
     private String blobName;
@@ -23,59 +32,83 @@ public class AzureStorageBlobProperties extends AzureProperties implements Endpo
     private String versionId;
     private BlobServiceVersion serviceVersion;
 
+    // StorageSharedKeyCredential
+    private String accountName;
+    private String accountKey;
+
+    private String sasToken;
+
+    // AzureSasCredential
+    private String signature;
+
+    private Boolean anonymousAccess;
+
+    private String connectionString;
+
     @Override
     public void afterPropertiesSet() throws Exception {
 
     }
 
-    public static class CPK {
+    public HttpProperties getHttp() {
+        return http;
+    }
 
-        /**
-         * Base64 encoded string of the encryption key.
-         */
-        private String key;
+    @Override
+    public void setHttp(HttpProperties http) {
+        this.http = http;
+    }
 
-        /**
-         * Base64 encoded string of the encryption key's SHA256 hash.
-         */
-        private String keySha256;
+    public Boolean getAnonymousAccess() {
+        return anonymousAccess;
+    }
 
-        /**
-         * The algorithm for Azure Blob Storage to encrypt with. Azure Blob Storage only offers AES256 encryption.
-         */
-        private String encryptionAlgorithm = "AES256";
+    public void setAnonymousAccess(Boolean anonymousAccess) {
+        this.anonymousAccess = anonymousAccess;
+    }
 
-        public String getKey() {
-            return key;
-        }
+    public String getSasToken() {
+        return sasToken;
+    }
 
-        public void setKey(String key) {
-            this.key = key;
-        }
+    @Override
+    public void setSasToken(String sasToken) {
+        this.sasToken = sasToken;
+    }
 
-        public String getKeySha256() {
-            return keySha256;
-        }
+    public String getSignature() {
+        return signature;
+    }
 
-        public void setKeySha256(String keySha256) {
-            this.keySha256 = keySha256;
-        }
+    @Override
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
 
-        public String getEncryptionAlgorithm() {
-            return encryptionAlgorithm;
-        }
+    public String getAccountName() {
+        return accountName;
+    }
 
-        public void setEncryptionAlgorithm(String encryptionAlgorithm) {
-            this.encryptionAlgorithm = encryptionAlgorithm;
-        }
+    @Override
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public String getAccountKey() {
+        return accountKey;
+    }
+
+    @Override
+    public void setAccountKey(String accountKey) {
+        this.accountKey = accountKey;
     }
 
     public String getEndpoint() {
         return endpoint;
     }
 
-    public String getApplicationId() {
-        return applicationId;
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
     }
 
     public String getEncryptionScope() {
@@ -122,27 +155,24 @@ public class AzureStorageBlobProperties extends AzureProperties implements Endpo
         return serviceVersion;
     }
 
-    @Override
-    public void setApplicationId(String applicationId) {
-        this.applicationId = applicationId;
-    }
-
-    @Override
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
-    }
-
     public void setServiceVersion(BlobServiceVersion serviceVersion) {
         this.serviceVersion = serviceVersion;
     }
 
-    public CPK getCpk() {
-        return cpk;
+    public CustomerProvidedKey getCustomerProvidedKey() {
+        return customerProvidedKey;
     }
 
-    public void setCpk(CPK cpk) {
-        this.cpk = cpk;
+    public void setCustomerProvidedKey(CustomerProvidedKey customerProvidedKey) {
+        this.customerProvidedKey = customerProvidedKey;
     }
 
+    public String getConnectionString() {
+        return connectionString;
+    }
 
+    @Override
+    public void setConnectionString(String connectionString) {
+        this.connectionString = connectionString;
+    }
 }

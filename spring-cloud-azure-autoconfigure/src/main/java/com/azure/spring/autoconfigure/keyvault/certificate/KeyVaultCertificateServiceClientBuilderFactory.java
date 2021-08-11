@@ -2,21 +2,16 @@ package com.azure.spring.autoconfigure.keyvault.certificate;
 
 import com.azure.core.credential.TokenCredential;
 import com.azure.core.http.HttpPipeline;
-import com.azure.core.http.HttpPipelineBuilder;
-import com.azure.core.http.policy.HttpPipelinePolicy;
+import com.azure.core.util.ClientOptions;
+import com.azure.core.util.Configuration;
 import com.azure.security.keyvault.certificates.CertificateClientBuilder;
 import com.azure.security.keyvault.certificates.CertificateServiceVersion;
 import com.azure.spring.autoconfigure.keyvault.KeyVaultProperties;
+import com.azure.spring.core.AzureSpringConfigurationContext;
 import com.azure.spring.core.http.AzureSpringHttpConfigurationContext;
-import com.azure.spring.core.AzureTokenCredentialResolver;
 import com.azure.spring.core.http.AzureHttpClientBuilderFactory;
-import com.azure.spring.core.properties.HttpProperties;
-import com.azure.spring.core.identify.AzureServiceFeature;
-import org.springframework.boot.context.properties.PropertyMapper;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import com.azure.spring.core.properties.ClientOptionsProperties;
+import com.azure.spring.core.properties.http.HttpProperties;
 
 
 public class KeyVaultCertificateServiceClientBuilderFactory implements
@@ -53,6 +48,26 @@ public class KeyVaultCertificateServiceClientBuilderFactory implements
     }
 
     @Override
+    public ClientOptions getClientOptions(ClientOptionsProperties client) {
+        return null;
+    }
+
+    @Override
+    public Configuration getDefaultConfiguration() {
+        return null;
+    }
+
+    @Override
+    public TokenCredential getDefaultTokenCredential() {
+        return null;
+    }
+
+    @Override
+    public AzureSpringConfigurationContext getConfigurationContext() {
+        return null;
+    }
+
+    @Override
     public CertificateClientBuilder build() {
         builder = new CertificateClientBuilder();
 
@@ -84,14 +99,19 @@ public class KeyVaultCertificateServiceClientBuilderFactory implements
     }
 
     @Override
+    public CertificateClientBuilder builder() {
+        return builder;
+    }
+
+    @Override
     public void setPipeline(HttpPipeline pipeline) {
         this.pipeline = pipeline;
     }
 
-    @Override
+    /*@Override
     public List<AzureServiceFeature> supportFeatures() {
         return Collections.singletonList(AzureServiceFeature.TOKEN_CREDENTIAL);
-    }
+    }*/
 
     public KeyVaultCertificateServiceClientBuilderFactory vaultUrl(String vaultUrl) {
         builder.vaultUrl(vaultUrl);

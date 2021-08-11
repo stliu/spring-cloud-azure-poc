@@ -9,10 +9,6 @@ package com.azure.spring.core.properties;
  */
 public class CredentialProperties {
 
-    private String keyOrResourceToken;
-
-    private String connectionString;
-
     /**
      * Client id to use when performing service principal authentication with Azure.
      */
@@ -37,49 +33,6 @@ public class CredentialProperties {
      * Tenant id for the Azure resources.
      */
     private String tenantId;
-
-    // StorageSharedKeyCredential
-    private String accountName;
-    private String accountKey;
-
-    private String sasToken;
-
-    // AzureSasCredential
-    private String signature;
-
-    private Boolean anonymousAccess;
-
-    public String getAccountName() {
-        return accountName;
-    }
-
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
-    }
-
-    public String getAccountKey() {
-        return accountKey;
-    }
-
-    public void setAccountKey(String accountKey) {
-        this.accountKey = accountKey;
-    }
-
-    public String getKeyOrResourceToken() {
-        return keyOrResourceToken;
-    }
-
-    public void setKeyOrResourceToken(String keyOrResourceToken) {
-        this.keyOrResourceToken = keyOrResourceToken;
-    }
-
-    public String getConnectionString() {
-        return connectionString;
-    }
-
-    public void setConnectionString(String connectionString) {
-        this.connectionString = connectionString;
-    }
 
     public String getClientId() {
         return clientId;

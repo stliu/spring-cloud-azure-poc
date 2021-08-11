@@ -1,4 +1,4 @@
-package com.azure.spring.core.properties;
+package com.azure.spring.core.properties.http;
 
 import java.util.List;
 

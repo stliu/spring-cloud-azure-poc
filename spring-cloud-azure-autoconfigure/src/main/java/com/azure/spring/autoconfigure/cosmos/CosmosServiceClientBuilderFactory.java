@@ -3,12 +3,12 @@ package com.azure.spring.autoconfigure.cosmos;
 import com.azure.core.credential.AzureKeyCredential;
 import com.azure.core.credential.TokenCredential;
 import com.azure.core.http.HttpPipeline;
+import com.azure.core.util.ClientOptions;
 import com.azure.cosmos.CosmosClientBuilder;
-import com.azure.spring.core.AzureTokenCredentialResolver;
 import com.azure.spring.core.IAzureKeyCredentialResolver;
-import com.azure.spring.core.AzureSpringKeyCredentialResolver;
 import com.azure.spring.core.http.AzureHttpClientBuilderFactory;
 import com.azure.spring.core.identify.AzureServiceFeature;
+import com.azure.spring.core.properties.ClientOptionsProperties;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
@@ -25,6 +25,11 @@ public class CosmosServiceClientBuilderFactory implements
     public CosmosServiceClientBuilderFactory(TokenCredential defaultTokenCredential, CosmosProperties cosmosProperties) {
         this.defaultTokenCredential = defaultTokenCredential;
         this.cosmosProperties = cosmosProperties;
+    }
+
+    @Override
+    public ClientOptions getClientOptions(ClientOptionsProperties client) {
+        return null;
     }
 
     @Override
@@ -51,6 +56,11 @@ public class CosmosServiceClientBuilderFactory implements
 //                            + "support the feature type " + feature + ".");
 //            }
 //        });
+        return builder;
+    }
+
+    @Override
+    public CosmosClientBuilder builder() {
         return builder;
     }
 

@@ -2,6 +2,7 @@ package com.azure.spring.core;
 
 import com.azure.core.credential.TokenCredential;
 import com.azure.identity.ChainedTokenCredentialBuilder;
+import com.azure.spring.core.properties.AzureProperties;
 
 /**
  * Resolve the token credential according azure properties.
@@ -24,7 +25,6 @@ public class AzureTokenCredentialResolver {
     }
 
     private TokenCredential getPropertiesInheritedTokenCredential(AzureProperties azureProperties) {
-
 
         // create ChainedTokenCredential according the modular AzureProperties
         return null;

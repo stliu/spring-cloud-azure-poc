@@ -1,12 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-package com.azure.spring.core;
-
-import com.azure.spring.core.identify.EnvironmentProperties;
-import com.azure.spring.core.properties.CredentialProperties;
-import com.azure.spring.core.properties.HttpProperties;
-import com.azure.spring.core.properties.ProxyProperties;
+package com.azure.spring.core.properties;
 
 /**
  * Unified properties for Azure SDK clients.
@@ -17,29 +12,29 @@ public class AzureProperties {
 
     public static final String PREFIX = "spring.cloud.azure";
 
-    private HttpProperties http;
+//    private HttpProperties http;
 
     private CredentialProperties credential;
 
     private EnvironmentProperties environment;
 
-    private ProxyProperties proxy;
+//    private ProxyOptionsProperties proxy;
 
-    public HttpProperties getHttp() {
-        return http;
-    }
+//    public HttpProperties getHttp() {
+//        return http;
+//    }
+//
+//    public void setHttp(HttpProperties http) {
+//        this.http = http;
+//    }
 
-    public void setHttp(HttpProperties http) {
-        this.http = http;
-    }
-
-    public ProxyProperties getProxy() {
-        return proxy;
-    }
-
-    public void setProxy(ProxyProperties proxy) {
-        this.proxy = proxy;
-    }
+//    public ProxyOptionsProperties getProxy() {
+//        return proxy;
+//    }
+//
+//    public void setProxy(ProxyOptionsProperties proxy) {
+//        this.proxy = proxy;
+//    }
 
     public CredentialProperties getCredential() {
         return credential;

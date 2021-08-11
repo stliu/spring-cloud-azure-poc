@@ -6,11 +6,11 @@ import com.azure.security.keyvault.certificates.CertificateClientBuilder;
 import com.azure.spring.autoconfigure.keyvault.KeyVaultProperties;
 import com.azure.spring.autoconfigure.keyvault.certificate.KeyVaultCertificateProperties;
 import com.azure.spring.autoconfigure.keyvault.certificate.KeyVaultCertificateServiceClientBuilderFactory;
-import com.azure.spring.core.AzureProperties;
+import com.azure.spring.core.properties.AzureProperties;
 import com.azure.spring.core.http.HttpClientSupplier;
 import com.azure.spring.core.http.HttpClientSupplierImpl;
 import com.azure.spring.core.http.HttpPipelinePoliciesSupplier;
-import com.azure.spring.core.properties.HttpProperties;
+import com.azure.spring.core.properties.http.HttpProperties;
 
 
 public class DemoKeyVault {
@@ -19,9 +19,10 @@ public class DemoKeyVault {
         KeyVaultProperties kp = new KeyVaultProperties();
         KeyVaultCertificateProperties kcp = new KeyVaultCertificateProperties();
         AzureProperties rootProperties = new AzureProperties();
+        HttpProperties rootHttp = new HttpProperties();
         TokenCredential defaultTokenCredential = new ChainedTokenCredentialBuilder().build();
         KeyVaultCertificateServiceClientBuilderFactory builderFactory =
-            new KeyVaultCertificateServiceClientBuilderFactory(defaultTokenCredential, kp, kcp, rootProperties.getHttp());
+            new KeyVaultCertificateServiceClientBuilderFactory(defaultTokenCredential, kp, kcp, rootHttp);
 
         //
 //        List<AzureServiceFeature> azureServiceFeatures = builderFactory.supportFeatures();
@@ -29,7 +30,7 @@ public class DemoKeyVault {
         HttpPipelinePoliciesSupplier httpPipelinePoliciesSupplier = builderFactory.getHttpPipelinePolicySupplier();
 
         HttpClientSupplier httpClientSupplier =
-            new HttpClientSupplierImpl(rootProperties.getHttp(), kcp.getHttp());
+            new HttpClientSupplierImpl(rootHttp, kcp.getHttp());
 
         // feature, -> resolve -> policies
         // client id & cert > policy -> pipeline

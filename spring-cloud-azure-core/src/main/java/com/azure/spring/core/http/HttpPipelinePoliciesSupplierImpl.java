@@ -2,8 +2,7 @@ package com.azure.spring.core.http;
 
 import com.azure.core.http.policy.HttpPipelinePolicy;
 import com.azure.spring.core.identify.AzureServiceFeature;
-import com.azure.spring.core.properties.HttpProperties;
-import com.azure.spring.core.properties.PipelinePolicyProperties;
+import com.azure.spring.core.properties.http.HttpProperties;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +44,7 @@ public class HttpPipelinePoliciesSupplierImpl implements HttpPipelinePoliciesSup
     }
 
     private void createCustomizerHttpPolicies() {
-        if (inheritProperties != null) {
+        /*if (inheritProperties != null) {
             inheritProperties.getPerCallPolicies()
                              .forEach(this::createHttpPolicyByInheritProperties);
             inheritProperties.getPerRetryPolicies()
@@ -55,12 +54,12 @@ public class HttpPipelinePoliciesSupplierImpl implements HttpPipelinePoliciesSup
                              .forEach(this::createHttpPolicyByRootProperties);
             inheritProperties.getPerRetryPolicies()
                              .forEach(this::createHttpPolicyByRootProperties);
-        }
+        }*/
 
         applyNecessaryHttpPoliciesIfMissing();
     }
 
-    private void createHttpPolicyByInheritProperties(PipelinePolicyProperties policyProperties) {
+    /*private void createHttpPolicyByInheritProperties(PipelinePolicyProperties policyProperties) {
         httpPipelinePolicyBuilder = new DefaultFeatureBasedHttpPipelinePolicyBuilder(inheritProperties);
         httpPipelinePolicyBuilder.policyProperties(policyProperties);
         policies.add(httpPipelinePolicyBuilder.build());
@@ -70,7 +69,7 @@ public class HttpPipelinePoliciesSupplierImpl implements HttpPipelinePoliciesSup
         httpPipelinePolicyBuilder = new DefaultFeatureBasedHttpPipelinePolicyBuilder(rootProperties);
         httpPipelinePolicyBuilder.policyProperties(policyProperties);
         policies.add(httpPipelinePolicyBuilder.build());
-    }
+    }*/
 
     /**
      * Feature && http policy need to collaborate.

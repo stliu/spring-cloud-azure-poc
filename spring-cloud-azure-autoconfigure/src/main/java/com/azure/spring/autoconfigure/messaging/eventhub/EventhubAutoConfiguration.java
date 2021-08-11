@@ -5,7 +5,7 @@ import com.azure.messaging.eventhubs.EventHubConsumerAsyncClient;
 import com.azure.messaging.eventhubs.EventHubConsumerClient;
 import com.azure.messaging.eventhubs.EventHubProducerAsyncClient;
 import com.azure.messaging.eventhubs.EventHubProducerClient;
-import org.springframework.beans.factory.ObjectProvider;
+import com.azure.spring.core.amqp.AzureSpringAmqpConfigurationContext;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -61,4 +61,16 @@ public class EventhubAutoConfiguration {
         return builder.buildProducerClient();
     }
 
+    @Bean
+    @ConditionalOnMissingBean
+    public AzureEventHubServiceClientBuilderFactory factory(AzureSpringAmqpConfigurationContext context,
+                                                            EventHubProperties properties) {
+        return new AzureEventHubServiceClientBuilderFactory(context, properties);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public EventHubClientBuilder blobClientBuilder(AzureEventHubServiceClientBuilderFactory factory) {
+        return factory.build();
+    }
 }
