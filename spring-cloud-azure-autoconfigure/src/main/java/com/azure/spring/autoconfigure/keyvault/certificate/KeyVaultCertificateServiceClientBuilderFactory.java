@@ -9,7 +9,7 @@ import com.azure.security.keyvault.certificates.CertificateServiceVersion;
 import com.azure.spring.autoconfigure.keyvault.KeyVaultProperties;
 import com.azure.spring.core.AzureSpringConfigurationContext;
 import com.azure.spring.core.http.AzureSpringHttpConfigurationContext;
-import com.azure.spring.core.http.AzureHttpClientBuilderFactory;
+import com.azure.spring.core.builder.AzureHttpClientBuilderFactory;
 import com.azure.spring.core.properties.ClientOptionsProperties;
 import com.azure.spring.core.properties.http.HttpProperties;
 

@@ -3,7 +3,7 @@ package com.azure.spring.autoconfigure.keyvault.certificate;
 import com.azure.security.keyvault.certificates.CertificateServiceVersion;
 import com.azure.spring.autoconfigure.core.ServiceVersionProvider;
 import com.azure.spring.core.properties.AzureProperties;
-import com.azure.spring.core.properties.HttpPropertiesAware;
+import com.azure.spring.core.aware.HttpPropertiesAware;
 import com.azure.spring.core.properties.http.HttpProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

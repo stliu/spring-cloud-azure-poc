@@ -74,6 +74,8 @@
     <dependency>
       <groupId>com.azure</groupId>
       <artifactId>azure-messaging-eventhubs</artifactId>
+      <version>5.9.0</version>
+      <!-- Current is 5.7.1, the named key credential is the new feature in higer version. -->
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -85,6 +87,7 @@
     <dependency>
       <groupId>com.azure</groupId>
       <artifactId>azure-messaging-servicebus</artifactId>
+      <version>7.3.0</version>
       <optional>true</optional>
     </dependency>
 

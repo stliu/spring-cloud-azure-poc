@@ -1,4 +1,4 @@
-package com.azure.spring.core;
+package com.azure.spring.core.aware;
 
 import com.azure.core.credential.TokenCredential;
 

@@ -7,7 +7,7 @@ package com.azure.spring.core.properties;
 /**
  * Azure properties used for getting token credential.
  */
-public class CredentialProperties {
+public class TokenCredentialProperties {
 
     /**
      * Client id to use when performing service principal authentication with Azure.

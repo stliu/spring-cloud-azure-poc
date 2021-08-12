@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(BlobClientBuilder.class)
 @ConditionalOnProperty(prefix = "spring.cloud.azure.storage.blob", name = "enabled", matchIfMissing = true)
-@EnableConfigurationProperties(AzureStorageBlobProperties.class)
+@EnableConfigurationProperties(AzureStorageBlob.class)
 @AutoConfigureAfter
 public class AzureStorageBlobAutoConfiguration {
 
@@ -45,15 +45,15 @@ public class AzureStorageBlobAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public AzureStorageBlobServiceClientBuilderFactory factory(AzureSpringHttpConfigurationContext context,
-                                                               AzureStorageBlobProperties properties,
-                                                               ObjectProvider<HttpPipelinePolicy> policies) {
-        return new AzureStorageBlobServiceClientBuilderFactory(context, properties, policies.stream().collect(Collectors.toList()));
+    public AzureBlobClientBuilderFactory factory(AzureSpringHttpConfigurationContext context,
+                                                 AzureStorageBlob properties,
+                                                 ObjectProvider<HttpPipelinePolicy> policies) {
+        return new AzureBlobClientBuilderFactory(context, properties, policies.stream().collect(Collectors.toList()));
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public BlobClientBuilder blobClientBuilder(AzureStorageBlobServiceClientBuilderFactory factory) {
+    public BlobClientBuilder blobClientBuilder(AzureBlobClientBuilderFactory factory) {
         return factory.build();
     }
 }

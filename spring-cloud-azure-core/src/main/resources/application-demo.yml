@@ -11,7 +11,14 @@ logging.level
 spring:
   cloud:
     azure:
-      # common http configuration
+      amqp:
+        client:
+          xxx: xxx
+        proxy:
+          xxx: xxx
+        retry:
+          xxx: xxx
+
       http:
         client:
 #          endpoint: xx
@@ -25,11 +32,11 @@ spring:
               values:
                 - test11
                 - test22
-          retry:
-            xx: xx
           proxy:
             host: sdfsd
             port: 32
+        retry:    #?
+          xx: xx  #?
       credential:
         client-id: xx
         client-secert: xx

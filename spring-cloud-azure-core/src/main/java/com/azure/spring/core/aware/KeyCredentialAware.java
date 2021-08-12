@@ -1,4 +1,4 @@
-package com.azure.spring.core;
+package com.azure.spring.core.aware;
 
 @FunctionalInterface
 public interface KeyCredentialAware<T> {

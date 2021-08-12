@@ -12,35 +12,25 @@ public class AzureProperties {
 
     public static final String PREFIX = "spring.cloud.azure";
 
-//    private HttpProperties http;
+    private ProxyProperties proxy;
 
-    private CredentialProperties credential;
+    private TokenCredentialProperties credential;
 
     private EnvironmentProperties environment;
 
-//    private ProxyOptionsProperties proxy;
+    public ProxyProperties getProxy() {
+        return proxy;
+    }
 
-//    public HttpProperties getHttp() {
-//        return http;
-//    }
-//
-//    public void setHttp(HttpProperties http) {
-//        this.http = http;
-//    }
+    public void setProxy(ProxyProperties proxy) {
+        this.proxy = proxy;
+    }
 
-//    public ProxyOptionsProperties getProxy() {
-//        return proxy;
-//    }
-//
-//    public void setProxy(ProxyOptionsProperties proxy) {
-//        this.proxy = proxy;
-//    }
-
-    public CredentialProperties getCredential() {
+    public TokenCredentialProperties getCredential() {
         return credential;
     }
 
-    public void setCredential(CredentialProperties credential) {
+    public void setCredential(TokenCredentialProperties credential) {
         this.credential = credential;
     }
 

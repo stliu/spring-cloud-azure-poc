@@ -1,11 +1,11 @@
 package com.azure.spring.autoconfigure.storage.blob;
 
 import com.azure.spring.core.properties.AzureProperties;
-import com.azure.spring.core.properties.AzureSasCredentialPropertiesAware;
-import com.azure.spring.core.properties.ConnectionStringPropertiesAware;
-import com.azure.spring.core.properties.EndpointPropertiesAware;
-import com.azure.spring.core.properties.HttpPropertiesAware;
-import com.azure.spring.core.properties.SasTokenPropertiesAware;
+import com.azure.spring.core.aware.AzureSasCredentialPropertiesAware;
+import com.azure.spring.core.aware.ConnectionStringAware;
+import com.azure.spring.core.aware.EndpointPropertiesAware;
+import com.azure.spring.core.aware.HttpPropertiesAware;
+import com.azure.spring.core.aware.SasCredentialAware;
 import com.azure.spring.core.properties.StorageSharedKeyCredentialPropertiesAware;
 import com.azure.spring.core.properties.http.HttpProperties;
 import com.azure.storage.blob.BlobServiceVersion;
@@ -14,9 +14,9 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "spring.cloud.azure.storage.blob")
-public class AzureStorageBlobProperties extends AzureProperties
-    implements EndpointPropertiesAware, StorageSharedKeyCredentialPropertiesAware,
-    SasTokenPropertiesAware, AzureSasCredentialPropertiesAware, ConnectionStringPropertiesAware,
+public class AzureStorageBlob extends AzureProperties
+    implements EndpointPropertiesAware,
+    SasCredentialAware, AzureSasCredentialPropertiesAware, ConnectionStringAware,
     HttpPropertiesAware, InitializingBean {
 
     private HttpProperties http;

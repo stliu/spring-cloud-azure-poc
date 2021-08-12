@@ -14,28 +14,28 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
-import static com.azure.spring.core.AzureTokenCredentialResolver.DEFAULT_CHAINED_TOKEN_CREDENTIAL_BEAN_NAME;
+//import static com.azure.spring.core.credential.AzureTokenCredentialResolver.DEFAULT_CHAINED_TOKEN_CREDENTIAL_BEAN_NAME;
 
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(AzureProperties.class)
 @AutoConfigureAfter
 public class AzureSpringAutoConfiguration {
 
-    @Bean
-    @ConditionalOnMissingBean
-    public AzureSpringHttpConfigurationContext azureSpringHttpConfigurationContext(
-        @Qualifier(DEFAULT_CHAINED_TOKEN_CREDENTIAL_BEAN_NAME) TokenCredential tokenCredential,
-        AzureProperties azureProperties,
-        Environment environment) {
-        return new DefaultAzureSpringHttpConfigurationContext(tokenCredential, azureProperties, environment);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public AzureSpringAmqpConfigurationContext azureSpringAmqpConfigurationContext(
-        @Qualifier(DEFAULT_CHAINED_TOKEN_CREDENTIAL_BEAN_NAME) TokenCredential tokenCredential,
-        AzureProperties azureProperties,
-        Environment environment) {
-        return new DefaultAzureSpringAmqpConfigurationContext(tokenCredential, azureProperties, environment);
-    }
+//    @Bean
+//    @ConditionalOnMissingBean
+//    public AzureSpringHttpConfigurationContext azureSpringHttpConfigurationContext(
+//        @Qualifier(DEFAULT_CHAINED_TOKEN_CREDENTIAL_BEAN_NAME) TokenCredential tokenCredential,
+//        AzureProperties azureProperties,
+//        Environment environment) {
+//        return new DefaultAzureSpringHttpConfigurationContext(tokenCredential, azureProperties, environment);
+//    }
+//
+//    @Bean
+//    @ConditionalOnMissingBean
+//    public AzureSpringAmqpConfigurationContext azureSpringAmqpConfigurationContext(
+//        @Qualifier(DEFAULT_CHAINED_TOKEN_CREDENTIAL_BEAN_NAME) TokenCredential tokenCredential,
+//        AzureProperties azureProperties,
+//        Environment environment) {
+//        return new DefaultAzureSpringAmqpConfigurationContext(tokenCredential, azureProperties, environment);
+//    }
 }

@@ -9,7 +9,7 @@ import com.azure.cosmos.DirectConnectionConfig;
 import com.azure.cosmos.GatewayConnectionConfig;
 import com.azure.cosmos.models.CosmosPermissionProperties;
 import com.azure.spring.core.properties.AzureProperties;
-import com.azure.spring.core.properties.EndpointPropertiesAware;
+import com.azure.spring.core.aware.EndpointPropertiesAware;
 import com.azure.spring.core.properties.http.HttpProxyOptionsProperties;
 import com.azure.spring.data.cosmos.core.ResponseDiagnosticsProcessor;
 import org.slf4j.Logger;

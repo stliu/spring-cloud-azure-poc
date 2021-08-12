@@ -2,7 +2,6 @@ package com.azure.spring.core.http;
 
 import com.azure.core.credential.TokenCredential;
 import com.azure.spring.core.properties.AzureProperties;
-import com.azure.spring.core.properties.CredentialProperties;
 import com.azure.spring.core.properties.http.HttpProperties;
 import org.springframework.core.env.Environment;
 

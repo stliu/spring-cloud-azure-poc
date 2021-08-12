@@ -1,4 +1,4 @@
-package com.azure.spring.core.http;
+package com.azure.spring.core.aware;
 
 import com.azure.core.http.HttpPipeline;
 

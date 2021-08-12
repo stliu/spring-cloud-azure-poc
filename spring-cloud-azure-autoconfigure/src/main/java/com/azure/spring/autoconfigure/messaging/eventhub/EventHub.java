@@ -1,18 +1,17 @@
 package com.azure.spring.autoconfigure.messaging.eventhub;
 
 import com.azure.core.amqp.AmqpTransportType;
-import com.azure.spring.core.properties.AmqpPropertiesAware;
+import com.azure.spring.core.aware.AmqpPropertiesAware;
 import com.azure.spring.core.properties.AzureProperties;
-import com.azure.spring.core.properties.ConnectionStringPropertiesAware;
+import com.azure.spring.core.aware.ConnectionStringAware;
 import com.azure.spring.core.properties.amqp.AmqpProperties;
-import org.apache.qpid.proton.engine.SslDomain;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import javax.validation.constraints.Pattern;
 
 @ConfigurationProperties(prefix = "spring.cloud.azure.eventhub")
-public class EventHubProperties extends AzureProperties implements
-    AmqpPropertiesAware, ConnectionStringPropertiesAware {
+public class EventHub extends AzureProperties implements
+    AmqpPropertiesAware, ConnectionStringAware {
 
     private AmqpProperties amqp;
     private String connectionString;
