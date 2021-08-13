@@ -1,4 +1,4 @@
-package com.azure.spring.core.aware;
+package com.azure.spring.core.aware.credential;
 
 public interface ConnectionStringAware {
 

@@ -3,7 +3,7 @@ package com.azure.spring.autoconfigure.messaging.eventhub;
 import com.azure.core.amqp.AmqpTransportType;
 import com.azure.spring.core.aware.AmqpPropertiesAware;
 import com.azure.spring.core.properties.AzureProperties;
-import com.azure.spring.core.aware.ConnectionStringAware;
+import com.azure.spring.core.aware.credential.ConnectionStringAware;
 import com.azure.spring.core.properties.amqp.AmqpProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

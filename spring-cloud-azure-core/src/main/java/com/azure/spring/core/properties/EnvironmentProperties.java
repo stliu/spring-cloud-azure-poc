@@ -3,7 +3,7 @@
 package com.azure.spring.core.properties;
 
 /**
- * Environment properties for endpoints in different Azure Clouds.
+ * Common Azure environment properties, such as Azure Cloud, for all Azure SDKs.
  */
 public class EnvironmentProperties {
 

@@ -1,12 +1,10 @@
 package com.azure.spring.autoconfigure.storage.blob;
 
-import com.azure.spring.core.properties.AzureProperties;
-import com.azure.spring.core.aware.AzureSasCredentialPropertiesAware;
-import com.azure.spring.core.aware.ConnectionStringAware;
 import com.azure.spring.core.aware.EndpointPropertiesAware;
 import com.azure.spring.core.aware.HttpPropertiesAware;
-import com.azure.spring.core.aware.SasCredentialAware;
-import com.azure.spring.core.properties.StorageSharedKeyCredentialPropertiesAware;
+import com.azure.spring.core.aware.credential.ConnectionStringAware;
+import com.azure.spring.core.aware.credential.SasTokenAware;
+import com.azure.spring.core.properties.AzureProperties;
 import com.azure.spring.core.properties.http.HttpProperties;
 import com.azure.storage.blob.BlobServiceVersion;
 import com.azure.storage.blob.models.CustomerProvidedKey;
@@ -16,7 +14,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.cloud.azure.storage.blob")
 public class AzureStorageBlob extends AzureProperties
     implements EndpointPropertiesAware,
-    SasCredentialAware, AzureSasCredentialPropertiesAware, ConnectionStringAware,
+    SasTokenAware, ConnectionStringAware,
     HttpPropertiesAware, InitializingBean {
 
     private HttpProperties http;
@@ -67,6 +65,7 @@ public class AzureStorageBlob extends AzureProperties
         this.anonymousAccess = anonymousAccess;
     }
 
+    @Override
     public String getSasToken() {
         return sasToken;
     }
@@ -80,7 +79,6 @@ public class AzureStorageBlob extends AzureProperties
         return signature;
     }
 
-    @Override
     public void setSignature(String signature) {
         this.signature = signature;
     }
@@ -89,7 +87,6 @@ public class AzureStorageBlob extends AzureProperties
         return accountName;
     }
 
-    @Override
     public void setAccountName(String accountName) {
         this.accountName = accountName;
     }
@@ -98,7 +95,6 @@ public class AzureStorageBlob extends AzureProperties
         return accountKey;
     }
 
-    @Override
     public void setAccountKey(String accountKey) {
         this.accountKey = accountKey;
     }

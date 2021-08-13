@@ -1,6 +1,6 @@
-package com.azure.spring.core.properties;
+package com.azure.spring.core.properties.credential;
 
-public class NamedKeyCredentialProperties {
+public class NamedKeyProperties {
     private String name;
     private String key;
 

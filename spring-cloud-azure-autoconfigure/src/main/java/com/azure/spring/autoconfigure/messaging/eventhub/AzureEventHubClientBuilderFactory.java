@@ -1,20 +1,10 @@
 package com.azure.spring.autoconfigure.messaging.eventhub;
 
-import com.azure.core.amqp.AmqpTransportType;
 import com.azure.core.credential.TokenCredential;
-import com.azure.core.exception.AzureException;
-import com.azure.core.util.ClientOptions;
-import com.azure.core.util.Configuration;
 import com.azure.messaging.eventhubs.EventHubClientBuilder;
-import com.azure.spring.core.AzureSpringConfigurationContext;
 import com.azure.spring.core.builder.AzureAmqpClientBuilderFactory;
-import com.azure.spring.core.amqp.AzureSpringAmqpConfigurationContext;
+import com.azure.spring.core.context.AzureSpringAmqpConfigurationContext;
 import com.azure.spring.core.properties.ProxyProperties;
-import com.azure.spring.core.properties.amqp.AmqpProperties;
-import org.springframework.util.StringUtils;
-
-import java.net.URL;
-import java.util.Optional;
 
 /**
  * Storage Blob Service client builder factory, it builds the storage blob client

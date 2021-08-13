@@ -1,20 +1,20 @@
-package com.azure.spring.core.amqp;
+package com.azure.spring.core.context;
 
 import com.azure.core.credential.TokenCredential;
 import com.azure.spring.core.properties.AzureProperties;
-import com.azure.spring.core.properties.amqp.AmqpProperties;
+import com.azure.spring.core.properties.http.HttpProperties;
 import org.springframework.core.env.Environment;
 
 /**
- * Default implementation for amqp configuration context,suitable for module-based amqp protocol.
+ * Default implementation for http configuration context,suitable for module-based http protocol.
  */
-public class DefaultAzureSpringAmqpConfigurationContext implements AzureSpringAmqpConfigurationContext {
+public class DefaultAzureSpringHttpConfigurationContext implements AzureSpringHttpConfigurationContext {
 
     private final TokenCredential tokenCredential;
     private final AzureProperties azureProperties;
     private final Environment environment;
 
-    public DefaultAzureSpringAmqpConfigurationContext(TokenCredential tokenCredential,
+    public DefaultAzureSpringHttpConfigurationContext(TokenCredential tokenCredential,
                                                       AzureProperties azureProperties,
                                                       Environment environment) {
         this.tokenCredential = tokenCredential;
@@ -22,19 +22,28 @@ public class DefaultAzureSpringAmqpConfigurationContext implements AzureSpringAm
         this.environment = environment;
     }
 
+//    public HttpProperties getInheritHttpProperties(AzureProperties inheritProperties) {
+//
+//        return null;
+//    }
+//
+//    public CredentialProperties getInheritCredentialProperties(AzureProperties inheritProperties) {
+//
+//        return null;
+//    }
+
     @Override
     public AzureProperties getRootAzureProperties() {
         return azureProperties;
     }
 
     @Override
-    public AmqpProperties getRootAmqpProperties() {
+    public HttpProperties getRootHttpProperties() {
         return null;
     }
 
     @Override
     public TokenCredential getTokenCredential() {
-        // TODO: Create the final chained token credential.
-        return null;
+        return tokenCredential;
     }
 }

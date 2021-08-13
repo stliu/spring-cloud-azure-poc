@@ -1,4 +1,4 @@
-package com.azure.spring.core;
+package com.azure.spring.core.context;
 
 import com.azure.core.credential.TokenCredential;
 import com.azure.core.util.Configuration;

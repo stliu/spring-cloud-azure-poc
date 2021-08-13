@@ -1,21 +1,22 @@
 package com.azure.spring.core.properties.http;
 
 import com.azure.spring.core.properties.ClientOptionsProperties;
+import com.azure.spring.core.properties.ProxyProperties;
 
 public class HttpClientOptionsProperties extends ClientOptionsProperties {
 
-    private HttpProxyOptionsProperties proxy;
+    private ProxyProperties proxy;
 
     private RequestRetryOptionsProperties retry;
 
 //    private String endpoint;
 
 
-    public HttpProxyOptionsProperties getProxy() {
+    public ProxyProperties getProxy() {
         return proxy;
     }
 
-    public void setProxy(HttpProxyOptionsProperties proxy) {
+    public void setProxy(ProxyProperties proxy) {
         this.proxy = proxy;
     }
 

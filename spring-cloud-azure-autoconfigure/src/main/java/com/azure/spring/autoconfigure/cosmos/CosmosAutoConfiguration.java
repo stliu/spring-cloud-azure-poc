@@ -17,8 +17,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static com.azure.spring.core.credential.AzureTokenCredentialResolver.DEFAULT_CHAINED_TOKEN_CREDENTIAL_BEAN_NAME;
-
 /**
  * Auto Configure Cosmos properties and connection policy.
  */
@@ -48,16 +46,16 @@ public class CosmosAutoConfiguration extends AbstractCosmosConfiguration {
     }
 
 
-    @Bean
-    @ConditionalOnMissingBean
-    public CosmosServiceClientBuilderFactory factory(@Qualifier(DEFAULT_CHAINED_TOKEN_CREDENTIAL_BEAN_NAME) TokenCredential tokenCredential,
-                                                     CosmosProperties cosmosProperties) {
-        return new CosmosServiceClientBuilderFactory(tokenCredential, cosmosProperties);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public CosmosClientBuilder cosmosClientBuilder(CosmosServiceClientBuilderFactory factory) {
-        return factory.build();
-    }
+//    @Bean
+//    @ConditionalOnMissingBean
+//    public CosmosServiceClientBuilderFactory factory(@Qualifier(DEFAULT_CHAINED_TOKEN_CREDENTIAL_BEAN_NAME) TokenCredential tokenCredential,
+//                                                     CosmosProperties cosmosProperties) {
+//        return new CosmosServiceClientBuilderFactory(tokenCredential, cosmosProperties);
+//    }
+//
+//    @Bean
+//    @ConditionalOnMissingBean
+//    public CosmosClientBuilder cosmosClientBuilder(CosmosServiceClientBuilderFactory factory) {
+//        return factory.build();
+//    }
 }

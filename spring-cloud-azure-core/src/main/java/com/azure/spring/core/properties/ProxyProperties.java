@@ -1,31 +1,23 @@
 package com.azure.spring.core.properties;
 
 /**
- * Common proxy options properties for Azure SDK service client options.
+ * Common proxy properties for all Azure SDKs.
  */
 public class ProxyProperties {
 
-    private String username;
-    private String password;
+    private String type;
     private String hostname;
     private int port;
     private String authenticationType;
-    private String type;
+    private String username;
+    private String password;
 
-    public String getUsername() {
-        return username;
+    public String getType() {
+        return type;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getHostname() {
@@ -52,11 +44,19 @@ public class ProxyProperties {
         this.authenticationType = authenticationType;
     }
 
-    public String getType() {
-        return type;
+    public String getUsername() {
+        return username;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

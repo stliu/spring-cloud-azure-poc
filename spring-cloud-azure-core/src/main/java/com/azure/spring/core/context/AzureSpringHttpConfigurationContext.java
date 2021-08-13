@@ -1,7 +1,7 @@
-package com.azure.spring.core.http;
+package com.azure.spring.core.context;
 
 import com.azure.spring.core.properties.AzureProperties;
-import com.azure.spring.core.AzureSpringConfigurationContext;
+import com.azure.spring.core.context.AzureSpringConfigurationContext;
 import com.azure.spring.core.properties.http.HttpProperties;
 
 /**

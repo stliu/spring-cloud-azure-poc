@@ -1,6 +1,6 @@
-package com.azure.spring.core.amqp;
+package com.azure.spring.core.context;
 
-import com.azure.spring.core.AzureSpringConfigurationContext;
+import com.azure.spring.core.context.AzureSpringConfigurationContext;
 import com.azure.spring.core.properties.AzureProperties;
 import com.azure.spring.core.properties.amqp.AmqpProperties;
 

@@ -1,16 +1,9 @@
 package com.azure.spring.autoconfigure.cosmos;
 
-import com.azure.core.credential.AzureKeyCredential;
 import com.azure.core.credential.TokenCredential;
 import com.azure.cosmos.CosmosClientBuilder;
-import com.azure.spring.core.IAzureKeyCredentialResolver;
 import com.azure.spring.core.builder.AzureHttpClientBuilderFactory;
-import com.azure.spring.core.identify.AzureServiceFeature;
 import com.azure.spring.core.properties.ProxyProperties;
-import org.springframework.util.StringUtils;
-
-import java.util.Arrays;
-import java.util.List;
 
 
 public class CosmosServiceClientBuilderFactory implements

@@ -3,6 +3,8 @@
 
 package com.azure.spring.core.properties;
 
+import com.azure.spring.core.properties.credential.TokenCredentialProperties;
+
 /**
  * Unified properties for Azure SDK clients.
  */

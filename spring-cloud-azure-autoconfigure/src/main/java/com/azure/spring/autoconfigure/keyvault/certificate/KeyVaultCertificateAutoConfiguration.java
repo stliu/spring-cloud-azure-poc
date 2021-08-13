@@ -16,8 +16,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static com.azure.spring.core.credential.AzureTokenCredentialResolver.DEFAULT_CHAINED_TOKEN_CREDENTIAL_BEAN_NAME;
-
 
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(CertificateClientBuilder.class)
@@ -38,19 +36,19 @@ public class KeyVaultCertificateAutoConfiguration {
         return builder.buildAsyncClient();
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public KeyVaultCertificateServiceClientBuilderFactory factory(@Qualifier(DEFAULT_CHAINED_TOKEN_CREDENTIAL_BEAN_NAME) TokenCredential tokenCredential,
-        KeyVaultProperties keyVaultProperties,
-        KeyVaultCertificateProperties keyVaultCertificateProperties,
-        HttpProperties httpProperties) {
-        return new KeyVaultCertificateServiceClientBuilderFactory(tokenCredential,
-            keyVaultProperties, keyVaultCertificateProperties, httpProperties);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public CertificateClientBuilder secretClientBuilder(KeyVaultCertificateServiceClientBuilderFactory factory) {
-        return factory.build();
-    }
+//    @Bean
+//    @ConditionalOnMissingBean
+//    public KeyVaultCertificateServiceClientBuilderFactory factory(@Qualifier(DEFAULT_CHAINED_TOKEN_CREDENTIAL_BEAN_NAME) TokenCredential tokenCredential,
+//        KeyVaultProperties keyVaultProperties,
+//        KeyVaultCertificateProperties keyVaultCertificateProperties,
+//        HttpProperties httpProperties) {
+//        return new KeyVaultCertificateServiceClientBuilderFactory(tokenCredential,
+//            keyVaultProperties, keyVaultCertificateProperties, httpProperties);
+//    }
+//
+//    @Bean
+//    @ConditionalOnMissingBean
+//    public CertificateClientBuilder secretClientBuilder(KeyVaultCertificateServiceClientBuilderFactory factory) {
+//        return factory.build();
+//    }
 }
