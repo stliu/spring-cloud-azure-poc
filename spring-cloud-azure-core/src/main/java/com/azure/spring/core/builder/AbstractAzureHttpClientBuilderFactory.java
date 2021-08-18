@@ -1,52 +1,30 @@
 package com.azure.spring.core.builder;
 
-import com.azure.core.http.ProxyOptions;
-import com.azure.core.util.Header;
-import com.azure.core.util.HttpClientOptions;
-import com.azure.spring.core.properties.ProxyProperties;
-import com.azure.spring.core.properties.http.HttpClientOptionsProperties;
-import org.springframework.util.StringUtils;
+import com.azure.core.util.ClientOptions;
+import com.azure.spring.core.aware.HttpPropertiesAware;
+import com.azure.spring.core.properties.AzureProperties;
+import com.azure.spring.core.properties.ClientProperties;
+import com.azure.spring.core.properties.http.HttpClientProperties;
+import com.azure.spring.core.properties.http.HttpProperties;
 
-import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-public abstract class AbstractAzureHttpClientBuilderFactory<T> extends AbstractAzureServiceClientBuilderFactory<T> {
+public abstract class AbstractAzureHttpClientBuilderFactory<T, O, R> extends AbstractAzureServiceClientBuilderFactory<T, O, R> {
 
     @Override
     protected void configureProxy(T builder) {
-
+        // TODO:
     }
 
-    private ProxyOptions convertToProxyOptions(ProxyProperties properties) {
-        InetSocketAddress address = new InetSocketAddress(properties.getHostname(), properties.getPort());
-        ProxyOptions proxyOptions = new ProxyOptions(getProxyType(properties), address);
-        if (StringUtils.hasText(properties.getUsername()) && StringUtils.hasText(properties.getPassword())) {
-            proxyOptions.setCredentials(properties.getUsername(), properties.getPassword());
-        }
-        return proxyOptions;
-    }
-
-    private ProxyOptions.Type getProxyType(ProxyProperties properties) {
-        // TODO
-        return ProxyOptions.Type.HTTP;
-    }
-
+    /**
+     * Override to return the http client properties
+     * @return {@link ClientOptions}'s extended class {@link HttpClientProperties}
+     */
     @Override
-    protected void configureClientOptions(T builder) {
-        HttpClientOptions httpClientOptions = new HttpClientOptions();
-        HttpClientOptionsProperties client = null; // (HttpClientOptionsProperties) getClientProperties();
-        Optional.ofNullable(client.getProxy()).map(this::convertToProxyOptions).ifPresent(httpClientOptions::setProxyOptions);
-        Optional.ofNullable(client.getApplicationId()).ifPresent(httpClientOptions::setApplicationId);
-        Optional.ofNullable(client.getHeaders()).ifPresent(headerProperties -> {
-            List<Header> headers = new ArrayList<>();
-            headerProperties.forEach(headerProp -> {
-                headers.add(new Header(headerProp.getName(), headerProp.getValues()));
-            });
-            httpClientOptions.setHeaders(headers);
-        });
-//        httpClientOptions.setConfiguration(getConfiguration());
-        // TODO: set clientOptions
+    protected ClientProperties getClientProperties() {
+        AzureProperties azureProperties = getAzureProperties();
+        if (azureProperties instanceof HttpPropertiesAware) {
+            HttpProperties httpProperties = ((HttpPropertiesAware) azureProperties).getHttp();
+            return httpProperties != null ? httpProperties.getClient() : null;
+        }
+        return null;
     }
 }

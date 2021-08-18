@@ -1,9 +1,9 @@
 package com.azure.spring.core.properties.http;
 
-import com.azure.spring.core.properties.ClientOptionsProperties;
+import com.azure.spring.core.properties.ClientProperties;
 import com.azure.spring.core.properties.ProxyProperties;
 
-public class HttpClientOptionsProperties extends ClientOptionsProperties {
+public class HttpClientProperties extends ClientProperties {
 
     private ProxyProperties proxy;
 

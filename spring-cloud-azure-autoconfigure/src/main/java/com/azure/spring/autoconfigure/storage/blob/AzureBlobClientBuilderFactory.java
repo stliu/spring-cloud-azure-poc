@@ -1,33 +1,31 @@
 package com.azure.spring.autoconfigure.storage.blob;
 
-import com.azure.core.credential.TokenCredential;
-import com.azure.core.util.Configuration;
+import com.azure.core.util.HttpClientOptions;
+import com.azure.spring.autoconfigure.storage.credential.StorageSharedKeyAuthenticationDescriptor;
 import com.azure.spring.core.builder.AbstractAzureHttpClientBuilderFactory;
-import com.azure.spring.core.context.AzureSpringHttpConfigurationContext;
-import com.azure.spring.core.credential.AzureCredentialManager;
-import com.azure.spring.core.credential.AzureCredentialType;
+import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
+import com.azure.spring.core.credential.descriptor.SasAuthenticationDescriptor;
+import com.azure.spring.core.credential.descriptor.TokenAuthenticationDescriptor;
+import com.azure.spring.core.credential.resolver.AzureCredentialResolvers;
 import com.azure.spring.core.properties.AzureProperties;
-import com.azure.spring.core.properties.ClientOptionsProperties;
-import com.azure.spring.core.properties.credential.NamedKeyProperties;
-import com.azure.spring.core.properties.ProxyProperties;
 import com.azure.storage.blob.BlobClientBuilder;
+import com.azure.storage.common.policy.RequestRetryOptions;
+import org.springframework.boot.context.properties.PropertyMapper;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Storage Blob Service client builder factory, it builds the storage blob client according the configuration context
  * and blob properties.
  */
-public class AzureBlobClientBuilderFactory extends AbstractAzureHttpClientBuilderFactory<BlobClientBuilder> {
+public class AzureBlobClientBuilderFactory extends AbstractAzureHttpClientBuilderFactory<BlobClientBuilder, HttpClientOptions, RequestRetryOptions> {
 
-    private final AzureSpringHttpConfigurationContext configurationContext;
-    private final AzureStorageBlob blobProperties;
+    private final AzureStorageBlobProperties blobProperties;
 
-    public AzureBlobClientBuilderFactory(AzureSpringHttpConfigurationContext configurationContext,
-                                         AzureStorageBlob blobProperties) {
-        this.configurationContext = configurationContext;
+    private AzureCredentialResolvers credentialResolvers;
+
+    public AzureBlobClientBuilderFactory(AzureStorageBlobProperties blobProperties) {
         this.blobProperties = blobProperties;
     }
 
@@ -38,23 +36,22 @@ public class AzureBlobClientBuilderFactory extends AbstractAzureHttpClientBuilde
 
     @Override
     public void configureService(BlobClientBuilder builder) {
-        Optional.ofNullable(blobProperties.getCustomerProvidedKey()).ifPresent(builder::customerProvidedKey);
-        Optional.ofNullable(blobProperties.getEncryptionScope()).ifPresent(builder::encryptionScope);
-
-        // TODO: wrapper credential
-        Optional.ofNullable(blobProperties.getConnectionString()).ifPresent(builder::connectionString);
-
-        Optional.ofNullable(blobProperties.getEndpoint()).ifPresent(builder::endpoint);
-        Optional.ofNullable(blobProperties.getBlobName()).ifPresent(builder::blobName);
-        Optional.ofNullable(blobProperties.getContainerName()).ifPresent(builder::containerName);
-        Optional.ofNullable(blobProperties.getSnapshot()).ifPresent(builder::snapshot);
-        Optional.ofNullable(blobProperties.getVersionId()).ifPresent(builder::versionId);
-        Optional.ofNullable(blobProperties.getServiceVersion()).ifPresent(builder::serviceVersion);
-
+        PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
+        map.from(blobProperties.getCustomerProvidedKey()).to(builder::customerProvidedKey);
+        map.from(blobProperties.getEncryptionScope()).to(builder::encryptionScope);
+        map.from(blobProperties.getEndpoint()).to(builder::endpoint);
+        map.from(blobProperties.getBlobName()).to(builder::blobName);
+        map.from(blobProperties.getContainerName()).to(builder::containerName);
+        map.from(blobProperties.getSnapshot()).to(builder::snapshot);
+        map.from(blobProperties.getVersionId()).to(builder::versionId);
+        map.from(blobProperties.getServiceVersion()).to(builder::serviceVersion);
+        // Only storage blob has anonymous access feature.
+        // TODO: Add anonymous mechanism
         if (blobProperties.getAnonymousAccess()) {
             builder.setAnonymousAccess();
         }
     }
+
 
     @Override
     protected AzureProperties getAzureProperties() {
@@ -62,15 +59,15 @@ public class AzureBlobClientBuilderFactory extends AbstractAzureHttpClientBuilde
     }
 
     @Override
-    protected List<AzureCredentialType> getOrderedSupportCredentialTypes() {
-        return Arrays.asList(AzureCredentialType.TOKEN_CREDENTIAL);
+    protected List<AuthenticationDescriptor> getAuthenticationDescriptors(BlobClientBuilder builder) {
+        return Arrays.asList(
+            new StorageSharedKeyAuthenticationDescriptor(c ->
+                builder.credential(c.getCredential())),
+            new TokenAuthenticationDescriptor(c ->
+                builder.credential(c.getCredential())),
+            new SasAuthenticationDescriptor(c ->
+                builder.credential(c.getCredential())));
     }
 
-    @Override
-    protected AzureCredentialManager getAzureCredentialManager(BlobClientBuilder builder) {
-        AzureCredentialManager azureCredentialManager = new AzureCredentialManager();
-        azureCredentialManager.registerConsumer(AzureCredentialType.TOKEN_CREDENTIAL,
-            c -> builder.credential((TokenCredential) c.getCredential()));
-        return azureCredentialManager;
-    }
+
 }

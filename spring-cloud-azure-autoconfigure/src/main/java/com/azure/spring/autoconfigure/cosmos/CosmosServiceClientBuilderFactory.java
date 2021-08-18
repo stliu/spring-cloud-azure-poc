@@ -3,7 +3,6 @@ package com.azure.spring.autoconfigure.cosmos;
 import com.azure.core.credential.TokenCredential;
 import com.azure.cosmos.CosmosClientBuilder;
 import com.azure.spring.core.builder.AzureHttpClientBuilderFactory;
-import com.azure.spring.core.properties.ProxyProperties;
 
 
 public class CosmosServiceClientBuilderFactory implements
@@ -43,17 +42,6 @@ public class CosmosServiceClientBuilderFactory implements
 //            }
 //        });
         return builder;
-    }
-
-
-    @Override
-    public void setProxy(ProxyProperties proxy) {
-
-    }
-
-    @Override
-    public void setTokenCredential(TokenCredential credential) {
-
     }
 
 }

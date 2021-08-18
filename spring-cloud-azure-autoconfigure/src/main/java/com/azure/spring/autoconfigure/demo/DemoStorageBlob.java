@@ -2,12 +2,10 @@ package com.azure.spring.autoconfigure.demo;
 
 import com.azure.core.credential.TokenCredential;
 import com.azure.identity.ChainedTokenCredentialBuilder;
-import com.azure.spring.autoconfigure.storage.blob.AzureStorageBlob;
-import com.azure.spring.autoconfigure.storage.blob.AzureBlobClientBuilderFactory;
+import com.azure.spring.autoconfigure.storage.blob.AzureStorageBlobProperties;
 import com.azure.spring.core.properties.AzureProperties;
 import com.azure.spring.core.context.DefaultAzureSpringHttpConfigurationContext;
 import com.azure.spring.core.context.AzureSpringHttpConfigurationContext;
-import com.azure.storage.blob.BlobClientBuilder;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.StandardEnvironment;
 
@@ -15,7 +13,7 @@ import org.springframework.core.env.StandardEnvironment;
 public class DemoStorageBlob {
 
     public static void main(String[] args) {
-        AzureStorageBlob blobProperties = new AzureStorageBlob();
+        AzureStorageBlobProperties blobProperties = new AzureStorageBlobProperties();
         TokenCredential tokenCredential = new ChainedTokenCredentialBuilder().build();
         AzureProperties rootProperties = new AzureProperties();
         Environment env = new StandardEnvironment();

@@ -1,35 +1,32 @@
 package com.azure.spring.core.credential.resolver;
 
-import com.azure.core.credential.AzureKeyCredential;
 import com.azure.spring.core.aware.credential.KeyAware;
-import com.azure.spring.core.credential.AzureCredential;
-import com.azure.spring.core.credential.AzureCredentialType;
-import com.azure.spring.core.credential.wrapper.AzureKeyCredentialWrapper;
+import com.azure.spring.core.credential.provider.AzureKeyCredentialProvider;
 import com.azure.spring.core.properties.AzureProperties;
 import org.springframework.util.StringUtils;
 
 /**
- * Resolve the token credential according azure properties.
+ * Resolve the token credential according to the azure properties.
  */
-public class AzureKeyCredentialResolver implements AzureCredentialResolver<AzureCredential<AzureKeyCredential>> {
+public class AzureKeyCredentialResolver implements AzureCredentialResolver<AzureKeyCredentialProvider> {
 
     @Override
-    public AzureCredential<AzureKeyCredential> resolve(AzureProperties azureProperties) {
-        if (!(azureProperties instanceof KeyAware)) {
+    public AzureKeyCredentialProvider resolve(AzureProperties properties) {
+        if (!isResolvable(properties)) {
             return null;
         }
 
-        String key = ((KeyAware) azureProperties).getKey();
+        String key = ((KeyAware) properties).getKey();
         if (!StringUtils.hasText(key)) {
             return null;
         }
 
-        return new AzureKeyCredentialWrapper(key);
+        return new AzureKeyCredentialProvider(key);
     }
 
     @Override
-    public AzureCredentialType support() {
-        return AzureCredentialType.KEY_CREDENTIAL;
+    public boolean isResolvable(AzureProperties properties) {
+        return properties instanceof KeyAware;
     }
 
 }

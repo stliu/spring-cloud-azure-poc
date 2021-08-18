@@ -1,10 +1,8 @@
 package com.azure.spring.autoconfigure.messaging.eventhub;
 
-import com.azure.core.credential.TokenCredential;
 import com.azure.messaging.eventhubs.EventHubClientBuilder;
 import com.azure.spring.core.builder.AzureAmqpClientBuilderFactory;
 import com.azure.spring.core.context.AzureSpringAmqpConfigurationContext;
-import com.azure.spring.core.properties.ProxyProperties;
 
 /**
  * Storage Blob Service client builder factory, it builds the storage blob client
@@ -14,12 +12,12 @@ public class AzureEventHubClientBuilderFactory implements
     AzureAmqpClientBuilderFactory<EventHubClientBuilder> {
 
     private final AzureSpringAmqpConfigurationContext configurationContext;
-    private final EventHub eventHubProperties;
+    private final EventHubProperties eventHubProperties;
 
     private EventHubClientBuilder builder;
 
     public AzureEventHubClientBuilderFactory(AzureSpringAmqpConfigurationContext configurationContext,
-                                             EventHub eventHubProperties) {
+                                             EventHubProperties eventHubProperties) {
         this.configurationContext = configurationContext;
         this.eventHubProperties = eventHubProperties;
 
@@ -51,15 +49,5 @@ public class AzureEventHubClientBuilderFactory implements
         Optional.ofNullable(eventHubProperties.getConsumerGroup()).ifPresent(this::consumerGroup);
         Optional.ofNullable(eventHubProperties.getPrefetchCount()).ifPresent(this::prefetchCount);*/
         return builder;
-    }
-
-    @Override
-    public void setProxy(ProxyProperties proxy) {
-
-    }
-
-    @Override
-    public void setTokenCredential(TokenCredential credential) {
-
     }
 }

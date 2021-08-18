@@ -2,15 +2,11 @@ package com.azure.spring.autoconfigure.keyvault.certificate;
 
 import com.azure.core.credential.TokenCredential;
 import com.azure.core.http.HttpPipeline;
-import com.azure.core.util.ClientOptions;
-import com.azure.core.util.Configuration;
 import com.azure.security.keyvault.certificates.CertificateClientBuilder;
 import com.azure.security.keyvault.certificates.CertificateServiceVersion;
 import com.azure.spring.autoconfigure.keyvault.KeyVaultProperties;
-import com.azure.spring.core.context.AzureSpringConfigurationContext;
-import com.azure.spring.core.context.AzureSpringHttpConfigurationContext;
 import com.azure.spring.core.builder.AzureHttpClientBuilderFactory;
-import com.azure.spring.core.properties.ClientOptionsProperties;
+import com.azure.spring.core.context.AzureSpringHttpConfigurationContext;
 import com.azure.spring.core.properties.http.HttpProperties;
 
 
@@ -35,36 +31,6 @@ public class KeyVaultCertificateServiceClientBuilderFactory implements
         this.keyVaultProperties = keyVaultProperties;
         this.keyVaultCertificateProperties = keyVaultCertificateProperties;
         this.httpProperties = httpProperties;
-    }
-
-    @Override
-    public HttpProperties getRootHttpProperties() {
-        return null;
-    }
-
-    @Override
-    public HttpProperties getInheritHttpProperties() {
-        return null;
-    }
-
-    @Override
-    public ClientOptions getClientOptions(ClientOptionsProperties client) {
-        return null;
-    }
-
-    @Override
-    public Configuration getDefaultConfiguration() {
-        return null;
-    }
-
-    @Override
-    public TokenCredential getDefaultTokenCredential() {
-        return null;
-    }
-
-    @Override
-    public AzureSpringConfigurationContext getConfigurationContext() {
-        return null;
     }
 
     @Override
@@ -97,21 +63,6 @@ public class KeyVaultCertificateServiceClientBuilderFactory implements
 //        });
         return builder;
     }
-
-    @Override
-    public CertificateClientBuilder builder() {
-        return builder;
-    }
-
-    @Override
-    public void setPipeline(HttpPipeline pipeline) {
-        this.pipeline = pipeline;
-    }
-
-    /*@Override
-    public List<AzureServiceFeature> supportFeatures() {
-        return Collections.singletonList(AzureServiceFeature.TOKEN_CREDENTIAL);
-    }*/
 
     public KeyVaultCertificateServiceClientBuilderFactory vaultUrl(String vaultUrl) {
         builder.vaultUrl(vaultUrl);

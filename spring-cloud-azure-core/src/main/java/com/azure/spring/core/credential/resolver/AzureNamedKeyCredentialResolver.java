@@ -1,36 +1,33 @@
 package com.azure.spring.core.credential.resolver;
 
-import com.azure.core.credential.AzureNamedKeyCredential;
 import com.azure.spring.core.aware.credential.NamedKeyAware;
-import com.azure.spring.core.credential.AzureCredential;
-import com.azure.spring.core.credential.AzureCredentialType;
-import com.azure.spring.core.credential.wrapper.AzureNamedKeyCredentialWrapper;
+import com.azure.spring.core.credential.provider.AzureNamedKeyCredentialProvider;
 import com.azure.spring.core.properties.AzureProperties;
 import com.azure.spring.core.properties.credential.NamedKeyProperties;
 import org.springframework.util.StringUtils;
 
 /**
- * Resolve the token credential according azure properties.
+ * Resolve the named key credential according to the azure properties.
  */
-public class AzureNamedKeyCredentialResolver implements AzureCredentialResolver<AzureCredential<AzureNamedKeyCredential>> {
+public class AzureNamedKeyCredentialResolver implements AzureCredentialResolver<AzureNamedKeyCredentialProvider> {
 
     @Override
-    public AzureCredential<AzureNamedKeyCredential> resolve(AzureProperties azureProperties) {
-        if (!(azureProperties instanceof NamedKeyAware)) {
+    public AzureNamedKeyCredentialProvider resolve(AzureProperties properties) {
+        if (!isResolvable(properties)) {
             return null;
         }
 
-        NamedKeyProperties namedKey = ((NamedKeyAware) azureProperties).getNamedKey();
+        NamedKeyProperties namedKey = ((NamedKeyAware) properties).getNamedKey();
         if (!StringUtils.hasText(namedKey.getName()) || !StringUtils.hasText(namedKey.getKey())) {
             return null;
         }
 
-        return new AzureNamedKeyCredentialWrapper(namedKey.getName(), namedKey.getKey());
+        return new AzureNamedKeyCredentialProvider(namedKey.getName(), namedKey.getKey());
     }
 
     @Override
-    public AzureCredentialType support() {
-        return AzureCredentialType.NAMED_KEY_CREDENTIAL;
+    public boolean isResolvable(AzureProperties properties) {
+        return properties instanceof NamedKeyAware;
     }
 
 }

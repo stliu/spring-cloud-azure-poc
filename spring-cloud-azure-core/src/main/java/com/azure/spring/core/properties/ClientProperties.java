@@ -4,7 +4,7 @@ import com.azure.spring.core.properties.http.HeaderProperties;
 
 import java.util.List;
 
-public class ClientOptionsProperties {
+public class ClientProperties {
 
     private String applicationId;
 

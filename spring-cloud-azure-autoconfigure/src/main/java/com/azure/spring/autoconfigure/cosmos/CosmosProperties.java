@@ -10,7 +10,6 @@ import com.azure.cosmos.GatewayConnectionConfig;
 import com.azure.cosmos.models.CosmosPermissionProperties;
 import com.azure.spring.core.properties.AzureProperties;
 import com.azure.spring.core.aware.EndpointPropertiesAware;
-import com.azure.spring.core.properties.http.HttpProxyOptionsProperties;
 import com.azure.spring.data.cosmos.core.ResponseDiagnosticsProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,8 +33,6 @@ public class CosmosProperties extends AzureProperties implements
 
     private String endpoint;
     private String applicationId;
-
-    private HttpProxyOptionsProperties proxy;
 
     /**
      * Override enabled, session capturing is enabled by default for {@link ConsistencyLevel#SESSION}
@@ -104,14 +101,6 @@ public class CosmosProperties extends AzureProperties implements
     @Override
     public void setEndpoint(String endpoint) {
         this.endpoint = endpoint;
-    }
-
-    public HttpProxyOptionsProperties getProxy() {
-        return proxy;
-    }
-
-    public void setProxy(HttpProxyOptionsProperties proxy) {
-        this.proxy = proxy;
     }
 
     public String getDatabase() {

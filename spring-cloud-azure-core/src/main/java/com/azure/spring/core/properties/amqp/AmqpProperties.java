@@ -1,37 +1,33 @@
 package com.azure.spring.core.properties.amqp;
 
-import com.azure.spring.core.properties.ClientOptionsProperties;
+import com.azure.spring.core.aware.client.ClientAware;
+import com.azure.spring.core.properties.ClientProperties;
+import com.azure.spring.core.properties.ProxyProperties;
 
-public class AmqpProperties {
+public class AmqpProperties implements ClientAware {
 
     public static final String PREFIX = "spring.cloud.azure.amqp";
 
-    private AmqpRetryOptionsProperties retry;
-    private AmqpProxyOptionsProperties proxy;
+//    private AmqpRetryOptionsProperties retry;
 
-    private ClientOptionsProperties client;
+    // TODO
+    private ProxyProperties proxy;
 
-    public ClientOptionsProperties getClient() {
-        return client;
-    }
+    private ClientProperties client;
 
-    public void setClient(ClientOptionsProperties client) {
-        this.client = client;
-    }
-
-    public AmqpRetryOptionsProperties getRetry() {
-        return retry;
-    }
-
-    public void setRetry(AmqpRetryOptionsProperties retry) {
-        this.retry = retry;
-    }
-
-    public AmqpProxyOptionsProperties getProxy() {
+    public ProxyProperties getProxy() {
         return proxy;
     }
 
-    public void setProxy(AmqpProxyOptionsProperties proxy) {
+    public void setProxy(ProxyProperties proxy) {
         this.proxy = proxy;
+    }
+
+    public ClientProperties getClient() {
+        return client;
+    }
+
+    public void setClient(ClientProperties client) {
+        this.client = client;
     }
 }

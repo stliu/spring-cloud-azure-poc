@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(EventHubClientBuilder.class)
 @ConditionalOnProperty(prefix = "spring.cloud.azure.eventhub", name = "enabled", matchIfMissing = true)
-@EnableConfigurationProperties(EventHub.class)
+@EnableConfigurationProperties(EventHubProperties.class)
 @AutoConfigureAfter
 public class EventhubAutoConfiguration {
 
@@ -64,7 +64,7 @@ public class EventhubAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public AzureEventHubClientBuilderFactory factory(AzureSpringAmqpConfigurationContext context,
-                                                     EventHub properties) {
+                                                     EventHubProperties properties) {
         return new AzureEventHubClientBuilderFactory(context, properties);
     }
 

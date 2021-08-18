@@ -1,34 +1,31 @@
 package com.azure.spring.core.credential.resolver;
 
-import com.azure.core.credential.AzureSasCredential;
 import com.azure.spring.core.aware.credential.SasTokenAware;
-import com.azure.spring.core.credential.AzureCredential;
-import com.azure.spring.core.credential.AzureCredentialType;
-import com.azure.spring.core.credential.wrapper.AzureSasCredentialWrapper;
+import com.azure.spring.core.credential.provider.AzureSasCredentialProvider;
 import com.azure.spring.core.properties.AzureProperties;
 import org.springframework.util.StringUtils;
 
 /**
- * Resolve the sas token credential according azure properties.
+ * Resolve the sas token credential according to the azure properties.
  */
-public class AzureSasCredentialResolver implements AzureCredentialResolver<AzureCredential<AzureSasCredential>> {
+public class AzureSasCredentialResolver implements AzureCredentialResolver<AzureSasCredentialProvider> {
 
     @Override
-    public AzureCredential<AzureSasCredential> resolve(AzureProperties azureProperties) {
-        if (!(azureProperties instanceof SasTokenAware)) {
+    public AzureSasCredentialProvider resolve(AzureProperties properties) {
+        if (!isResolvable(properties)) {
             return null;
         }
 
-        String sasToken = ((SasTokenAware) azureProperties).getSasToken();
+        String sasToken = ((SasTokenAware) properties).getSasToken();
         if (!StringUtils.hasText(sasToken)) {
             return null;
         }
 
-        return new AzureSasCredentialWrapper(sasToken);
+        return new AzureSasCredentialProvider(sasToken);
     }
 
     @Override
-    public AzureCredentialType support() {
-        return AzureCredentialType.SAS_CREDENTIAL;
+    public boolean isResolvable(AzureProperties properties) {
+        return properties instanceof SasTokenAware;
     }
 }

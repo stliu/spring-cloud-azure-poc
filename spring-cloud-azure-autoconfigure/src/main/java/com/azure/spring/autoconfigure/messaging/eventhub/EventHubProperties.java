@@ -10,10 +10,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import javax.validation.constraints.Pattern;
 
 @ConfigurationProperties(prefix = "spring.cloud.azure.eventhub")
-public class EventHub extends AzureProperties implements
+public class EventHubProperties extends AzureProperties implements
     AmqpPropertiesAware, ConnectionStringAware {
 
     private AmqpProperties amqp;
+
     private String connectionString;
     private String eventHubName;
     private String customEndpointAddress;
@@ -32,6 +33,7 @@ public class EventHub extends AzureProperties implements
     private String checkpointAccessKey;
     private String checkpointContainer;
 
+    @Override
     public AmqpProperties getAmqp() {
         return amqp;
     }

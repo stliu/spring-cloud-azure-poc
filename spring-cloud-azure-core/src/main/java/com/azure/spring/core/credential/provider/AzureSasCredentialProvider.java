@@ -1,14 +1,16 @@
-package com.azure.spring.core.credential.wrapper;
+package com.azure.spring.core.credential.provider;
 
 import com.azure.core.credential.AzureSasCredential;
-import com.azure.spring.core.credential.AzureCredential;
 import com.azure.spring.core.credential.AzureCredentialType;
 
-public class AzureSasCredentialWrapper implements AzureCredential<AzureSasCredential> {
+/**
+ * Provide the azure sas credential.
+ */
+public class AzureSasCredentialProvider implements AzureCredentialProvider<AzureSasCredential> {
 
     private String sasToken;
 
-    public AzureSasCredentialWrapper(String sasToken) {
+    public AzureSasCredentialProvider(String sasToken) {
         this.sasToken = sasToken;
     }
 

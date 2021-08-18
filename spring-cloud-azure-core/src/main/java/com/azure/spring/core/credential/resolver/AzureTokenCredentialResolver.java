@@ -1,24 +1,26 @@
 package com.azure.spring.core.credential.resolver;
 
-import com.azure.core.credential.TokenCredential;
-import com.azure.spring.core.credential.AzureCredential;
-import com.azure.spring.core.credential.AzureCredentialType;
-import com.azure.spring.core.credential.wrapper.AzureTokenCredentialWrapper;
+import com.azure.spring.core.credential.provider.AzureTokenCredentialProvider;
 import com.azure.spring.core.properties.AzureProperties;
 
 /**
- * Resolve the token credential according azure properties.
+ * Resolve the token credential according to the azure properties.
  */
-public class AzureTokenCredentialResolver implements AzureCredentialResolver<AzureCredential<TokenCredential>> {
+public class AzureTokenCredentialResolver implements AzureCredentialResolver<AzureTokenCredentialProvider> {
 
     @Override
-    public AzureCredential<TokenCredential> resolve(AzureProperties azureProperties) {
-        // TODO
-        return new AzureTokenCredentialWrapper(null);
+    public AzureTokenCredentialProvider resolve(AzureProperties properties) {
+        // TODO: build token credential
+        return new AzureTokenCredentialProvider(null);
     }
 
+    /**
+     * All SDKs will support this type.
+     * @param properties Azure properties
+     * @return Resolvable or not
+     */
     @Override
-    public AzureCredentialType support() {
-        return AzureCredentialType.TOKEN_CREDENTIAL;
+    public boolean isResolvable(AzureProperties properties) {
+        return true;
     }
 }

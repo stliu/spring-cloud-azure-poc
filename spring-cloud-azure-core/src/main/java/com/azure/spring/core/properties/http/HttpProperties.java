@@ -1,16 +1,20 @@
 package com.azure.spring.core.properties.http;
 
-public class HttpProperties {
+import com.azure.spring.core.aware.client.HttpClientAware;
+
+public class HttpProperties implements HttpClientAware {
 
     public static final String PREFIX = "spring.cloud.azure.http";
 
-    private HttpClientOptionsProperties client;
+    private HttpClientProperties client;
 
-    public HttpClientOptionsProperties getClient() {
+    @Override
+    public HttpClientProperties getClient() {
         return client;
     }
 
-    public void setClient(HttpClientOptionsProperties client) {
+    @Override
+    public void setClient(HttpClientProperties client) {
         this.client = client;
     }
 }

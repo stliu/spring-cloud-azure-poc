@@ -15,6 +15,7 @@ public class KeyVaultCertificateProperties extends AzureProperties implements
 
     private HttpProperties http;
 
+    @Override
     public HttpProperties getHttp() {
         return http;
     }

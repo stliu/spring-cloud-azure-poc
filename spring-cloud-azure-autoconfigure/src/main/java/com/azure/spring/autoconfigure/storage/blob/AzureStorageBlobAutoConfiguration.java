@@ -1,6 +1,5 @@
 package com.azure.spring.autoconfigure.storage.blob;
 
-import com.azure.spring.core.context.AzureSpringHttpConfigurationContext;
 import com.azure.storage.blob.BlobAsyncClient;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobClientBuilder;
@@ -15,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(BlobClientBuilder.class)
 @ConditionalOnProperty(prefix = "spring.cloud.azure.storage.blob", name = "enabled", matchIfMissing = true)
-@EnableConfigurationProperties(AzureStorageBlob.class)
+@EnableConfigurationProperties(AzureStorageBlobProperties.class)
 @AutoConfigureAfter
 public class AzureStorageBlobAutoConfiguration {
 
@@ -41,9 +40,8 @@ public class AzureStorageBlobAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public AzureBlobClientBuilderFactory factory(AzureSpringHttpConfigurationContext context,
-                                                 AzureStorageBlob properties) {
-        return new AzureBlobClientBuilderFactory(context, properties);
+    public AzureBlobClientBuilderFactory factory(AzureStorageBlobProperties properties) {
+        return new AzureBlobClientBuilderFactory(properties);
     }
 
     @Bean
@@ -51,4 +49,6 @@ public class AzureStorageBlobAutoConfiguration {
     public BlobClientBuilder blobClientBuilder(AzureBlobClientBuilderFactory factory) {
         return factory.build();
     }
+
+    // TODO: should we expose more SDK provided client builders?
 }

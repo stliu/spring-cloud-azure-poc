@@ -1,13 +1,11 @@
 package com.azure.spring.core.credential;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.util.Assert;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Credential type for Azure Spring service client authentication.
+ * Azure credential type for Azure SDKs authentication.
  */
 public final class AzureCredentialType {
 
@@ -19,7 +17,7 @@ public final class AzureCredentialType {
 
     private final String type;
 
-    AzureCredentialType(String type) {
+    public AzureCredentialType(String type) {
         Assert.hasText(type, "type cannot be empty");
         this.type = type;
     }
@@ -29,15 +27,15 @@ public final class AzureCredentialType {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object current) {
+        if (this == current) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (current == null || getClass() != current.getClass()) {
             return false;
         }
-        AzureCredentialType type1 = (AzureCredentialType) o;
-        return Objects.equals(type, type1.type);
+        AzureCredentialType another = (AzureCredentialType) current;
+        return Objects.equals(type, another.type);
     }
 
     @Override

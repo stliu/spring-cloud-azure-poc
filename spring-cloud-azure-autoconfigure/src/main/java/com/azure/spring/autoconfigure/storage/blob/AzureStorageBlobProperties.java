@@ -1,5 +1,6 @@
 package com.azure.spring.autoconfigure.storage.blob;
 
+import com.azure.spring.autoconfigure.storage.properties.AzureStorageProperties;
 import com.azure.spring.core.aware.EndpointPropertiesAware;
 import com.azure.spring.core.aware.HttpPropertiesAware;
 import com.azure.spring.core.aware.credential.ConnectionStringAware;
@@ -12,7 +13,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "spring.cloud.azure.storage.blob")
-public class AzureStorageBlob extends AzureProperties
+public class AzureStorageBlobProperties extends AzureStorageProperties
     implements EndpointPropertiesAware,
     SasTokenAware, ConnectionStringAware,
     HttpPropertiesAware, InitializingBean {
@@ -30,10 +31,6 @@ public class AzureStorageBlob extends AzureProperties
     private String versionId;
     private BlobServiceVersion serviceVersion;
 
-    // StorageSharedKeyCredential
-    private String accountName;
-    private String accountKey;
-
     private String sasToken;
 
     // AzureSasCredential
@@ -48,6 +45,7 @@ public class AzureStorageBlob extends AzureProperties
 
     }
 
+    @Override
     public HttpProperties getHttp() {
         return http;
     }
@@ -81,22 +79,6 @@ public class AzureStorageBlob extends AzureProperties
 
     public void setSignature(String signature) {
         this.signature = signature;
-    }
-
-    public String getAccountName() {
-        return accountName;
-    }
-
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
-    }
-
-    public String getAccountKey() {
-        return accountKey;
-    }
-
-    public void setAccountKey(String accountKey) {
-        this.accountKey = accountKey;
     }
 
     public String getEndpoint() {
@@ -163,6 +145,7 @@ public class AzureStorageBlob extends AzureProperties
         this.customerProvidedKey = customerProvidedKey;
     }
 
+    @Override
     public String getConnectionString() {
         return connectionString;
     }

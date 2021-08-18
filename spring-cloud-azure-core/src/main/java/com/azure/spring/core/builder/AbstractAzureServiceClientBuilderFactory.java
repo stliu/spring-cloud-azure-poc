@@ -1,43 +1,89 @@
 package com.azure.spring.core.builder;
 
-import com.azure.spring.core.credential.AzureCredential;
-import com.azure.spring.core.credential.AzureCredentialType;
-import com.azure.spring.core.credential.AzureCredentialManager;
+import com.azure.spring.core.aware.client.ClientAware;
+import com.azure.spring.core.client.descriptor.AzureClientOptionsDescriptor;
+import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
+import com.azure.spring.core.credential.provider.AzureCredentialProvider;
 import com.azure.spring.core.credential.resolver.AzureCredentialResolver;
-import com.azure.spring.core.credential.resolver.AzureKeyCredentialResolver;
-import com.azure.spring.core.credential.resolver.AzureNamedKeyCredentialResolver;
-import com.azure.spring.core.credential.resolver.AzureSasCredentialResolver;
-import com.azure.spring.core.credential.resolver.AzureTokenCredentialResolver;
+import com.azure.spring.core.credential.resolver.AzureCredentialResolvers;
 import com.azure.spring.core.properties.AzureProperties;
+import com.azure.spring.core.properties.ClientProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public abstract class AbstractAzureServiceClientBuilderFactory<T> implements AzureServiceClientBuilderFactory<T> {
+public abstract class AbstractAzureServiceClientBuilderFactory<T, O, R> implements AzureServiceClientBuilderFactory<T> {
 
+    private static Logger LOGGER = LoggerFactory.getLogger(AbstractAzureServiceClientBuilderFactory.class);
+
+    /**
+     * Create client builder
+     * @return builder instance
+     */
     protected abstract T createBuilderInstance();
 
-    protected abstract void configureClientOptions(T builder);
+    protected ClientProperties getClientProperties() {
+        AzureProperties azureProperties = getAzureProperties();
+        if (azureProperties instanceof ClientAware) {
+            return ((ClientAware) azureProperties).getClient();
+        }
+
+        return null;
+    }
+
+    protected void configureClientOptions(T builder) {
+        AzureClientOptionsDescriptor<O> descriptor = getAzureHttpClientOptionsDescriptor();
+        if (descriptor == null) {
+            if (getClientProperties() != null) {
+                // TODO: Throw exception or only warn log?
+                LOGGER.warn("Not found 'AzureHttpClientOptionsDescriptor' implementation, please override the "
+                    + "method 'AbstractAzureServiceClientBuilderFactory.getAzureHttpClientOptionsDescriptor'");
+            }
+            return;
+        }
+
+        O client = descriptor.clientOptionsResolver().resolve(getClientProperties());
+        if (client != null) {
+            descriptor.consumer().accept(client);
+        }
+    }
+
+    /**
+     * Empty implementation.
+     * Add {@link AzureClientOptionsDescriptor} implementation if you need ClientOptions personalized configuration.
+     * @return
+     */
+    protected AzureClientOptionsDescriptor<O> getAzureHttpClientOptionsDescriptor() {
+        return null;
+    }
 
     protected abstract void configureProxy(T builder);
 
+    /**
+     * Configure SDK Service level configuration,
+     * @param builder SDK client builder
+     */
     protected abstract void configureService(T builder);
 
     /**
      * TODO: add description
      * @param builder
      */
-    public void customizeBuilder(T builder) {
+    protected void customizeBuilder(T builder) {
 
     }
 
     protected abstract AzureProperties getAzureProperties();
 
-    protected abstract List<AzureCredentialType> getOrderedSupportCredentialTypes();
-
-    protected abstract AzureCredentialManager getAzureCredentialManager(T builder);
+    /**
+     * Get the authentication descriptors
+     * @param builder SDK client builder
+     * @return descriptor collection
+     */
+    protected abstract List<AuthenticationDescriptor> getAuthenticationDescriptors(T builder);
 
     /**
      1. create a builder instance
@@ -57,44 +103,38 @@ public abstract class AbstractAzureServiceClientBuilderFactory<T> implements Azu
         return builder;
     }
 
-    public void configureCore(T builder) {
+    /**
+     * Configure Azure Core level configuration
+     * @param builder SDK client builder
+     */
+    protected void configureCore(T builder) {
         configureClientOptions(builder);
         configureProxy(builder);
-        configureCredentials(resolveAzureCredential(getAzureProperties()), builder);
+        List<AuthenticationDescriptor> authenticationDescriptors = getAuthenticationDescriptors(builder);
+        AzureCredentialProvider azureCredentialProvider = resolveAzureCredential(getAzureProperties(), authenticationDescriptors);
+        configureCredential(azureCredentialProvider, authenticationDescriptors);
     }
 
-    protected AzureCredential resolveAzureCredential(AzureProperties azureProperties) {
-        List<AzureCredentialType> supportedTypes = getOrderedSupportCredentialTypes();
-        List<AzureCredentialResolver> resolvers = getCredentialResolvers()
-            .stream()
-            .filter(r -> supportedTypes.contains(r.support()))
-            .sorted(Comparator.comparingInt(r -> supportedTypes.indexOf(r.support())))
-            .collect(Collectors.toList());
-
-        AzureCredential credential = null;
-        for (AzureCredentialResolver resolver : resolvers) {
-            credential = (AzureCredential) resolver.resolve(azureProperties);
-            if (credential != null) {
-                break;
-            }
-        }
-        return credential;
-    }
-
-    protected List<AzureCredentialResolver> getCredentialResolvers() {
-        List<AzureCredentialResolver> resolvers = new ArrayList<>();
-        resolvers.add(new AzureTokenCredentialResolver());
-        resolvers.add(new AzureKeyCredentialResolver());
-        resolvers.add(new AzureNamedKeyCredentialResolver());
-        resolvers.add(new AzureSasCredentialResolver());
-        return resolvers;
+    private AzureCredentialProvider resolveAzureCredential(AzureProperties azureProperties,
+                                                           List<AuthenticationDescriptor> descriptors) {
+        List<AzureCredentialResolver<?>> resolvers = descriptors.stream()
+                                                                .map(d -> d.azureCredentialResolver())
+                                                                .collect(Collectors.toList());
+        AzureCredentialResolvers credentialResolvers = new AzureCredentialResolvers(resolvers);
+        return credentialResolvers.resolve(azureProperties);
     }
 
     /**
-     * Configure credential and register credential consumer.
-     * @param azureCredential
+     * Configure credential
+     * @param provider
+     * @param descriptors
      */
-    public void configureCredentials(AzureCredential azureCredential, T builder) {
-        getAzureCredentialManager(builder).configureCredential(azureCredential);
+    private void configureCredential(AzureCredentialProvider provider, List<AuthenticationDescriptor> descriptors) {
+        Consumer consumer = descriptors.stream()
+                                       .filter(d -> d.azureCredentialType() == provider.getType())
+                                       .map(d -> d.consumer())
+                                       .findFirst()
+                                       .get();
+        consumer.accept(provider.getCredential());
     }
 }
