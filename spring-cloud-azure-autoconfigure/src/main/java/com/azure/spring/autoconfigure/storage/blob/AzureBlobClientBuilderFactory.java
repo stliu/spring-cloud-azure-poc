@@ -3,6 +3,8 @@ package com.azure.spring.autoconfigure.storage.blob;
 import com.azure.core.util.HttpClientOptions;
 import com.azure.spring.autoconfigure.storage.credential.StorageSharedKeyAuthenticationDescriptor;
 import com.azure.spring.core.builder.AbstractAzureHttpClientBuilderFactory;
+import com.azure.spring.core.client.descriptor.AzureClientOptionsDescriptor;
+import com.azure.spring.core.client.descriptor.AzureHttpClientOptionsDescriptor;
 import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
 import com.azure.spring.core.credential.descriptor.SasAuthenticationDescriptor;
 import com.azure.spring.core.credential.descriptor.TokenAuthenticationDescriptor;
@@ -52,7 +54,6 @@ public class AzureBlobClientBuilderFactory extends AbstractAzureHttpClientBuilde
         }
     }
 
-
     @Override
     protected AzureProperties getAzureProperties() {
         return blobProperties;
@@ -69,5 +70,8 @@ public class AzureBlobClientBuilderFactory extends AbstractAzureHttpClientBuilde
                 builder.credential(c.getCredential())));
     }
 
-
+    @Override
+    protected AzureClientOptionsDescriptor<HttpClientOptions> getAzureClientOptionsDescriptor(BlobClientBuilder builder) {
+        return new AzureHttpClientOptionsDescriptor(client -> builder.clientOptions(client));
+    }
 }

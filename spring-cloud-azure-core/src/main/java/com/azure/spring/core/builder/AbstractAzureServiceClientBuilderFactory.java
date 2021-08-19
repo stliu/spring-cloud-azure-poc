@@ -15,6 +15,13 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+/**
+ * Abstract azure service client builder factory, it's the implementation of {@link AzureServiceClientBuilderFactory}
+ * to provide the template methods to extend any service on the top of azure core.
+ * @param <T> Service client builder
+ * @param <O> Service client options
+ * @param <R> Service retry options
+ */
 public abstract class AbstractAzureServiceClientBuilderFactory<T, O, R> implements AzureServiceClientBuilderFactory<T> {
 
     private static Logger LOGGER = LoggerFactory.getLogger(AbstractAzureServiceClientBuilderFactory.class);
@@ -35,17 +42,18 @@ public abstract class AbstractAzureServiceClientBuilderFactory<T, O, R> implemen
     }
 
     protected void configureClientOptions(T builder) {
-        AzureClientOptionsDescriptor<O> descriptor = getAzureHttpClientOptionsDescriptor();
+        AzureClientOptionsDescriptor<O> descriptor = getAzureClientOptionsDescriptor(builder);
+        ClientProperties clientProperties = getClientProperties();
         if (descriptor == null) {
-            if (getClientProperties() != null) {
+            if (clientProperties != null) {
                 // TODO: Throw exception or only warn log?
-                LOGGER.warn("Not found 'AzureHttpClientOptionsDescriptor' implementation, please override the "
-                    + "method 'AbstractAzureServiceClientBuilderFactory.getAzureHttpClientOptionsDescriptor'");
+                LOGGER.warn("Not found available 'AzureClientOptionsDescriptor' implementation, please override "
+                    + "the method 'AbstractAzureServiceClientBuilderFactory.getAzureClientOptionsDescriptor'");
             }
             return;
         }
 
-        O client = descriptor.clientOptionsResolver().resolve(getClientProperties());
+        O client = descriptor.clientOptionsResolver().resolve(clientProperties);
         if (client != null) {
             descriptor.consumer().accept(client);
         }
@@ -53,10 +61,11 @@ public abstract class AbstractAzureServiceClientBuilderFactory<T, O, R> implemen
 
     /**
      * Empty implementation.
-     * Add {@link AzureClientOptionsDescriptor} implementation if you need ClientOptions personalized configuration.
-     * @return
+     * Add {@link AzureClientOptionsDescriptor} implementation if you need client options personalized configuration.
+     * @param builder client builder
+     * @return Null
      */
-    protected AzureClientOptionsDescriptor<O> getAzureHttpClientOptionsDescriptor() {
+    protected AzureClientOptionsDescriptor<O> getAzureClientOptionsDescriptor(T builder) {
         return null;
     }
 

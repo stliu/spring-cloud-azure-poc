@@ -1,7 +1,6 @@
 package com.azure.spring.core.http;
 
 import com.azure.core.http.policy.HttpPipelinePolicy;
-import com.azure.spring.core.identify.AzureServiceFeature;
 import com.azure.spring.core.properties.http.HttpProperties;
 
 import java.util.ArrayList;
@@ -17,21 +16,22 @@ public class HttpPipelinePoliciesSupplierImpl implements HttpPipelinePoliciesSup
 
     private final HttpProperties rootProperties;
     private final HttpProperties inheritProperties;
-    private final List<AzureServiceFeature> features;
+//    private final List<AzureServiceFeature> features;
 
     private DefaultFeatureBasedHttpPipelinePolicyBuilder httpPipelinePolicyBuilder;
 
-    private static final List<AzureServiceFeature> REQUIRED_FEATURES = Collections.unmodifiableList(
-        Arrays.asList(AzureServiceFeature.TOKEN_CREDENTIAL));
+//    private static final List<AzureServiceFeature> REQUIRED_FEATURES = Collections.unmodifiableList(
+//        Arrays.asList(AzureServiceFeature.TOKEN_CREDENTIAL));
 
     private List<HttpPipelinePolicy> policies;
 
     public HttpPipelinePoliciesSupplierImpl(HttpProperties rootProperties,
-                                            HttpProperties inheritProperties,
-                                            List<AzureServiceFeature> features) {
+                                            HttpProperties inheritProperties
+//                                            List<AzureServiceFeature> features
+                                                    ) {
         this.rootProperties = rootProperties;
         this.inheritProperties = inheritProperties;
-        this.features = features;
+//        this.features = features;
     }
 
     @Override
@@ -75,8 +75,8 @@ public class HttpPipelinePoliciesSupplierImpl implements HttpPipelinePoliciesSup
      * Feature && http policy need to collaborate.
      */
     private void applyNecessaryHttpPoliciesIfMissing() {
-        REQUIRED_FEATURES.stream().forEach(feature -> {
-            // TODO: check the required http policy existence
-        });
+//        REQUIRED_FEATURES.stream().forEach(feature -> {
+//            // TODO: check the required http policy existence
+//        });
     }
 }

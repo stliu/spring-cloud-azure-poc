@@ -1,10 +1,9 @@
-package com.azure.spring.core.client.resolver;
+package com.azure.spring.service.factory.client;
 
 import com.azure.core.http.ProxyOptions;
-import com.azure.core.util.Configuration;
-import com.azure.core.util.Header;
-import com.azure.core.util.HttpClientOptions;
+import com.azure.identity.implementation.IdentityClientOptions;
 import com.azure.spring.core.aware.HttpPropertiesAware;
+import com.azure.spring.core.client.resolver.AzureClientOptionsResolver;
 import com.azure.spring.core.properties.ClientProperties;
 import com.azure.spring.core.properties.ProxyProperties;
 import com.azure.spring.core.properties.http.HttpClientProperties;
@@ -13,14 +12,11 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
-public class AzureHttpClientOptionsResolver implements AzureClientOptionsResolver<HttpClientOptions> {
+public class AzureIdentityClientOptionsResolver implements AzureClientOptionsResolver<IdentityClientOptions> {
 
     @Override
-    public HttpClientOptions resolve(ClientProperties properties) {
+    public IdentityClientOptions resolve(ClientProperties properties) {
         if (!isResolvable(properties)) {
             return null;
         }
@@ -42,21 +38,8 @@ public class AzureHttpClientOptionsResolver implements AzureClientOptionsResolve
             return null;
         }
 
-        HttpClientOptions clientOptions = new HttpClientOptions();
-        Optional.ofNullable(client.getProxy())
-                .map(this::convertToProxyOptions)
-                .ifPresent(clientOptions::setProxyOptions);
-        Optional.ofNullable(client.getApplicationId())
-                .ifPresent(clientOptions::setApplicationId);
-        Optional.ofNullable(client.getHeaders()).ifPresent(headerProperties -> {
-            List<Header> headers = new ArrayList<>();
-            headerProperties.forEach(headerProp -> {
-                headers.add(new Header(headerProp.getName(), headerProp.getValues()));
-            });
-            clientOptions.setHeaders(headers);
-        });
-        // TODO: check setting configuration
-        clientOptions.setConfiguration(Configuration.getGlobalConfiguration().clone());
+        IdentityClientOptions clientOptions = new IdentityClientOptions();
+        //TODO:
         return clientOptions;
     }
 
