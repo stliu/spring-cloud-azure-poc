@@ -1,6 +1,5 @@
 package com.azure.spring.core.credential.descriptor;
 
-import com.azure.core.credential.AzureSasCredential;
 import com.azure.spring.core.credential.AzureCredentialType;
 import com.azure.spring.core.credential.provider.AzureSasCredentialProvider;
 import com.azure.spring.core.credential.resolver.AzureCredentialResolver;
@@ -8,7 +7,7 @@ import com.azure.spring.core.credential.resolver.AzureSasCredentialResolver;
 
 import java.util.function.Consumer;
 
-public class SasAuthenticationDescriptor implements AuthenticationDescriptor<AzureSasCredentialProvider, AzureSasCredential> {
+public class SasAuthenticationDescriptor implements AuthenticationDescriptor<AzureSasCredentialProvider> {
 
     private final Consumer<AzureSasCredentialProvider> consumer;
 
@@ -22,7 +21,7 @@ public class SasAuthenticationDescriptor implements AuthenticationDescriptor<Azu
     }
 
     @Override
-    public AzureCredentialResolver azureCredentialResolver() {
+    public AzureCredentialResolver<AzureSasCredentialProvider> azureCredentialResolver() {
         return new AzureSasCredentialResolver();
     }
 

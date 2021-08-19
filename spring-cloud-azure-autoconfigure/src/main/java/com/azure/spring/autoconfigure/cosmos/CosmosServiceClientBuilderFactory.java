@@ -2,11 +2,9 @@ package com.azure.spring.autoconfigure.cosmos;
 
 import com.azure.core.credential.TokenCredential;
 import com.azure.cosmos.CosmosClientBuilder;
-import com.azure.spring.core.builder.AzureHttpClientBuilderFactory;
 
 
-public class CosmosServiceClientBuilderFactory implements
-    AzureHttpClientBuilderFactory<CosmosClientBuilder> {
+public class CosmosServiceClientBuilderFactory implements com.azure.spring.core.factory.AzureServiceClientBuilderFactory<CosmosClientBuilder> {
 
     private CosmosClientBuilder builder;
     private CosmosProperties cosmosProperties;

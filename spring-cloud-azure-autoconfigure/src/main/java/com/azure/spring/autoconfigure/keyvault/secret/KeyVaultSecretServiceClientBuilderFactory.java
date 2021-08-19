@@ -1,42 +1,44 @@
 package com.azure.spring.autoconfigure.keyvault.secret;
 
+import com.azure.core.http.HttpClient;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
-import com.azure.security.keyvault.secrets.SecretServiceVersion;
 import com.azure.spring.autoconfigure.keyvault.KeyVaultProperties;
-import com.azure.spring.autoconfigure.keyvault.certificate.KeyVaultCertificateProperties;
-import com.azure.spring.core.builder.AzureHttpClientBuilderFactory;
-import org.springframework.boot.context.properties.PropertyMapper;
+import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
+import com.azure.spring.core.factory.AbstractAzureHttpClientBuilderFactory;
+import com.azure.spring.core.properties.AzureProperties;
 
-public class KeyVaultSecretServiceClientBuilderFactory implements
-    AzureHttpClientBuilderFactory<SecretClientBuilder> {
+import java.util.List;
 
-    private SecretClientBuilder delegated;
+public class KeyVaultSecretServiceClientBuilderFactory extends AbstractAzureHttpClientBuilderFactory<SecretClientBuilder> {
+
     private KeyVaultProperties keyVaultProperties;
-    private KeyVaultCertificateProperties keyVaultCertificateProperties;
 
-    public KeyVaultSecretServiceClientBuilderFactory(KeyVaultProperties keyVaultProperties,
-                                                     KeyVaultCertificateProperties keyVaultCertificateProperties) {
+    public KeyVaultSecretServiceClientBuilderFactory(KeyVaultProperties keyVaultProperties) {
         this.keyVaultProperties = keyVaultProperties;
-        this.keyVaultCertificateProperties = keyVaultCertificateProperties;
-
-        delegated = new SecretClientBuilder();
-        PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
-        map.from(keyVaultProperties.getEndpoint()).to(this::vaultUrl);
     }
 
     @Override
-    public SecretClientBuilder build() {
+    protected SecretClientBuilder createBuilderInstance() {
+        return new SecretClientBuilder();
+    }
+
+    @Override
+    protected AzureProperties getAzureProperties() {
+        return this.keyVaultProperties;
+    }
+
+    @Override
+    protected List<AuthenticationDescriptor<?>> getAuthenticationDescriptors(SecretClientBuilder builder) {
         return null;
     }
 
-    public KeyVaultSecretServiceClientBuilderFactory vaultUrl(String vaultUrl) {
-        delegated.vaultUrl(vaultUrl);
-        return this;
+    @Override
+    protected void configureService(SecretClientBuilder builder) {
+
     }
 
-    public KeyVaultSecretServiceClientBuilderFactory serviceVersion(SecretServiceVersion version) {
-        delegated.serviceVersion(version);
-        return this;
+    @Override
+    protected void configureHttpClient(SecretClientBuilder builder, HttpClient httpClient) {
+        builder.httpClient(httpClient);
     }
-
 }

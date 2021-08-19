@@ -5,7 +5,6 @@ import com.azure.messaging.eventhubs.EventHubConsumerAsyncClient;
 import com.azure.messaging.eventhubs.EventHubConsumerClient;
 import com.azure.messaging.eventhubs.EventHubProducerAsyncClient;
 import com.azure.messaging.eventhubs.EventHubProducerClient;
-import com.azure.spring.core.context.AzureSpringAmqpConfigurationContext;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -20,22 +19,6 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(EventHubProperties.class)
 @AutoConfigureAfter
 public class EventhubAutoConfiguration {
-
-//    @Bean
-//    @ConditionalOnMissingBean
-//    public EventhubBuilderCustomizer eventhubBuilderCustomizer() {
-//        return new EventhubBuilderCustomizer(){};
-//    }
-
-//    @Bean
-//    @ConditionalOnMissingBean
-//    public EventHubClientBuilder eventHubClientBuilder(EventHubProperties properties,
-//        ObjectProvider<EventhubBuilderCustomizer> configurers) {
-//        EventHubClientBuilder builder = new EventHubClientBuilder();
-//
-//        configurers.orderedStream().forEach(c -> c.customize(builder));
-//        return builder;
-//    }
 
     @Bean
     @ConditionalOnMissingBean
@@ -63,14 +46,8 @@ public class EventhubAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public AzureEventHubClientBuilderFactory factory(AzureSpringAmqpConfigurationContext context,
-                                                     EventHubProperties properties) {
-        return new AzureEventHubClientBuilderFactory(context, properties);
+    public AzureEventHubClientBuilderFactory factory(EventHubProperties properties) {
+        return new AzureEventHubClientBuilderFactory(properties);
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public EventHubClientBuilder blobClientBuilder(AzureEventHubClientBuilderFactory factory) {
-        return factory.build();
-    }
 }

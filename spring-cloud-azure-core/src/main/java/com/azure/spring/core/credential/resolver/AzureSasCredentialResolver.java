@@ -1,6 +1,6 @@
 package com.azure.spring.core.credential.resolver;
 
-import com.azure.spring.core.aware.credential.SasTokenAware;
+import com.azure.spring.core.properties.aware.credential.SasTokenAware;
 import com.azure.spring.core.credential.provider.AzureSasCredentialProvider;
 import com.azure.spring.core.properties.AzureProperties;
 import org.springframework.util.StringUtils;

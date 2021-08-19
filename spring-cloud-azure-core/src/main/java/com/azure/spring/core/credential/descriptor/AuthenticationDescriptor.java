@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 /**
  * Describe the azure credential authentication.
  */
-public interface AuthenticationDescriptor<T extends AzureCredentialProvider<C>, C> {
+public interface AuthenticationDescriptor<T extends AzureCredentialProvider<?>> {
 
     AzureCredentialType azureCredentialType();
 

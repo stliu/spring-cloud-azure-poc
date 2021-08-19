@@ -1,77 +1,47 @@
 package com.azure.spring.autoconfigure.keyvault.certificate;
 
-import com.azure.core.credential.TokenCredential;
-import com.azure.core.http.HttpPipeline;
+import com.azure.core.http.HttpClient;
 import com.azure.security.keyvault.certificates.CertificateClientBuilder;
-import com.azure.security.keyvault.certificates.CertificateServiceVersion;
 import com.azure.spring.autoconfigure.keyvault.KeyVaultProperties;
-import com.azure.spring.core.builder.AzureHttpClientBuilderFactory;
-import com.azure.spring.core.context.AzureSpringHttpConfigurationContext;
-import com.azure.spring.core.properties.http.HttpProperties;
+import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
+import com.azure.spring.core.factory.AbstractAzureHttpClientBuilderFactory;
+import com.azure.spring.core.properties.AzureProperties;
+
+import java.util.List;
 
 
-public class KeyVaultCertificateServiceClientBuilderFactory implements
-    AzureHttpClientBuilderFactory<CertificateClientBuilder> {
+public class KeyVaultCertificateServiceClientBuilderFactory extends AbstractAzureHttpClientBuilderFactory<CertificateClientBuilder> {
 
-    private CertificateClientBuilder builder;
     private final KeyVaultProperties keyVaultProperties;
-    private final KeyVaultCertificateProperties keyVaultCertificateProperties;
-    private final HttpProperties httpProperties;
-    private final TokenCredential defaultTokenCredential;
 
-    private HttpPipeline pipeline;
 
-    private AzureSpringHttpConfigurationContext httpContext;
-
-    public KeyVaultCertificateServiceClientBuilderFactory(TokenCredential defaultTokenCredential,
-                                                          KeyVaultProperties keyVaultProperties,
-                                                          KeyVaultCertificateProperties keyVaultCertificateProperties,
-                                                          HttpProperties httpProperties) {
-        this.defaultTokenCredential = defaultTokenCredential;
+    public KeyVaultCertificateServiceClientBuilderFactory(KeyVaultProperties keyVaultProperties) {
         this.keyVaultProperties = keyVaultProperties;
-        this.keyVaultCertificateProperties = keyVaultCertificateProperties;
-        this.httpProperties = httpProperties;
+    }
+
+
+    @Override
+    protected void configureHttpClient(CertificateClientBuilder builder, HttpClient httpClient) {
+        builder.httpClient(httpClient);
     }
 
     @Override
-    public CertificateClientBuilder build() {
-        builder = new CertificateClientBuilder();
-
-//        PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
-//        map.from(keyVaultProperties.getEndpoint()).to(this::vaultUrl);
-//        map.from(keyVaultCertificateProperties.getServiceVersion()).to(this::serviceVersion);
-//
-//        // Customize the http pipeline
-//        Optional.ofNullable(httpProperties)
-//                .ifPresent(p -> {
-//                    HttpPipeline hp = new HttpPipelineBuilder()
-//                        .httpClient(getHttpClientSupplier().get())
-//                        .policies(getHttpPipelinePolicySupplier().get().toArray(new HttpPipelinePolicy[0]))
-//                        .build();
-//                    builder.pipeline(hp);
-//                });
-//
-//        // apply the credential
-//        supportFeatures().forEach(feature -> {
-//            if (feature == AzureServiceFeature.TOKEN_CREDENTIAL) {
-//                builder.credential(new AzureTokenCredentialResolver().resolve(defaultTokenCredential,
-//                    keyVaultCertificateProperties));
-//            } else {
-//                throw new IllegalStateException("KeyVault certificate starter does not "
-//                    + "support the feature type " + feature + ".");
-//            }
-//        });
-        return builder;
+    protected CertificateClientBuilder createBuilderInstance() {
+        return new CertificateClientBuilder();
     }
 
-    public KeyVaultCertificateServiceClientBuilderFactory vaultUrl(String vaultUrl) {
-        builder.vaultUrl(vaultUrl);
-        return this;
+    @Override
+    protected AzureProperties getAzureProperties() {
+        return this.keyVaultProperties;
     }
 
-    public KeyVaultCertificateServiceClientBuilderFactory serviceVersion(CertificateServiceVersion version) {
-        builder.serviceVersion(version);
-        return this;
+    @Override
+    protected List<AuthenticationDescriptor<?>> getAuthenticationDescriptors(CertificateClientBuilder builder) {
+        return null;
     }
 
+    @Override
+    protected void configureService(CertificateClientBuilder builder) {
+
+    }
 }

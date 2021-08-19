@@ -43,5 +43,11 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>com.azure</groupId>
+      <artifactId>azure-storage-blob</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>

@@ -1,6 +1,5 @@
 package com.azure.spring.core.credential.descriptor;
 
-import com.azure.core.credential.TokenCredential;
 import com.azure.spring.core.credential.AzureCredentialType;
 import com.azure.spring.core.credential.provider.AzureTokenCredentialProvider;
 import com.azure.spring.core.credential.resolver.AzureCredentialResolver;
@@ -8,7 +7,7 @@ import com.azure.spring.core.credential.resolver.AzureTokenCredentialResolver;
 
 import java.util.function.Consumer;
 
-public class TokenAuthenticationDescriptor implements AuthenticationDescriptor<AzureTokenCredentialProvider, TokenCredential> {
+public class TokenAuthenticationDescriptor implements AuthenticationDescriptor<AzureTokenCredentialProvider> {
 
     private final Consumer<AzureTokenCredentialProvider> consumer;
 
@@ -22,7 +21,7 @@ public class TokenAuthenticationDescriptor implements AuthenticationDescriptor<A
     }
 
     @Override
-    public AzureCredentialResolver azureCredentialResolver() {
+    public AzureCredentialResolver<AzureTokenCredentialProvider> azureCredentialResolver() {
         return new AzureTokenCredentialResolver();
     }
 

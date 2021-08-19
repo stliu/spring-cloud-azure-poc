@@ -1,53 +1,84 @@
 package com.azure.spring.autoconfigure.messaging.eventhub;
 
+import com.azure.core.amqp.AmqpRetryOptions;
+import com.azure.core.amqp.AmqpTransportType;
+import com.azure.core.amqp.ProxyOptions;
 import com.azure.messaging.eventhubs.EventHubClientBuilder;
-import com.azure.spring.core.builder.AzureAmqpClientBuilderFactory;
-import com.azure.spring.core.context.AzureSpringAmqpConfigurationContext;
+import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
+import com.azure.spring.core.credential.descriptor.NamedKeyAuthenticationDescriptor;
+import com.azure.spring.core.credential.descriptor.SasAuthenticationDescriptor;
+import com.azure.spring.core.credential.descriptor.TokenAuthenticationDescriptor;
+import com.azure.spring.core.factory.AbstractAzureAmqpClientBuilderFactory;
+import com.azure.spring.core.properties.AzureProperties;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Storage Blob Service client builder factory, it builds the storage blob client
  * according the configuration context and blob properties.
  */
-public class AzureEventHubClientBuilderFactory implements
-    AzureAmqpClientBuilderFactory<EventHubClientBuilder> {
+public class AzureEventHubClientBuilderFactory extends AbstractAzureAmqpClientBuilderFactory<EventHubClientBuilder> {
 
-    private final AzureSpringAmqpConfigurationContext configurationContext;
     private final EventHubProperties eventHubProperties;
 
-    private EventHubClientBuilder builder;
-
-    public AzureEventHubClientBuilderFactory(AzureSpringAmqpConfigurationContext configurationContext,
-                                             EventHubProperties eventHubProperties) {
-        this.configurationContext = configurationContext;
+    public AzureEventHubClientBuilderFactory(EventHubProperties eventHubProperties) {
         this.eventHubProperties = eventHubProperties;
-
-        builder = new EventHubClientBuilder();
     }
 
     @Override
-    public EventHubClientBuilder build() {
-        /*Optional.ofNullable(eventHubProperties.getConnectionString()).ifPresent(this::connectionString);
-        clientOptions(getClientOptions(eventHubProperties.getAmqp().getClient()));
-        builder.configuration(configurationContext.getAzureDefaultConfiguration());
-        Optional.ofNullable(eventHubProperties.getCustomEndpointAddress()).ifPresent(this::customEndpointAddress);
+    protected EventHubClientBuilder createBuilderInstance() {
+        return new EventHubClientBuilder();
+    }
 
-        if (eventHubProperties.getSharedConnection()) {
-            shareConnection();
-        }
-        if (StringUtils.hasText(eventHubProperties.getFullyQualifiedNamespace())
-            && StringUtils.hasText(eventHubProperties.getEventHubName())) {
-            credential(eventHubProperties.getFullyQualifiedNamespace(), eventHubProperties.getEventHubName(), getTokenCredential(eventHubProperties));
-        }
-        if (StringUtils.hasText(eventHubProperties.getConnectionString())
-            && StringUtils.hasText(eventHubProperties.getEventHubName())) {
-            connectionString(eventHubProperties.getConnectionString(), eventHubProperties.getEventHubName());
-        }
+    @Override
+    protected AzureProperties getAzureProperties() {
+        return this.eventHubProperties;
+    }
 
-        proxyOptions(getProxyOptions(eventHubProperties.getAmqp().getProxy()));
-        retry(getAmqpRetryOptions(eventHubProperties.getAmqp().getRetry()));
-        Optional.ofNullable(eventHubProperties.getTransport()).ifPresent(this::transportType);
-        Optional.ofNullable(eventHubProperties.getConsumerGroup()).ifPresent(this::consumerGroup);
-        Optional.ofNullable(eventHubProperties.getPrefetchCount()).ifPresent(this::prefetchCount);*/
-        return builder;
+    @Override
+    protected String getApplicationId() {
+        // TODO
+        return super.getApplicationId();
+    }
+
+    @Override
+    protected void configureAmqpProxy(EventHubClientBuilder builder, ProxyOptions proxyOptions) {
+        builder.proxyOptions(proxyOptions);
+    }
+
+    @Override
+    protected void configureAmqpTransportType(EventHubClientBuilder builder, AmqpTransportType amqpTransportType) {
+        builder.transportType(amqpTransportType);
+    }
+
+    @Override
+    protected void configureAmqpRetryOptions(EventHubClientBuilder builder, AmqpRetryOptions amqpRetryOptions) {
+        builder.retry(amqpRetryOptions);
+    }
+
+    @Override
+    protected void configureService(EventHubClientBuilder builder) {
+        builder.consumerGroup(eventHubProperties.getConsumerGroup());
+        builder.prefetchCount(eventHubProperties.getPrefetchCount());
+        builder.customEndpointAddress(eventHubProperties.getCustomEndpointAddress());
+        if (eventHubProperties.isSharedConnection()) {
+            builder.shareConnection();
+        }
+    }
+
+    @Override
+    protected List<AuthenticationDescriptor<?>> getAuthenticationDescriptors(EventHubClientBuilder builder) {
+        return Arrays.asList(
+            new NamedKeyAuthenticationDescriptor(provider -> builder.credential(eventHubProperties.getNamespace(),
+                                                                                eventHubProperties.getEventHubName(),
+                                                                                provider.getCredential())),
+            new SasAuthenticationDescriptor(provider -> builder.credential(eventHubProperties.getNamespace(),
+                                                                           eventHubProperties.getEventHubName(),
+                                                                           provider.getCredential())),
+            new TokenAuthenticationDescriptor(provider -> builder.credential(eventHubProperties.getNamespace(),
+                                                                             eventHubProperties.getEventHubName(),
+                                                                             provider.getCredential()))
+        );
     }
 }

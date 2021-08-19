@@ -3,6 +3,7 @@
 
 package com.azure.spring.core.properties;
 
+import com.azure.spring.core.properties.client.ClientProperties;
 import com.azure.spring.core.properties.credential.TokenCredentialProperties;
 
 /**
@@ -10,15 +11,31 @@ import com.azure.spring.core.properties.credential.TokenCredentialProperties;
  */
 public class AzureProperties {
 
-    public static final String AZURE_PROPERTY_BEAN_NAME = "azureProperties";
+    protected ClientProperties client;
 
-    public static final String PREFIX = "spring.cloud.azure";
+    protected EnvironmentProperties env;
 
-    private ProxyProperties proxy;
+    protected ProxyProperties proxy;
 
-    private TokenCredentialProperties credential;
+    protected RetryProperties retry;
 
-    private EnvironmentProperties environment;
+    protected TokenCredentialProperties credential;
+
+    public ClientProperties getClient() {
+        return client;
+    }
+
+    public void setClient(ClientProperties client) {
+        this.client = client;
+    }
+
+    public EnvironmentProperties getEnv() {
+        return env;
+    }
+
+    public void setEnv(EnvironmentProperties env) {
+        this.env = env;
+    }
 
     public ProxyProperties getProxy() {
         return proxy;
@@ -28,19 +45,19 @@ public class AzureProperties {
         this.proxy = proxy;
     }
 
+    public RetryProperties getRetry() {
+        return retry;
+    }
+
+    public void setRetry(RetryProperties retry) {
+        this.retry = retry;
+    }
+
     public TokenCredentialProperties getCredential() {
         return credential;
     }
 
     public void setCredential(TokenCredentialProperties credential) {
         this.credential = credential;
-    }
-
-    public EnvironmentProperties getEnvironment() {
-        return environment;
-    }
-
-    public void setEnvironment(EnvironmentProperties environment) {
-        this.environment = environment;
     }
 }

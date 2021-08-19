@@ -1,17 +1,13 @@
 package com.azure.spring.autoconfigure.storage.blob;
 
-import com.azure.core.util.HttpClientOptions;
-import com.azure.spring.autoconfigure.storage.credential.StorageSharedKeyAuthenticationDescriptor;
-import com.azure.spring.core.builder.AbstractAzureHttpClientBuilderFactory;
-import com.azure.spring.core.client.descriptor.AzureClientOptionsDescriptor;
-import com.azure.spring.core.client.descriptor.AzureHttpClientOptionsDescriptor;
+import com.azure.core.http.HttpClient;
+import com.azure.spring.autoconfigure.storage.common.credential.StorageSharedKeyAuthenticationDescriptor;
 import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
 import com.azure.spring.core.credential.descriptor.SasAuthenticationDescriptor;
 import com.azure.spring.core.credential.descriptor.TokenAuthenticationDescriptor;
-import com.azure.spring.core.credential.resolver.AzureCredentialResolvers;
+import com.azure.spring.core.factory.AbstractAzureHttpClientBuilderFactory;
 import com.azure.spring.core.properties.AzureProperties;
 import com.azure.storage.blob.BlobClientBuilder;
-import com.azure.storage.common.policy.RequestRetryOptions;
 import org.springframework.boot.context.properties.PropertyMapper;
 
 import java.util.Arrays;
@@ -21,14 +17,17 @@ import java.util.List;
  * Storage Blob Service client builder factory, it builds the storage blob client according the configuration context
  * and blob properties.
  */
-public class AzureBlobClientBuilderFactory extends AbstractAzureHttpClientBuilderFactory<BlobClientBuilder, HttpClientOptions, RequestRetryOptions> {
+public class AzureBlobClientBuilderFactory extends AbstractAzureHttpClientBuilderFactory<BlobClientBuilder> {
 
     private final AzureStorageBlobProperties blobProperties;
 
-    private AzureCredentialResolvers credentialResolvers;
-
     public AzureBlobClientBuilderFactory(AzureStorageBlobProperties blobProperties) {
         this.blobProperties = blobProperties;
+    }
+
+    @Override
+    protected void configureHttpClient(BlobClientBuilder builder, HttpClient httpClient) {
+        builder.httpClient(httpClient);
     }
 
     @Override
@@ -49,7 +48,7 @@ public class AzureBlobClientBuilderFactory extends AbstractAzureHttpClientBuilde
         map.from(blobProperties.getServiceVersion()).to(builder::serviceVersion);
         // Only storage blob has anonymous access feature.
         // TODO: Add anonymous mechanism
-        if (blobProperties.getAnonymousAccess()) {
+        if (blobProperties.isAnonymousAccess()) {
             builder.setAnonymousAccess();
         }
     }
@@ -60,18 +59,12 @@ public class AzureBlobClientBuilderFactory extends AbstractAzureHttpClientBuilde
     }
 
     @Override
-    protected List<AuthenticationDescriptor> getAuthenticationDescriptors(BlobClientBuilder builder) {
+    protected List<AuthenticationDescriptor<?>> getAuthenticationDescriptors(BlobClientBuilder builder) {
         return Arrays.asList(
-            new StorageSharedKeyAuthenticationDescriptor(c ->
-                builder.credential(c.getCredential())),
-            new TokenAuthenticationDescriptor(c ->
-                builder.credential(c.getCredential())),
-            new SasAuthenticationDescriptor(c ->
-                builder.credential(c.getCredential())));
+            new StorageSharedKeyAuthenticationDescriptor(provider -> builder.credential(provider.getCredential())),
+            new SasAuthenticationDescriptor(provider -> builder.credential(provider.getCredential())),
+            new TokenAuthenticationDescriptor(provider -> builder.credential(provider.getCredential()))
+        );
     }
 
-    @Override
-    protected AzureClientOptionsDescriptor<HttpClientOptions> getAzureClientOptionsDescriptor(BlobClientBuilder builder) {
-        return new AzureHttpClientOptionsDescriptor(client -> builder.clientOptions(client));
-    }
 }

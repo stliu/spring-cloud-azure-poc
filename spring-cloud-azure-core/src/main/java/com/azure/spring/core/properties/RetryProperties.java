@@ -7,11 +7,19 @@ import java.time.Duration;
  */
 public class RetryProperties {
 
+    private String mode;
+    private Duration delay;
+    private Duration maxDelay;
     private int maxRetries;
-    private Duration retryDelay;
-    private Duration maxRetryDelay;
     private Duration tryTimeout;
-    private AzureRetryType type;
+
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
 
     public int getMaxRetries() {
         return maxRetries;
@@ -21,20 +29,20 @@ public class RetryProperties {
         this.maxRetries = maxRetries;
     }
 
-    public Duration getRetryDelay() {
-        return retryDelay;
+    public Duration getDelay() {
+        return delay;
     }
 
-    public void setRetryDelay(Duration retryDelay) {
-        this.retryDelay = retryDelay;
+    public void setDelay(Duration delay) {
+        this.delay = delay;
     }
 
-    public Duration getMaxRetryDelay() {
-        return maxRetryDelay;
+    public Duration getMaxDelay() {
+        return maxDelay;
     }
 
-    public void setMaxRetryDelay(Duration maxRetryDelay) {
-        this.maxRetryDelay = maxRetryDelay;
+    public void setMaxDelay(Duration maxDelay) {
+        this.maxDelay = maxDelay;
     }
 
     public Duration getTryTimeout() {
@@ -43,13 +51,5 @@ public class RetryProperties {
 
     public void setTryTimeout(Duration tryTimeout) {
         this.tryTimeout = tryTimeout;
-    }
-
-    public AzureRetryType getRetryType() {
-        return type;
-    }
-
-    public void setRetryType(AzureRetryType azureRetryType) {
-        this.type = azureRetryType;
     }
 }

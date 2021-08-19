@@ -1,6 +1,5 @@
 package com.azure.spring.core.credential.descriptor;
 
-import com.azure.core.credential.AzureKeyCredential;
 import com.azure.spring.core.credential.AzureCredentialType;
 import com.azure.spring.core.credential.provider.AzureKeyCredentialProvider;
 import com.azure.spring.core.credential.resolver.AzureCredentialResolver;
@@ -8,7 +7,7 @@ import com.azure.spring.core.credential.resolver.AzureKeyCredentialResolver;
 
 import java.util.function.Consumer;
 
-public class KeyAuthenticationDescriptor implements AuthenticationDescriptor<AzureKeyCredentialProvider, AzureKeyCredential> {
+public class KeyAuthenticationDescriptor implements AuthenticationDescriptor<AzureKeyCredentialProvider> {
 
     private final Consumer<AzureKeyCredentialProvider> consumer;
 
@@ -22,7 +21,7 @@ public class KeyAuthenticationDescriptor implements AuthenticationDescriptor<Azu
     }
 
     @Override
-    public AzureCredentialResolver azureCredentialResolver() {
+    public AzureCredentialResolver<AzureKeyCredentialProvider> azureCredentialResolver() {
         return new AzureKeyCredentialResolver();
     }
 

@@ -1,87 +1,26 @@
 package com.azure.spring.autoconfigure.messaging.eventhub;
 
-import com.azure.core.amqp.AmqpTransportType;
-import com.azure.spring.core.aware.AmqpPropertiesAware;
 import com.azure.spring.core.properties.AzureProperties;
-import com.azure.spring.core.aware.credential.ConnectionStringAware;
-import com.azure.spring.core.properties.amqp.AmqpProperties;
+import com.azure.spring.core.properties.aware.credential.ConnectionStringAware;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import javax.validation.constraints.Pattern;
-
 @ConfigurationProperties(prefix = "spring.cloud.azure.eventhub")
-public class EventHubProperties extends AzureProperties implements
-    AmqpPropertiesAware, ConnectionStringAware {
+public class EventHubProperties extends AzureProperties implements ConnectionStringAware {
 
-    private AmqpProperties amqp;
-
-    private String connectionString;
-    private String eventHubName;
-    private String customEndpointAddress;
-    private Boolean isSharedConnection;
-    private String fullyQualifiedNamespace;
+    private boolean isSharedConnection;
     private String namespace;
-
-    private AmqpTransportType transport;
+    private String eventHubName;
+    private String connectionString;
+    private String customEndpointAddress;
     private String consumerGroup;
     private Integer prefetchCount;
-//    private SslDomain.VerifyMode verifyMode;
 
-    @Pattern(regexp = "^[a-z0-9]{3,24}$",
-        message = "must be between 3 and 24 characters in length and use numbers and lower-case letters only")
-    private String checkpointStorageAccount;
-    private String checkpointAccessKey;
-    private String checkpointContainer;
-
-    @Override
-    public AmqpProperties getAmqp() {
-        return amqp;
-    }
-
-    @Override
-    public void setAmqp(AmqpProperties amqp) {
-        this.amqp = amqp;
-    }
-
-    public String getConnectionString() {
-        return connectionString;
-    }
-
-    @Override
-    public void setConnectionString(String connectionString) {
-        this.connectionString = connectionString;
-    }
-
-    public String getEventHubName() {
-        return eventHubName;
-    }
-
-    public void setEventHubName(String eventHubName) {
-        this.eventHubName = eventHubName;
-    }
-
-    public String getCustomEndpointAddress() {
-        return customEndpointAddress;
-    }
-
-    public void setCustomEndpointAddress(String customEndpointAddress) {
-        this.customEndpointAddress = customEndpointAddress;
-    }
-
-    public Boolean getSharedConnection() {
+    public boolean isSharedConnection() {
         return isSharedConnection;
     }
 
-    public void setSharedConnection(Boolean sharedConnection) {
+    public void setSharedConnection(boolean sharedConnection) {
         isSharedConnection = sharedConnection;
-    }
-
-    public String getFullyQualifiedNamespace() {
-        return fullyQualifiedNamespace;
-    }
-
-    public void setFullyQualifiedNamespace(String fullyQualifiedNamespace) {
-        this.fullyQualifiedNamespace = fullyQualifiedNamespace;
     }
 
     public String getNamespace() {
@@ -92,12 +31,30 @@ public class EventHubProperties extends AzureProperties implements
         this.namespace = namespace;
     }
 
-    public AmqpTransportType getTransport() {
-        return transport;
+    public String getEventHubName() {
+        return eventHubName;
     }
 
-    public void setTransport(AmqpTransportType transport) {
-        this.transport = transport;
+    public void setEventHubName(String eventHubName) {
+        this.eventHubName = eventHubName;
+    }
+
+    @Override
+    public String getConnectionString() {
+        return connectionString;
+    }
+
+    @Override
+    public void setConnectionString(String connectionString) {
+        this.connectionString = connectionString;
+    }
+
+    public String getCustomEndpointAddress() {
+        return customEndpointAddress;
+    }
+
+    public void setCustomEndpointAddress(String customEndpointAddress) {
+        this.customEndpointAddress = customEndpointAddress;
     }
 
     public String getConsumerGroup() {
@@ -114,29 +71,5 @@ public class EventHubProperties extends AzureProperties implements
 
     public void setPrefetchCount(Integer prefetchCount) {
         this.prefetchCount = prefetchCount;
-    }
-
-    public String getCheckpointStorageAccount() {
-        return checkpointStorageAccount;
-    }
-
-    public void setCheckpointStorageAccount(String checkpointStorageAccount) {
-        this.checkpointStorageAccount = checkpointStorageAccount;
-    }
-
-    public String getCheckpointAccessKey() {
-        return checkpointAccessKey;
-    }
-
-    public void setCheckpointAccessKey(String checkpointAccessKey) {
-        this.checkpointAccessKey = checkpointAccessKey;
-    }
-
-    public String getCheckpointContainer() {
-        return checkpointContainer;
-    }
-
-    public void setCheckpointContainer(String checkpointContainer) {
-        this.checkpointContainer = checkpointContainer;
     }
 }

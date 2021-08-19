@@ -9,11 +9,9 @@ import com.azure.cosmos.DirectConnectionConfig;
 import com.azure.cosmos.GatewayConnectionConfig;
 import com.azure.cosmos.models.CosmosPermissionProperties;
 import com.azure.spring.core.properties.AzureProperties;
-import com.azure.spring.core.aware.EndpointPropertiesAware;
 import com.azure.spring.data.cosmos.core.ResponseDiagnosticsProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
 import org.springframework.validation.annotation.Validated;
@@ -25,8 +23,7 @@ import javax.validation.constraints.NotEmpty;
  */
 @Validated
 @ConfigurationProperties(CosmosProperties.PREFIX)
-public class CosmosProperties extends AzureProperties implements
-    EndpointPropertiesAware, InitializingBean {
+public class CosmosProperties extends AzureProperties {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CosmosProperties.class);
     public static final String PREFIX = "spring.cloud.azure.cosmos";
@@ -81,10 +78,6 @@ public class CosmosProperties extends AzureProperties implements
             }
         };
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        // TODO: DB endpoint should be not empty
-    }
 
     public String getApplicationId() {
         return applicationId;
@@ -92,15 +85,6 @@ public class CosmosProperties extends AzureProperties implements
 
     public void setApplicationId(String applicationId) {
         this.applicationId = applicationId;
-    }
-
-    public String getEndpoint() {
-        return endpoint;
-    }
-
-    @Override
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
     }
 
     public String getDatabase() {

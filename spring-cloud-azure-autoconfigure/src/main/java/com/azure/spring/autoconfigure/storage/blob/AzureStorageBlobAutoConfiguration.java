@@ -20,14 +20,6 @@ public class AzureStorageBlobAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public BlobClientBuilder blobClientBuilder() {
-        BlobClientBuilder builder = new BlobClientBuilder();
-
-        return builder;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
     public BlobClient blobClient(BlobClientBuilder builder) {
         return builder.buildClient();
     }
@@ -50,5 +42,4 @@ public class AzureStorageBlobAutoConfiguration {
         return factory.build();
     }
 
-    // TODO: should we expose more SDK provided client builders?
 }
