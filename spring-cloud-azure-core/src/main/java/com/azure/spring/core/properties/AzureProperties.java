@@ -14,8 +14,6 @@ public class AzureProperties {
 
     protected ClientProperties client;
 
-    protected EnvironmentProperties env;
-
     protected ProxyProperties proxy;
 
     protected RetryProperties retry;
@@ -28,14 +26,6 @@ public class AzureProperties {
 
     public void setClient(ClientProperties client) {
         this.client = client;
-    }
-
-    public EnvironmentProperties getEnv() {
-        return env;
-    }
-
-    public void setEnv(EnvironmentProperties env) {
-        this.env = env;
     }
 
     public ProxyProperties getProxy() {

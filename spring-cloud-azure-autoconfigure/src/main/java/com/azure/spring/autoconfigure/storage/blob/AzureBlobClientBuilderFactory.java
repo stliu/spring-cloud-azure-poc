@@ -1,6 +1,7 @@
 package com.azure.spring.autoconfigure.storage.blob;
 
 import com.azure.core.http.HttpClient;
+import com.azure.core.util.Configuration;
 import com.azure.spring.autoconfigure.storage.common.credential.StorageSharedKeyAuthenticationDescriptor;
 import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
 import com.azure.spring.core.credential.descriptor.ConnectionStringAuthenticationDescriptor;
@@ -13,6 +14,7 @@ import org.springframework.boot.context.properties.PropertyMapper;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 /**
  * Storage Blob Service client builder factory, it builds the storage blob client according the configuration context
@@ -24,11 +26,6 @@ public class AzureBlobClientBuilderFactory extends AbstractAzureHttpClientBuilde
 
     public AzureBlobClientBuilderFactory(AzureStorageBlobProperties blobProperties) {
         this.blobProperties = blobProperties;
-    }
-
-    @Override
-    protected void configureHttpClient(BlobClientBuilder builder, HttpClient httpClient) {
-        builder.httpClient(httpClient);
     }
 
     @Override
@@ -52,6 +49,16 @@ public class AzureBlobClientBuilderFactory extends AbstractAzureHttpClientBuilde
         if (blobProperties.isAnonymousAccess()) {
             builder.setAnonymousAccess();
         }
+    }
+
+    @Override
+    protected BiConsumer<BlobClientBuilder, HttpClient> consumeHttpClient() {
+        return BlobClientBuilder::httpClient;
+    }
+
+    @Override
+    protected BiConsumer<BlobClientBuilder, Configuration> consumeConfiguration() {
+        return BlobClientBuilder::configuration;
     }
 
     @Override

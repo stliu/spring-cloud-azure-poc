@@ -1,6 +1,7 @@
 package com.azure.spring.core.factory;
 
-import com.azure.core.util.Header;
+import com.azure.core.management.AzureEnvironment;
+import com.azure.core.util.Configuration;
 import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
 import com.azure.spring.core.credential.provider.AzureCredentialProvider;
 import com.azure.spring.core.credential.resolver.AzureCredentialResolver;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -32,17 +34,18 @@ public abstract class AbstractAzureServiceClientBuilderFactory<T> implements Azu
 
     protected abstract List<AuthenticationDescriptor<?>> getAuthenticationDescriptors(T builder);
 
-    protected abstract void configureApplicationId(T builder, String applicationId);
-
-    protected abstract void configureHeaders(T builder, List<Header> headers);
-
-    protected abstract void configureClient(T builder);
+    protected abstract void configureApplicationId(T builder);
 
     protected abstract void configureProxy(T builder);
 
     protected abstract void configureRetry(T builder);
 
     protected abstract void configureService(T builder);
+
+    protected abstract BiConsumer<T, Configuration> consumeConfiguration();
+
+    private AzureEnvironment azureEnvironment = AzureEnvironment.AZURE;
+    private String applicationId;
 
 
     /**
@@ -59,12 +62,17 @@ public abstract class AbstractAzureServiceClientBuilderFactory<T> implements Azu
     }
 
     protected void configureCore(T builder) {
-        configureApplicationId(builder, getApplicationId());
-        configureHeaders(builder, getHeaders());
-        configureProxy(builder);
+        configureApplicationId(builder);
+        configureAzureEnvironment(builder);
         configureRetry(builder);
+        configureProxy(builder);
         configureCredential(builder);
-        configureClient(builder);
+    }
+
+    protected void configureAzureEnvironment(T builder) {
+        Configuration configuration = new Configuration();
+        configuration.put(Configuration.PROPERTY_AZURE_AUTHORITY_HOST, this.azureEnvironment.getActiveDirectoryEndpoint());
+        consumeConfiguration().accept(builder, configuration);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -87,21 +95,6 @@ public abstract class AbstractAzureServiceClientBuilderFactory<T> implements Azu
         consumer.accept(azureCredentialProvider);
     }
 
-    protected String getApplicationId() {
-        final ClientProperties client = getAzureProperties().getClient();
-        return client == null ? null : client.getApplicationId();
-    }
-
-    protected List<Header> getHeaders() {
-        final ClientProperties client = getAzureProperties().getClient();
-        if (client == null || client.getHeaders() == null) {
-            return null;
-        }
-        return client.getHeaders()
-                     .stream()
-                     .map(h -> new Header(h.getName(), h.getValues()))
-                     .collect(Collectors.toList());
-    }
 
     protected AzureServiceClientBuilderCustomizer<T> getBuilderCustomizer() {
         return new NoOpAzureServiceClientBuilderCustomizer<>();
@@ -118,5 +111,23 @@ public abstract class AbstractAzureServiceClientBuilderFactory<T> implements Azu
                                                                 .collect(Collectors.toList());
         AzureCredentialResolvers credentialResolvers = new AzureCredentialResolvers(resolvers);
         return credentialResolvers.resolve(azureProperties);
+    }
+
+    protected AzureEnvironment getAzureEnvironment() {
+        return azureEnvironment;
+    }
+
+    public void setAzureEnvironment(AzureEnvironment azureEnvironment) {
+        this.azureEnvironment = azureEnvironment;
+    }
+
+    protected String getApplicationId() {
+        final ClientProperties clientProperties = getAzureProperties().getClient();
+        return this.applicationId != null ? this.applicationId : (clientProperties != null ?
+                                                                      clientProperties.getApplicationId() : null);
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
     }
 }

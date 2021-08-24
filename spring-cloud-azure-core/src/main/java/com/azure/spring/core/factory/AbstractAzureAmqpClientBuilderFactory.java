@@ -6,7 +6,6 @@ import com.azure.core.amqp.AmqpTransportType;
 import com.azure.core.amqp.ProxyAuthenticationType;
 import com.azure.core.amqp.ProxyOptions;
 import com.azure.core.util.ClientOptions;
-import com.azure.core.util.Header;
 import com.azure.spring.core.properties.ProxyProperties;
 import com.azure.spring.core.properties.client.AmqpClientProperties;
 import com.azure.spring.core.properties.retry.RetryProperties;
@@ -15,35 +14,46 @@ import org.springframework.lang.NonNull;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.time.Duration;
-import java.util.List;
+import java.util.function.BiConsumer;
 
 public abstract class AbstractAzureAmqpClientBuilderFactory<T> extends AbstractAzureServiceClientBuilderFactory<T> {
 
-    private final ClientOptions clientOptions = new ClientOptions();
+    private ClientOptions clientOptions = new ClientOptions();
+    protected abstract BiConsumer<T, ProxyOptions> consumeProxyOptions();
+    protected abstract BiConsumer<T, AmqpTransportType> consumeAmqpTransportType();
+    protected abstract BiConsumer<T, AmqpRetryOptions> consumeAmqpRetryOptions();
 
-    protected abstract void configureAmqpProxy(T builder, ProxyOptions proxyOptions);
-    
-    protected abstract void configureAmqpTransportType(T builder, AmqpTransportType amqpTransportType);
-    
-    protected abstract void configureAmqpRetryOptions(T builder, AmqpRetryOptions amqpRetryOptions);
+    protected abstract BiConsumer<T, ClientOptions> consumeClientOptions();
 
     @Override
-    protected void configureClient(T builder) {
+    protected void configureCore(T builder) {
+        configureAzureEnvironment(builder);
+        configureAmqpClient(builder);
+    }
+
+    protected void configureAmqpClient(T builder) {
+        configureAmqpClientOptions(builder);
+        configureAmqpTransportType(builder);
+        configureProxy(builder);
+        configureRetry(builder);
+    }
+
+    protected void configureAmqpTransportType(T builder) {
         final AmqpClientProperties client = (AmqpClientProperties) getAzureProperties().getClient();
         if (client == null) {
             return;
         }
-        configureAmqpTransportType(builder, client.getTransportType());
+        consumeAmqpTransportType().accept(builder, client.getTransportType());
+    }
+
+    protected void configureAmqpClientOptions(T builder) {
+        configureApplicationId(builder);
+        consumeClientOptions().accept(builder, this.clientOptions);
     }
 
     @Override
-    protected void configureApplicationId(T builder, String applicationId) {
-        this.clientOptions.setApplicationId(applicationId);
-    }
-
-    @Override
-    protected void configureHeaders(T builder, List<Header> headers) {
-        this.clientOptions.setHeaders(headers);
+    protected void configureApplicationId(T builder) {
+        this.clientOptions.setApplicationId(getApplicationId());
     }
 
     @Override
@@ -53,7 +63,7 @@ public abstract class AbstractAzureAmqpClientBuilderFactory<T> extends AbstractA
             return;
         }
         AmqpRetryOptions retryOptions = getAmqpRetryOptions(retry);
-        configureAmqpRetryOptions(builder, retryOptions);
+        consumeAmqpRetryOptions().accept(builder, retryOptions);
     }
 
     @Override
@@ -62,7 +72,7 @@ public abstract class AbstractAzureAmqpClientBuilderFactory<T> extends AbstractA
             return;
         }
         final ProxyOptions proxyOptions = getProxyOptions(getAzureProperties().getProxy());
-        configureAmqpProxy(builder, proxyOptions);
+        consumeProxyOptions().accept(builder, proxyOptions);
     }
 
     private AmqpRetryOptions getAmqpRetryOptions(RetryProperties retry) {
@@ -79,6 +89,14 @@ public abstract class AbstractAzureAmqpClientBuilderFactory<T> extends AbstractA
         retryOptions.setMaxRetries(retry.getMaxAttempts());
         retryOptions.setTryTimeout(Duration.ofMillis(retry.getTimeout()));
         return retryOptions;
+    }
+
+    protected ClientOptions getClientOptions() {
+        return clientOptions;
+    }
+
+    public void setClientOptions(ClientOptions clientOptions) {
+        this.clientOptions = clientOptions;
     }
 
     private ProxyOptions getProxyOptions(@NonNull ProxyProperties properties) {

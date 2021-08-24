@@ -1,6 +1,7 @@
 package com.azure.spring.core.factory;
 
 import com.azure.core.http.HttpClient;
+import com.azure.core.util.Configuration;
 import com.azure.identity.implementation.IdentityClientBuilder;
 import com.azure.identity.implementation.IdentityClientOptions;
 import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
@@ -13,6 +14,7 @@ import com.azure.spring.core.properties.retry.RetryProperties;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 public class AzureIdentityClientBuilderFactory extends AbstractAzureHttpClientBuilderFactory<IdentityClientBuilder> {
 
@@ -24,8 +26,8 @@ public class AzureIdentityClientBuilderFactory extends AbstractAzureHttpClientBu
     }
 
     @Override
-    protected void configureHttpClient(IdentityClientBuilder builder, HttpClient httpClient) {
-        identityClientOptions.setHttpClient(httpClient);
+    protected BiConsumer<IdentityClientBuilder, HttpClient> consumeHttpClient() {
+        return (b, c) -> identityClientOptions.setHttpClient(c);
     }
 
     @Override
@@ -65,6 +67,11 @@ public class AzureIdentityClientBuilderFactory extends AbstractAzureHttpClientBu
     @Override
     protected void configureService(IdentityClientBuilder builder) {
         builder.sharedTokenCacheCredential(properties.isSharedTokenCacheCred());
+    }
+
+    @Override
+    protected BiConsumer<IdentityClientBuilder, Configuration> consumeConfiguration() {
+        return (b, c) -> {};
     }
 
 

@@ -1,6 +1,6 @@
 package com.azure.spring.autoconfigure.cosmos;
 
-import com.azure.core.util.Header;
+import com.azure.core.util.Configuration;
 import com.azure.cosmos.CosmosClientBuilder;
 import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
 import com.azure.spring.core.credential.descriptor.KeyAuthenticationDescriptor;
@@ -10,6 +10,7 @@ import com.azure.spring.core.properties.AzureProperties;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 
 public class CosmosServiceClientBuilderFactory extends AbstractAzureServiceClientBuilderFactory<CosmosClientBuilder> {
@@ -39,17 +40,7 @@ public class CosmosServiceClientBuilderFactory extends AbstractAzureServiceClien
     }
 
     @Override
-    protected void configureApplicationId(CosmosClientBuilder builder, String applicationId) {
-        builder.userAgentSuffix(applicationId);
-    }
-
-    @Override
-    protected void configureHeaders(CosmosClientBuilder builder, List<Header> headers) {
-        // empty
-    }
-
-    @Override
-    protected void configureClient(CosmosClientBuilder builder) {
+    protected void configureApplicationId(CosmosClientBuilder builder) {
 
     }
 
@@ -66,5 +57,10 @@ public class CosmosServiceClientBuilderFactory extends AbstractAzureServiceClien
     @Override
     protected void configureService(CosmosClientBuilder builder) {
 
+    }
+
+    @Override
+    protected BiConsumer<CosmosClientBuilder, Configuration> consumeConfiguration() {
+        return null;
     }
 }

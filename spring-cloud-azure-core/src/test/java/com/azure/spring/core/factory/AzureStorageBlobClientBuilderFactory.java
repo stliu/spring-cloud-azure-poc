@@ -1,6 +1,7 @@
 package com.azure.spring.core.factory;
 
 import com.azure.core.http.HttpClient;
+import com.azure.core.util.Configuration;
 import com.azure.spring.core.credential.AzureCredentialType;
 import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
 import com.azure.spring.core.credential.descriptor.SasAuthenticationDescriptor;
@@ -17,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static com.azure.spring.core.factory.AzureStorageBlobClientBuilderFactory.StorageSharedKeyAuthenticationDescriptor.STORAGE_SHARED_KEY;
@@ -34,13 +36,13 @@ public class AzureStorageBlobClientBuilderFactory extends AbstractAzureHttpClien
     }
 
     @Override
-    protected void configureHttpClient(BlobClientBuilder builder, HttpClient httpClient) {
-        builder.httpClient(httpClient);
+    protected BlobClientBuilder createBuilderInstance() {
+        return new BlobClientBuilder();
     }
 
     @Override
-    protected BlobClientBuilder createBuilderInstance() {
-        return new BlobClientBuilder();
+    protected BiConsumer<BlobClientBuilder, HttpClient> consumeHttpClient() {
+        return BlobClientBuilder::httpClient;
     }
 
     @Override
@@ -64,6 +66,11 @@ public class AzureStorageBlobClientBuilderFactory extends AbstractAzureHttpClien
         if (blobProperties.isAnonymousAccess()) {
             builder.setAnonymousAccess();
         }
+    }
+
+    @Override
+    protected BiConsumer<BlobClientBuilder, Configuration> consumeConfiguration() {
+        return BlobClientBuilder::configuration;
     }
 
     @Override

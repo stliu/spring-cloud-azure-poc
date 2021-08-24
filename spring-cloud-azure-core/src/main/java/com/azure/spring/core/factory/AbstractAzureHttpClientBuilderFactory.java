@@ -1,27 +1,67 @@
 package com.azure.spring.core.factory;
 
 import com.azure.core.http.HttpClient;
+import com.azure.core.http.HttpClientProvider;
+import com.azure.core.http.ProxyOptions;
 import com.azure.core.util.Header;
+import com.azure.core.util.HttpClientOptions;
+import com.azure.spring.core.http.DefaultHttpProvider;
+import com.azure.spring.core.properties.ProxyProperties;
+import com.azure.spring.core.properties.client.ClientProperties;
 import com.azure.spring.core.properties.client.HttpClientProperties;
+import org.springframework.util.StringUtils;
 
+import java.net.InetSocketAddress;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 public abstract class AbstractAzureHttpClientBuilderFactory<T> extends AbstractAzureServiceClientBuilderFactory<T> {
 
-    protected HttpClientFactory httpClientFactory = new HttpClientFactory();
+    private final HttpClientOptions httpClientOptions = new HttpClientOptions();
+    private HttpClientProvider httpClientProvider = new DefaultHttpProvider();
 
-    protected abstract void configureHttpClient(T builder, HttpClient httpClient);
+    protected abstract BiConsumer<T, HttpClient> consumeHttpClient();
 
     @Override
     protected void configureCore(T builder) {
+        configureAzureEnvironment(builder);
         configureRetry(builder);
         configureCredential(builder);
-        configureClient(builder);
+        configureHttpClient(builder);
+    }
+
+    protected void configureHttpClient(T builder) {
+        configureApplicationId(builder);
+        configureProxy(builder);
+        configureHttpHeaders(builder);
+        configureHttpClientProperties(builder);
+        final HttpClient httpClient = getHttpClientProvider().createInstance(this.httpClientOptions);
+        consumeHttpClient().accept(builder, httpClient);
     }
 
     @Override
     protected void configureProxy(T builder) {
-        httpClientFactory.configureProxy(getAzureProperties().getProxy());
+        this.httpClientOptions.setProxyOptions(getProxyOptions(getAzureProperties().getProxy()));
+    }
+
+    @Override
+    protected void configureApplicationId(T builder) {
+        this.httpClientOptions.setApplicationId(getApplicationId());
+    }
+
+    protected void configureHttpHeaders(T builder) {
+        this.httpClientOptions.setHeaders(getHeaders());
+    }
+
+    protected void configureHttpClientProperties(T builder) {
+        final HttpClientProperties properties = (HttpClientProperties) getAzureProperties().getClient();
+        if (properties == null) {
+            return;
+        }
+        httpClientOptions.setWriteTimeout(properties.getWriteTimeout());
+        httpClientOptions.responseTimeout(properties.getResponseTimeout());
+        httpClientOptions.readTimeout(properties.getReadTimeout());
     }
 
     @Override
@@ -29,37 +69,46 @@ public abstract class AbstractAzureHttpClientBuilderFactory<T> extends AbstractA
 
     }
 
-    @Override
-    protected void configureClient(T builder) {
-        configureApplicationId(builder, getApplicationId());
-        configureHeaders(builder, getHeaders());
-        configureProxy(builder);
-        configureHttpProperties(builder);
-        configureHttpClient(builder, createHttpClientInstance());
-    }
-
-    protected void configureHttpProperties(T builder) {
-        final HttpClientProperties client = (HttpClientProperties) getAzureProperties().getClient();
-        if (client == null) {
-            return;
+    protected List<Header> getHeaders() {
+        final ClientProperties client = getAzureProperties().getClient();
+        if (client == null || client.getHeaders() == null) {
+            return null;
         }
-        this.httpClientFactory.configureReadTimeout(client.getReadTimeout());
-        this.httpClientFactory.configureWriteTimeout(client.getWriteTimeout());
-        this.httpClientFactory.configureResponseTimeout(client.getResponseTimeout());
+        return client.getHeaders()
+                     .stream()
+                     .map(h -> new Header(h.getName(), h.getValues()))
+                     .collect(Collectors.toList());
     }
 
-    @Override
-    protected void configureApplicationId(T builder, String applicationId) {
-        this.httpClientFactory.configureApplicationId(applicationId);
+    public void setHttpClientProvider(HttpClientProvider httpClientProvider) {
+        if (httpClientProvider != null) {
+            this.httpClientProvider = httpClientProvider;
+        }
     }
 
-    @Override
-    protected void configureHeaders(T builder, List<Header> headers) {
-        this.httpClientFactory.configureHttpHeaders(headers);
+    protected HttpClientProvider getHttpClientProvider() {
+        return this.httpClientProvider;
     }
 
-    protected HttpClient createHttpClientInstance() {
-        return httpClientFactory.build();
+    private ProxyOptions getProxyOptions(ProxyProperties proxyProperties) {
+        if (proxyProperties == null) {
+            return null;
+        }
+        final String type = proxyProperties.getType();
+        ProxyOptions.Type sdkProxyType;
+        if ("http".equalsIgnoreCase(type)) {
+            sdkProxyType = ProxyOptions.Type.HTTP;
+        } else {
+            sdkProxyType = ProxyOptions.Type.SOCKS4;
+        }
+
+        ProxyOptions proxyOptions = new ProxyOptions(sdkProxyType, new InetSocketAddress(proxyProperties.getHostname(),
+                                                                                         proxyProperties.getPort()));
+        if (StringUtils.hasText(proxyProperties.getUsername()) && StringUtils.hasText(proxyProperties.getPassword())) {
+            proxyOptions.setCredentials(proxyProperties.getUsername(), proxyProperties.getPassword());
+        }
+        // TODO non proxy hosts
+        return proxyOptions;
     }
 
 }

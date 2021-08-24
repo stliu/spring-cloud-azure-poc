@@ -1,6 +1,7 @@
 package com.azure.spring.autoconfigure.keyvault.certificate;
 
 import com.azure.core.http.HttpClient;
+import com.azure.core.util.Configuration;
 import com.azure.security.keyvault.certificates.CertificateClientBuilder;
 import com.azure.spring.autoconfigure.keyvault.KeyVaultProperties;
 import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
@@ -8,6 +9,7 @@ import com.azure.spring.core.factory.AbstractAzureHttpClientBuilderFactory;
 import com.azure.spring.core.properties.AzureProperties;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 
 
 public class KeyVaultCertificateServiceClientBuilderFactory extends AbstractAzureHttpClientBuilderFactory<CertificateClientBuilder> {
@@ -19,10 +21,9 @@ public class KeyVaultCertificateServiceClientBuilderFactory extends AbstractAzur
         this.keyVaultProperties = keyVaultProperties;
     }
 
-
     @Override
-    protected void configureHttpClient(CertificateClientBuilder builder, HttpClient httpClient) {
-        builder.httpClient(httpClient);
+    protected BiConsumer<CertificateClientBuilder, HttpClient> consumeHttpClient() {
+        return CertificateClientBuilder::httpClient;
     }
 
     @Override
@@ -43,5 +44,10 @@ public class KeyVaultCertificateServiceClientBuilderFactory extends AbstractAzur
     @Override
     protected void configureService(CertificateClientBuilder builder) {
 
+    }
+
+    @Override
+    protected BiConsumer<CertificateClientBuilder, Configuration> consumeConfiguration() {
+        return CertificateClientBuilder::configuration;
     }
 }

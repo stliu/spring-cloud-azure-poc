@@ -3,6 +3,8 @@ package com.azure.spring.autoconfigure.messaging.eventhub;
 import com.azure.core.amqp.AmqpRetryOptions;
 import com.azure.core.amqp.AmqpTransportType;
 import com.azure.core.amqp.ProxyOptions;
+import com.azure.core.util.ClientOptions;
+import com.azure.core.util.Configuration;
 import com.azure.messaging.eventhubs.EventHubClientBuilder;
 import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
 import com.azure.spring.core.credential.descriptor.NamedKeyAuthenticationDescriptor;
@@ -13,6 +15,7 @@ import com.azure.spring.core.properties.AzureProperties;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 /**
  * Storage Blob Service client builder factory, it builds the storage blob client
@@ -27,6 +30,31 @@ public class AzureEventHubClientBuilderFactory extends AbstractAzureAmqpClientBu
     }
 
     @Override
+    protected BiConsumer<EventHubClientBuilder, ProxyOptions> consumeProxyOptions() {
+        return EventHubClientBuilder::proxyOptions;
+    }
+
+    @Override
+    protected BiConsumer<EventHubClientBuilder, AmqpTransportType> consumeAmqpTransportType() {
+        return EventHubClientBuilder::transportType;
+    }
+
+    @Override
+    protected BiConsumer<EventHubClientBuilder, AmqpRetryOptions> consumeAmqpRetryOptions() {
+        return EventHubClientBuilder::retry;
+    }
+
+    @Override
+    protected BiConsumer<EventHubClientBuilder, ClientOptions> consumeClientOptions() {
+        return EventHubClientBuilder::clientOptions;
+    }
+
+    @Override
+    protected BiConsumer<EventHubClientBuilder, Configuration> consumeConfiguration() {
+        return EventHubClientBuilder::configuration;
+    }
+
+    @Override
     protected EventHubClientBuilder createBuilderInstance() {
         return new EventHubClientBuilder();
     }
@@ -34,27 +62,6 @@ public class AzureEventHubClientBuilderFactory extends AbstractAzureAmqpClientBu
     @Override
     protected AzureProperties getAzureProperties() {
         return this.eventHubProperties;
-    }
-
-    @Override
-    protected String getApplicationId() {
-        // TODO
-        return super.getApplicationId();
-    }
-
-    @Override
-    protected void configureAmqpProxy(EventHubClientBuilder builder, ProxyOptions proxyOptions) {
-        builder.proxyOptions(proxyOptions);
-    }
-
-    @Override
-    protected void configureAmqpTransportType(EventHubClientBuilder builder, AmqpTransportType amqpTransportType) {
-        builder.transportType(amqpTransportType);
-    }
-
-    @Override
-    protected void configureAmqpRetryOptions(EventHubClientBuilder builder, AmqpRetryOptions amqpRetryOptions) {
-        builder.retry(amqpRetryOptions);
     }
 
     @Override
@@ -81,4 +88,5 @@ public class AzureEventHubClientBuilderFactory extends AbstractAzureAmqpClientBu
                                                                              provider.getCredential()))
         );
     }
+
 }

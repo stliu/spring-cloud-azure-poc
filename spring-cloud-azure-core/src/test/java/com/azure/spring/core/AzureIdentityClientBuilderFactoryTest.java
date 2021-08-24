@@ -35,7 +35,7 @@ public class AzureIdentityClientBuilderFactoryTest {
         tokenCredentialProperties.setTenantId("test-tenant");
         tokenCredentialProperties.setClientId("test-id");
         tokenCredentialProperties.setClientSecret("test-secret");
-        new AzureIdentityClientBuilderFactoryExt(properties).build();
+        new AzureIdentityClientBuilderFactoryExt(properties).build().build();
         verify(builder, times(1)).tenantId("test-tenant");
         verify(builder, times(1)).clientId("test-id");
         verify(builder, times(1)).clientSecret("test-secret");
@@ -49,7 +49,7 @@ public class AzureIdentityClientBuilderFactoryTest {
         tokenCredentialProperties.setTenantId("test-tenant");
         tokenCredentialProperties.setCertificatePath("test-cert-path");
         tokenCredentialProperties.setCertificatePassword("test-cert-password");
-        new AzureIdentityClientBuilderFactoryExt(properties).build();
+        new AzureIdentityClientBuilderFactoryExt(properties).build().build();
         verify(builder, times(1)).tenantId("test-tenant");
         verify(builder, times(1)).certificatePath("test-cert-path");
         verify(builder, times(1)).certificatePassword("test-cert-password");
@@ -62,7 +62,7 @@ public class AzureIdentityClientBuilderFactoryTest {
         properties.setRetry(retryProperties);
         retryProperties.setMaxAttempts(5);
 
-        new AzureIdentityClientBuilderFactoryExt(properties).build();
+        new AzureIdentityClientBuilderFactoryExt(properties).build().build();
     }
 
     static class AzureIdentityClientBuilderFactoryExt extends AzureIdentityClientBuilderFactory {
