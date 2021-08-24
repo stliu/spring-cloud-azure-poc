@@ -4,14 +4,17 @@ import com.azure.core.http.HttpClient;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
 import com.azure.spring.autoconfigure.keyvault.KeyVaultProperties;
 import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
+import com.azure.spring.core.credential.descriptor.TokenAuthenticationDescriptor;
 import com.azure.spring.core.factory.AbstractAzureHttpClientBuilderFactory;
 import com.azure.spring.core.properties.AzureProperties;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class KeyVaultSecretServiceClientBuilderFactory extends AbstractAzureHttpClientBuilderFactory<SecretClientBuilder> {
 
-    private KeyVaultProperties keyVaultProperties;
+    private final KeyVaultProperties keyVaultProperties;
 
     public KeyVaultSecretServiceClientBuilderFactory(KeyVaultProperties keyVaultProperties) {
         this.keyVaultProperties = keyVaultProperties;
@@ -29,7 +32,8 @@ public class KeyVaultSecretServiceClientBuilderFactory extends AbstractAzureHttp
 
     @Override
     protected List<AuthenticationDescriptor<?>> getAuthenticationDescriptors(SecretClientBuilder builder) {
-        return null;
+        return Collections.singletonList(
+            new TokenAuthenticationDescriptor(provider -> builder.credential(provider.getCredential())));
     }
 
     @Override

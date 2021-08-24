@@ -8,12 +8,13 @@ import com.azure.core.amqp.ProxyOptions;
 import com.azure.core.util.ClientOptions;
 import com.azure.core.util.Header;
 import com.azure.spring.core.properties.ProxyProperties;
-import com.azure.spring.core.properties.RetryProperties;
 import com.azure.spring.core.properties.client.AmqpClientProperties;
+import com.azure.spring.core.properties.retry.RetryProperties;
 import org.springframework.lang.NonNull;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.time.Duration;
 import java.util.List;
 
 public abstract class AbstractAzureAmqpClientBuilderFactory<T> extends AbstractAzureServiceClientBuilderFactory<T> {
@@ -66,17 +67,17 @@ public abstract class AbstractAzureAmqpClientBuilderFactory<T> extends AbstractA
 
     private AmqpRetryOptions getAmqpRetryOptions(RetryProperties retry) {
         AmqpRetryMode mode;
-        if ("exponential".equals(retry.getMode())) {
+        if (retry.getBackoff().getMultiplier() > 0) {
             mode = AmqpRetryMode.EXPONENTIAL;
         } else {
             mode = AmqpRetryMode.FIXED;
         }
         AmqpRetryOptions retryOptions = new AmqpRetryOptions();
-        retryOptions.setDelay(retry.getDelay());
-        retryOptions.setMaxDelay(retry.getMaxDelay());
+        retryOptions.setDelay(Duration.ofMillis(retry.getBackoff().getDelay()));
+        retryOptions.setMaxDelay(Duration.ofMillis(retry.getBackoff().getMaxDelay()));
         retryOptions.setMode(mode);
-        retryOptions.setMaxRetries(retry.getMaxRetries());
-        retryOptions.setTryTimeout(retry.getTryTimeout());
+        retryOptions.setMaxRetries(retry.getMaxAttempts());
+        retryOptions.setTryTimeout(Duration.ofMillis(retry.getTimeout()));
         return retryOptions;
     }
 

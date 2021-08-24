@@ -17,19 +17,14 @@ public class AzureCredentialResolvers {
         this.resolvers = resolvers;
     }
 
-    public AzureCredentialResolvers(List<AzureCredentialResolver<?>> resolvers, Comparator<AzureCredentialResolver> comparator) {
+    public AzureCredentialResolvers(List<AzureCredentialResolver<?>> resolvers, Comparator<AzureCredentialResolver<?>> comparator) {
         this(resolvers);
         this.resolvers.sort(comparator);
     }
 
-    /**
-     * Find the first available {@link AzureCredentialProvider}.
-     * @param azureProperties
-     * @return
-     */
-    public AzureCredentialProvider resolve(AzureProperties azureProperties) {
-        AzureCredentialProvider credential = null;
-        for (AzureCredentialResolver resolver : this.resolvers) {
+    public AzureCredentialProvider<?> resolve(AzureProperties azureProperties) {
+        AzureCredentialProvider<?> credential = null;
+        for (AzureCredentialResolver<?> resolver : this.resolvers) {
             if (!resolver.isResolvable(azureProperties)) {
                 continue;
             }

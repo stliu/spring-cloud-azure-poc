@@ -8,8 +8,8 @@ import com.azure.spring.core.credential.AzureCredentialType;
  */
 public class AzureNamedKeyCredentialProvider implements AzureCredentialProvider<AzureNamedKeyCredential> {
 
-    private String name;
-    private String key;
+    private final String name;
+    private final String key;
 
     public AzureNamedKeyCredentialProvider(String name, String key) {
         this.name = name;

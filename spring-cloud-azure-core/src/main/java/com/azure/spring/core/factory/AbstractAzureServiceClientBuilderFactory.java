@@ -5,6 +5,8 @@ import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
 import com.azure.spring.core.credential.provider.AzureCredentialProvider;
 import com.azure.spring.core.credential.resolver.AzureCredentialResolver;
 import com.azure.spring.core.credential.resolver.AzureCredentialResolvers;
+import com.azure.spring.core.customizer.AzureServiceClientBuilderCustomizer;
+import com.azure.spring.core.customizer.NoOpAzureServiceClientBuilderCustomizer;
 import com.azure.spring.core.properties.AzureProperties;
 import com.azure.spring.core.properties.client.ClientProperties;
 import org.slf4j.Logger;
@@ -42,16 +44,11 @@ public abstract class AbstractAzureServiceClientBuilderFactory<T> implements Azu
 
     protected abstract void configureService(T builder);
 
-    protected void customizeBuilder(T builder) { }
 
     /**
-     * 1. create a builder instance
-     * 2. configure builder
-     *   2.1 configure azure core level configuration
-     *     2.1.1 configure http client getHttpClientInstance
-     *   2.2 configure service level configuration
-     * 3. customize builder
-     * 4. return builder
+     * 1. create a builder instance 2. configure builder 2.1 configure azure core level configuration 2.1.1 configure
+     * http client getHttpClientInstance 2.2 configure service level configuration 3. customize builder 4. return
+     * builder
      */
     public T build() {
         T builder = createBuilderInstance();
@@ -70,12 +67,24 @@ public abstract class AbstractAzureServiceClientBuilderFactory<T> implements Azu
         configureClient(builder);
     }
 
-
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     protected void configureCredential(T builder) {
-        List<AuthenticationDescriptor<?>> authenticationDescriptors = getAuthenticationDescriptors(builder);
-        AzureCredentialProvider<?> azureCredentialProvider = resolveAzureCredential(getAzureProperties(),
-                                                                                    authenticationDescriptors);
-        configureCredential(azureCredentialProvider, authenticationDescriptors);
+        List<AuthenticationDescriptor<?>> descriptors = getAuthenticationDescriptors(builder);
+        AzureCredentialProvider<?> azureCredentialProvider = resolveAzureCredential(getAzureProperties(), descriptors);
+        if (azureCredentialProvider == null) {
+            LOGGER.warn("No authentication credential configured");
+            return;
+        }
+
+        final Consumer consumer = descriptors.stream()
+                                             .filter(d -> d.azureCredentialType() == azureCredentialProvider.getType())
+                                             .map(AuthenticationDescriptor::consumer)
+                                             .findFirst()
+                                             .orElseThrow(
+                                                 () -> new IllegalArgumentException("Consumer should not be null"));
+
+
+        consumer.accept(azureCredentialProvider);
     }
 
     protected String getApplicationId() {
@@ -85,11 +94,21 @@ public abstract class AbstractAzureServiceClientBuilderFactory<T> implements Azu
 
     protected List<Header> getHeaders() {
         final ClientProperties client = getAzureProperties().getClient();
-        if (client == null || client.getHeaders() == null) return null;
+        if (client == null || client.getHeaders() == null) {
+            return null;
+        }
         return client.getHeaders()
                      .stream()
                      .map(h -> new Header(h.getName(), h.getValues()))
                      .collect(Collectors.toList());
+    }
+
+    protected AzureServiceClientBuilderCustomizer<T> getBuilderCustomizer() {
+        return new NoOpAzureServiceClientBuilderCustomizer<>();
+    }
+
+    protected void customizeBuilder(T builder) {
+        getBuilderCustomizer().customize(builder);
     }
 
     private AzureCredentialProvider<?> resolveAzureCredential(AzureProperties azureProperties,
@@ -99,18 +118,5 @@ public abstract class AbstractAzureServiceClientBuilderFactory<T> implements Azu
                                                                 .collect(Collectors.toList());
         AzureCredentialResolvers credentialResolvers = new AzureCredentialResolvers(resolvers);
         return credentialResolvers.resolve(azureProperties);
-    }
-
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    private void configureCredential(AzureCredentialProvider provider, List<AuthenticationDescriptor<?>> descriptors) {
-        final Consumer consumer = descriptors.stream()
-                                             .filter(d -> d.azureCredentialType() == provider.getType())
-                                             .map(AuthenticationDescriptor::consumer)
-                                             .findFirst()
-                                             .orElseThrow(
-                                                 () -> new IllegalArgumentException("Consumer should not be null"));
-
-
-        consumer.accept(provider.getCredential());
     }
 }

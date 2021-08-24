@@ -14,8 +14,7 @@ public class StorageSharedKeyCredentialProvider implements AzureCredentialProvid
     private final String accountName;
     private final String accountKey;
 
-    public StorageSharedKeyCredentialProvider(String accountName,
-                                              String accountKey) {
+    public StorageSharedKeyCredentialProvider(String accountName, String accountKey) {
         this.accountName = accountName;
         this.accountKey = accountKey;
     }

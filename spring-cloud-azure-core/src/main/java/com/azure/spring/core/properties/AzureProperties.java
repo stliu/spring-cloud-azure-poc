@@ -5,6 +5,7 @@ package com.azure.spring.core.properties;
 
 import com.azure.spring.core.properties.client.ClientProperties;
 import com.azure.spring.core.properties.credential.TokenCredentialProperties;
+import com.azure.spring.core.properties.retry.RetryProperties;
 
 /**
  * Unified properties for Azure SDK clients.

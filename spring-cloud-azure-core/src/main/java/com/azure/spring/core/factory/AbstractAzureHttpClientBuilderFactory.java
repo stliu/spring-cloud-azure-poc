@@ -12,7 +12,6 @@ public abstract class AbstractAzureHttpClientBuilderFactory<T> extends AbstractA
 
     protected abstract void configureHttpClient(T builder, HttpClient httpClient);
 
-
     @Override
     protected void configureCore(T builder) {
         configureRetry(builder);

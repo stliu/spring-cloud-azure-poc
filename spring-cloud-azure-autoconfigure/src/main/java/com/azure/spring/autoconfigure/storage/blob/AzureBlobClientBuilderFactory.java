@@ -3,6 +3,7 @@ package com.azure.spring.autoconfigure.storage.blob;
 import com.azure.core.http.HttpClient;
 import com.azure.spring.autoconfigure.storage.common.credential.StorageSharedKeyAuthenticationDescriptor;
 import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
+import com.azure.spring.core.credential.descriptor.ConnectionStringAuthenticationDescriptor;
 import com.azure.spring.core.credential.descriptor.SasAuthenticationDescriptor;
 import com.azure.spring.core.credential.descriptor.TokenAuthenticationDescriptor;
 import com.azure.spring.core.factory.AbstractAzureHttpClientBuilderFactory;
@@ -61,6 +62,7 @@ public class AzureBlobClientBuilderFactory extends AbstractAzureHttpClientBuilde
     @Override
     protected List<AuthenticationDescriptor<?>> getAuthenticationDescriptors(BlobClientBuilder builder) {
         return Arrays.asList(
+            new ConnectionStringAuthenticationDescriptor(provider -> builder.connectionString(provider.getCredential())),
             new StorageSharedKeyAuthenticationDescriptor(provider -> builder.credential(provider.getCredential())),
             new SasAuthenticationDescriptor(provider -> builder.credential(provider.getCredential())),
             new TokenAuthenticationDescriptor(provider -> builder.credential(provider.getCredential()))

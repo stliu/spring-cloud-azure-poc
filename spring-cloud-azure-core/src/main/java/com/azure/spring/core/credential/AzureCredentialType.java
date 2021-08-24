@@ -14,6 +14,7 @@ public final class AzureCredentialType {
     public static final AzureCredentialType KEY_CREDENTIAL = new AzureCredentialType("key_credential");
     public static final AzureCredentialType SAS_CREDENTIAL = new AzureCredentialType("sas_credential");
     public static final AzureCredentialType NAMED_KEY_CREDENTIAL = new AzureCredentialType("named_key_credential");
+    public static final AzureCredentialType CONNECTION_STRING_CREDENTIAL = new AzureCredentialType("connection_string");
 
     private final String type;
 

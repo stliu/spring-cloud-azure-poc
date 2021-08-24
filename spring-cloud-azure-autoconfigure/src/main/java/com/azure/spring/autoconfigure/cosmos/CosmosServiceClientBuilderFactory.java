@@ -1,45 +1,70 @@
 package com.azure.spring.autoconfigure.cosmos;
 
-import com.azure.core.credential.TokenCredential;
+import com.azure.core.util.Header;
 import com.azure.cosmos.CosmosClientBuilder;
+import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
+import com.azure.spring.core.credential.descriptor.KeyAuthenticationDescriptor;
+import com.azure.spring.core.credential.descriptor.TokenAuthenticationDescriptor;
+import com.azure.spring.core.factory.AbstractAzureServiceClientBuilderFactory;
+import com.azure.spring.core.properties.AzureProperties;
+
+import java.util.Arrays;
+import java.util.List;
 
 
-public class CosmosServiceClientBuilderFactory implements com.azure.spring.core.factory.AzureServiceClientBuilderFactory<CosmosClientBuilder> {
+public class CosmosServiceClientBuilderFactory extends AbstractAzureServiceClientBuilderFactory<CosmosClientBuilder> {
 
-    private CosmosClientBuilder builder;
-    private CosmosProperties cosmosProperties;
-    private TokenCredential defaultTokenCredential;
+    private final CosmosProperties cosmosProperties;
 
-    public CosmosServiceClientBuilderFactory(TokenCredential defaultTokenCredential, CosmosProperties cosmosProperties) {
-        this.defaultTokenCredential = defaultTokenCredential;
+    public CosmosServiceClientBuilderFactory(CosmosProperties cosmosProperties) {
         this.cosmosProperties = cosmosProperties;
     }
 
     @Override
-    public CosmosClientBuilder build() {
-        builder = new CosmosClientBuilder();
-
-        // apply the credential
-//        supportFeatures()
-//            .stream()
-//            .sorted()
-//            .forEach(feature -> {
-//                switch (feature) {
-//                    case KEY_CREDENTIAL:
-//                        AzureKeyCredential keyCredential = new AzureSpringKeyCredentialResolver<AzureKeyCredential>().resolve(this);
-//                        if (keyCredential != null) {
-//                            builder.credential(keyCredential);
-//                        }
-//                        break;
-//                    case TOKEN_CREDENTIAL:
-//                        builder.credential(new AzureTokenCredentialResolver().resolve(defaultTokenCredential, cosmosProperties));
-//                        break;
-//                    default:
-//                        throw new IllegalStateException("Cosmos starter does not "
-//                            + "support the feature type " + feature + ".");
-//            }
-//        });
-        return builder;
+    protected CosmosClientBuilder createBuilderInstance() {
+        return new CosmosClientBuilder();
     }
 
+    @Override
+    protected AzureProperties getAzureProperties() {
+        return this.cosmosProperties;
+    }
+
+    @Override
+    protected List<AuthenticationDescriptor<?>> getAuthenticationDescriptors(CosmosClientBuilder builder) {
+        return Arrays.asList(
+            new KeyAuthenticationDescriptor(provider -> builder.credential(provider.getCredential())),
+            new TokenAuthenticationDescriptor(provider -> builder.credential(provider.getCredential()))
+        );
+    }
+
+    @Override
+    protected void configureApplicationId(CosmosClientBuilder builder, String applicationId) {
+        builder.userAgentSuffix(applicationId);
+    }
+
+    @Override
+    protected void configureHeaders(CosmosClientBuilder builder, List<Header> headers) {
+        // empty
+    }
+
+    @Override
+    protected void configureClient(CosmosClientBuilder builder) {
+
+    }
+
+    @Override
+    protected void configureProxy(CosmosClientBuilder builder) {
+
+    }
+
+    @Override
+    protected void configureRetry(CosmosClientBuilder builder) {
+
+    }
+
+    @Override
+    protected void configureService(CosmosClientBuilder builder) {
+
+    }
 }

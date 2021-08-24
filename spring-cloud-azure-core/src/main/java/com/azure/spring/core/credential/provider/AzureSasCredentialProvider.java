@@ -8,7 +8,7 @@ import com.azure.spring.core.credential.AzureCredentialType;
  */
 public class AzureSasCredentialProvider implements AzureCredentialProvider<AzureSasCredential> {
 
-    private String sasToken;
+    private final String sasToken;
 
     public AzureSasCredentialProvider(String sasToken) {
         this.sasToken = sasToken;
@@ -21,7 +21,6 @@ public class AzureSasCredentialProvider implements AzureCredentialProvider<Azure
 
     @Override
     public AzureSasCredential getCredential() {
-        AzureSasCredential sasCredential = new AzureSasCredential(sasToken);
-        return sasCredential;
+        return new AzureSasCredential(sasToken);
     }
 }

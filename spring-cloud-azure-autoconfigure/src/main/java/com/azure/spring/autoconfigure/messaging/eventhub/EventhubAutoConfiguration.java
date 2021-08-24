@@ -50,4 +50,9 @@ public class EventhubAutoConfiguration {
         return new AzureEventHubClientBuilderFactory(properties);
     }
 
+    @Bean
+    @ConditionalOnMissingBean
+    public EventHubClientBuilder eventHubClientBuilder(AzureEventHubClientBuilderFactory factory) {
+        return factory.build();
+    }
 }

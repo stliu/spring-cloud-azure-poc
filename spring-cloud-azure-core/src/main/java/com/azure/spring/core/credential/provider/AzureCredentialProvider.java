@@ -1,6 +1,7 @@
 package com.azure.spring.core.credential.provider;
 
 import com.azure.spring.core.credential.AzureCredentialType;
+import com.azure.spring.core.credential.resolver.AzureCredentialResolver;
 
 /**
  * Azure credential provider interface to unify all the credential cases.

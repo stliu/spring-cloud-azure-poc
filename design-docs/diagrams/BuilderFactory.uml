@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.azure.spring.core.factory.AzureServiceClientBuilderFactory</OriginalElement>
+  <nodes>
+    <node x="63.0" y="0.0">com.azure.spring.core.factory.AzureServiceClientBuilderFactory</node>
+    <node x="0.0" y="105.0">com.azure.spring.core.factory.AbstractAzureServiceClientBuilderFactory</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.azure.spring.core.factory.AbstractAzureServiceClientBuilderFactory" target="com.azure.spring.core.factory.AzureServiceClientBuilderFactory" relationship="REALIZATION">
+      <point x="0.0" y="-181.5" />
+      <point x="0.0" y="27.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="1.0" showDependencies="false" x="173.0" y="92.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>protected</VISIBILITY>
+</Diagram>
+
