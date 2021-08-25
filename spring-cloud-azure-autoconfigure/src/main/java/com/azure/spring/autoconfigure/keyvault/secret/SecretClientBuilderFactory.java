@@ -4,7 +4,6 @@ import com.azure.core.http.HttpClient;
 import com.azure.core.http.policy.HttpPipelinePolicy;
 import com.azure.core.util.Configuration;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
-import com.azure.spring.autoconfigure.keyvault.KeyVaultProperties;
 import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
 import com.azure.spring.core.credential.descriptor.TokenAuthenticationDescriptor;
 import com.azure.spring.core.factory.AbstractAzureHttpClientBuilderFactory;
@@ -14,11 +13,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class KeyVaultSecretServiceClientBuilderFactory extends AbstractAzureHttpClientBuilderFactory<SecretClientBuilder> {
+public class SecretClientBuilderFactory extends AbstractAzureHttpClientBuilderFactory<SecretClientBuilder> {
 
-    private final KeyVaultProperties keyVaultProperties;
+    private final AzureKeyVaultSecretProperties keyVaultProperties;
 
-    public KeyVaultSecretServiceClientBuilderFactory(KeyVaultProperties keyVaultProperties) {
+    public SecretClientBuilderFactory(AzureKeyVaultSecretProperties keyVaultProperties) {
         this.keyVaultProperties = keyVaultProperties;
     }
 

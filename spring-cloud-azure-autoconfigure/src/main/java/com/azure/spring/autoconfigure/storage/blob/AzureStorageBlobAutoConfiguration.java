@@ -32,13 +32,13 @@ public class AzureStorageBlobAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public AzureBlobClientBuilderFactory factory(AzureStorageBlobProperties properties) {
-        return new AzureBlobClientBuilderFactory(properties);
+    public BlobClientBuilderFactory factory(AzureStorageBlobProperties properties) {
+        return new BlobClientBuilderFactory(properties);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public BlobClientBuilder blobClientBuilder(AzureBlobClientBuilderFactory factory) {
+    public BlobClientBuilder blobClientBuilder(BlobClientBuilderFactory factory) {
         return factory.build();
     }
 

@@ -1,18 +1,15 @@
 package com.azure.spring.autoconfigure.storage.blob;
 
-import com.azure.core.http.HttpClient;
-import com.azure.core.http.HttpClientProvider;
-import com.azure.core.http.HttpRequest;
-import com.azure.core.http.HttpResponse;
-import com.azure.core.util.Context;
 import com.azure.identity.ClientCertificateCredential;
 import com.azure.identity.ClientSecretCredential;
-import com.azure.spring.core.properties.credential.TokenCredentialProperties;
+import com.azure.spring.autoconfigure.AzureHttpClientBuilderFactoryTestBase;
+import com.azure.spring.autoconfigure.core.TestHttpClient;
+import com.azure.spring.autoconfigure.core.TestPerCallHttpPipelinePolicy;
+import com.azure.spring.autoconfigure.core.TestPerRetryHttpPipelinePolicy;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobClientBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -22,7 +19,9 @@ import static org.mockito.Mockito.verify;
 /**
  * @author Xiaolu Dai, 2021/8/25.
  */
-public class AzureBlobClientBuilderFactoryTest {
+public class AzureBlobClientBuilderFactoryTest extends AzureHttpClientBuilderFactoryTestBase<BlobClientBuilder, 
+                                                                                                AzureStorageBlobProperties,
+                                                                                                BlobClientBuilderFactory> {
 
     private static BlobClientBuilder builder;
     private static final String ENDPOINT = "https://abc.blob.core.windows.net/";
@@ -35,90 +34,61 @@ public class AzureBlobClientBuilderFactoryTest {
 
     @Test
     public void testMinimalSettings() {
-        AzureStorageBlobProperties properties = new AzureStorageBlobProperties();
-        properties.setEndpoint(ENDPOINT);
-        properties.setBlobName(BLOB_NAME);
+        AzureStorageBlobProperties properties = createMinimalProperties();
 
-        final BlobClientBuilder blobClientBuilder = new AzureBlobClientBuilderFactoryExt(properties).build();
-        final BlobClient blobClient = blobClientBuilder.buildClient();
+        final BlobClientBuilder clientBuilder = new BlobClientBuilderFactoryExt(properties).build();
+        final BlobClient client = clientBuilder.buildClient();
     }
 
     @Test
     public void testClientSecretTokenCredentialConfigured() {
-        AzureStorageBlobProperties properties = new AzureStorageBlobProperties();
-        properties.setEndpoint(ENDPOINT);
-        properties.setBlobName(BLOB_NAME);
-
-        TokenCredentialProperties tokenCredentialProperties = new TokenCredentialProperties();
-        properties.setCredential(tokenCredentialProperties);
-        tokenCredentialProperties.setTenantId("test-tenant");
-        tokenCredentialProperties.setClientId("test-client");
-        tokenCredentialProperties.setClientSecret("test-secret");
-
-        final BlobClientBuilder blobClientBuilder = new AzureBlobClientBuilderFactoryExt(properties).build();
-        final BlobClient blobClient = blobClientBuilder.buildClient();
+        final BlobClientBuilder builder = configureClientSecretTokenCredential();
+        final BlobClient client = builder.buildClient();
 
         verify(builder, times(1)).credential(any(ClientSecretCredential.class));
     }
 
     @Test
     public void testClientCertificateTokenCredentialConfigured() {
-        AzureStorageBlobProperties properties = new AzureStorageBlobProperties();
-        properties.setEndpoint(ENDPOINT);
-        properties.setBlobName(BLOB_NAME);
-
-        TokenCredentialProperties tokenCredentialProperties = new TokenCredentialProperties();
-        properties.setCredential(tokenCredentialProperties);
-        tokenCredentialProperties.setTenantId("test-tenant");
-        tokenCredentialProperties.setClientId("test-client");
-        tokenCredentialProperties.setCertificatePath("test-cert-path");
-        tokenCredentialProperties.setCertificatePassword("test-cert-password");
-
-        final BlobClientBuilder blobClientBuilder = new AzureBlobClientBuilderFactoryExt(properties).build();
-        final BlobClient blobClient = blobClientBuilder.buildClient();
-
+        final BlobClientBuilder builder = configureClientCertificateTokenCredential();
         verify(builder, times(1)).credential(any(ClientCertificateCredential.class));
     }
 
     @Test
-    public void testSetHttpClient() {
+    public void testHttpClientConfigured() {
+        final BlobClientBuilder builder = configureHttpClient();
+        final BlobClient client = builder.buildClient();
+
+        verify(builder).httpClient(any(TestHttpClient.class));
+    }
+
+    @Test
+    public void testDefaultHttpPipelinePoliciesConfigured() {
+        final BlobClientBuilder builder = configureDefaultHttpPipelinePolicies();
+        final BlobClient client = builder.buildClient();
+
+        verify(builder, times(1)).addPolicy(any(TestPerCallHttpPipelinePolicy.class));
+        verify(builder, times(1)).addPolicy(any(TestPerRetryHttpPipelinePolicy.class));
+    }
+
+
+    @Override
+    protected BlobClientBuilderFactory createBuilderFactory(AzureStorageBlobProperties properties) {
+        return new BlobClientBuilderFactoryExt(properties);
+    }
+
+    @Override
+    protected AzureStorageBlobProperties createMinimalProperties() {
         AzureStorageBlobProperties properties = new AzureStorageBlobProperties();
         properties.setEndpoint(ENDPOINT);
         properties.setBlobName(BLOB_NAME);
-
-        final AzureBlobClientBuilderFactoryExt builderFactory = new AzureBlobClientBuilderFactoryExt(properties);
-
-        builderFactory.setHttpClientProvider(new TestHttpClientProvider());
-        final BlobClientBuilder blobClientBuilder = builderFactory.build();
-        final BlobClient blobClient = blobClientBuilder.buildClient();
-
-        verify(builder, times(1)).httpClient(any(TestHttpClient.class));
+        return properties;
     }
 
-    static class TestHttpClientProvider implements HttpClientProvider {
 
-        @Override
-        public HttpClient createInstance() {
-            return new TestHttpClient();
-        }
-    }
+    static class BlobClientBuilderFactoryExt extends BlobClientBuilderFactory {
 
-    static class TestHttpClient implements HttpClient {
-
-        @Override
-        public Mono<HttpResponse> send(HttpRequest request) {
-            return null;
-        }
-
-        @Override
-        public Mono<HttpResponse> send(HttpRequest request, Context context) {
-            return HttpClient.super.send(request, context);
-        }
-    }
-
-    static class AzureBlobClientBuilderFactoryExt extends AzureBlobClientBuilderFactory {
-
-        public AzureBlobClientBuilderFactoryExt(AzureStorageBlobProperties blobProperties) {
+        public BlobClientBuilderFactoryExt(AzureStorageBlobProperties blobProperties) {
             super(blobProperties);
         }
 

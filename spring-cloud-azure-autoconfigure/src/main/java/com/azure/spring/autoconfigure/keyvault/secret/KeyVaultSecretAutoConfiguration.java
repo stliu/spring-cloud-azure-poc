@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(SecretClientBuilder.class)
 @ConditionalOnProperty(prefix = "spring.cloud.azure.keyvault.secret", name = "enabled", matchIfMissing = true)
-@EnableConfigurationProperties(KeyVaultSecretProperties.class)
+@EnableConfigurationProperties(AzureKeyVaultSecretProperties.class)
 public class KeyVaultSecretAutoConfiguration {
 
     @Bean

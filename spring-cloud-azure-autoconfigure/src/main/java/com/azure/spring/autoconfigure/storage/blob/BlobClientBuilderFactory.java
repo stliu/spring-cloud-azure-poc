@@ -21,11 +21,11 @@ import java.util.function.BiConsumer;
  * Storage Blob Service client builder factory, it builds the storage blob client according the configuration context
  * and blob properties.
  */
-public class AzureBlobClientBuilderFactory extends AbstractAzureHttpClientBuilderFactory<BlobClientBuilder> {
+public class BlobClientBuilderFactory extends AbstractAzureHttpClientBuilderFactory<BlobClientBuilder> {
 
     private final AzureStorageBlobProperties blobProperties;
 
-    public AzureBlobClientBuilderFactory(AzureStorageBlobProperties blobProperties) {
+    public BlobClientBuilderFactory(AzureStorageBlobProperties blobProperties) {
         this.blobProperties = blobProperties;
     }
 

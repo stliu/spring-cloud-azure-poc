@@ -22,7 +22,6 @@ public abstract class AbstractAzureAmqpClientBuilderFactory<T> extends AbstractA
     protected abstract BiConsumer<T, ProxyOptions> consumeProxyOptions();
     protected abstract BiConsumer<T, AmqpTransportType> consumeAmqpTransportType();
     protected abstract BiConsumer<T, AmqpRetryOptions> consumeAmqpRetryOptions();
-
     protected abstract BiConsumer<T, ClientOptions> consumeClientOptions();
 
     @Override
@@ -32,13 +31,13 @@ public abstract class AbstractAzureAmqpClientBuilderFactory<T> extends AbstractA
     }
 
     protected void configureAmqpClient(T builder) {
-        configureAmqpClientOptions(builder);
-        configureAmqpTransportType(builder);
+        configureClientProperties(builder);
+        configureAmqpTransportProperties(builder);
         configureProxy(builder);
         configureRetry(builder);
     }
 
-    protected void configureAmqpTransportType(T builder) {
+    protected void configureAmqpTransportProperties(T builder) {
         final AmqpClientProperties client = (AmqpClientProperties) getAzureProperties().getClient();
         if (client == null) {
             return;
@@ -46,7 +45,7 @@ public abstract class AbstractAzureAmqpClientBuilderFactory<T> extends AbstractA
         consumeAmqpTransportType().accept(builder, client.getTransportType());
     }
 
-    protected void configureAmqpClientOptions(T builder) {
+    protected void configureClientProperties(T builder) {
         configureApplicationId(builder);
         consumeClientOptions().accept(builder, this.clientOptions);
     }
