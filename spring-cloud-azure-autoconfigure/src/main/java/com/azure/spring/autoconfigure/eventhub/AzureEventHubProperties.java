@@ -1,11 +1,11 @@
-package com.azure.spring.autoconfigure.messaging.eventhub;
+package com.azure.spring.autoconfigure.eventhub;
 
 import com.azure.spring.core.properties.AzureProperties;
 import com.azure.spring.core.properties.aware.credential.ConnectionStringAware;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "spring.cloud.azure.eventhub")
-public class EventHubProperties extends AzureProperties implements ConnectionStringAware {
+public class AzureEventHubProperties extends AzureProperties implements ConnectionStringAware {
 
     private boolean isSharedConnection;
     private String namespace;
@@ -14,6 +14,11 @@ public class EventHubProperties extends AzureProperties implements ConnectionStr
     private String customEndpointAddress;
     private String consumerGroup;
     private Integer prefetchCount;
+
+
+    public String getFQDN() {
+        return this.namespace + ".servicebus.windows.net";
+    }
 
     public boolean isSharedConnection() {
         return isSharedConnection;

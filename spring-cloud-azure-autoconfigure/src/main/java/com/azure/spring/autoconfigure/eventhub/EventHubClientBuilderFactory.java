@@ -1,4 +1,4 @@
-package com.azure.spring.autoconfigure.messaging.eventhub;
+package com.azure.spring.autoconfigure.eventhub;
 
 import com.azure.core.amqp.AmqpRetryOptions;
 import com.azure.core.amqp.AmqpTransportType;
@@ -12,6 +12,7 @@ import com.azure.spring.core.credential.descriptor.SasAuthenticationDescriptor;
 import com.azure.spring.core.credential.descriptor.TokenAuthenticationDescriptor;
 import com.azure.spring.core.factory.AbstractAzureAmqpClientBuilderFactory;
 import com.azure.spring.core.properties.AzureProperties;
+import org.springframework.boot.context.properties.PropertyMapper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,11 +22,11 @@ import java.util.function.BiConsumer;
  * Storage Blob Service client builder factory, it builds the storage blob client
  * according the configuration context and blob properties.
  */
-public class AzureEventHubClientBuilderFactory extends AbstractAzureAmqpClientBuilderFactory<EventHubClientBuilder> {
+public class EventHubClientBuilderFactory extends AbstractAzureAmqpClientBuilderFactory<EventHubClientBuilder> {
 
-    private final EventHubProperties eventHubProperties;
+    private final AzureEventHubProperties eventHubProperties;
 
-    public AzureEventHubClientBuilderFactory(EventHubProperties eventHubProperties) {
+    public EventHubClientBuilderFactory(AzureEventHubProperties eventHubProperties) {
         this.eventHubProperties = eventHubProperties;
     }
 
@@ -64,26 +65,36 @@ public class AzureEventHubClientBuilderFactory extends AbstractAzureAmqpClientBu
         return this.eventHubProperties;
     }
 
+
+    // Endpoint=sb://<FQDN>/;SharedAccessKeyName=<KeyName>;SharedAccessKey=<KeyValue>
+
     @Override
     protected void configureService(EventHubClientBuilder builder) {
-        builder.consumerGroup(eventHubProperties.getConsumerGroup());
-        builder.prefetchCount(eventHubProperties.getPrefetchCount());
-        builder.customEndpointAddress(eventHubProperties.getCustomEndpointAddress());
+        PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
+        map.from(eventHubProperties.getConsumerGroup()).to(builder::consumerGroup);
+        map.from(eventHubProperties.getPrefetchCount()).to(builder::prefetchCount);
+        map.from(eventHubProperties.getCustomEndpointAddress()).to(builder::customEndpointAddress);
         if (eventHubProperties.isSharedConnection()) {
             builder.shareConnection();
         }
     }
 
+
+    //Credentials have not been set. They can be set using:
+    // connectionString(String),
+    // connectionString(String, String),
+    // credentials(String, String, TokenCredential),
+    // or setting the environment variable 'AZURE_EVENT_HUBS_CONNECTION_STRING' with a connection string
     @Override
     protected List<AuthenticationDescriptor<?>> getAuthenticationDescriptors(EventHubClientBuilder builder) {
         return Arrays.asList(
-            new NamedKeyAuthenticationDescriptor(provider -> builder.credential(eventHubProperties.getNamespace(),
+            new NamedKeyAuthenticationDescriptor(provider -> builder.credential(eventHubProperties.getFQDN(),
                                                                                 eventHubProperties.getEventHubName(),
                                                                                 provider.getCredential())),
-            new SasAuthenticationDescriptor(provider -> builder.credential(eventHubProperties.getNamespace(),
+            new SasAuthenticationDescriptor(provider -> builder.credential(eventHubProperties.getFQDN(),
                                                                            eventHubProperties.getEventHubName(),
                                                                            provider.getCredential())),
-            new TokenAuthenticationDescriptor(provider -> builder.credential(eventHubProperties.getNamespace(),
+            new TokenAuthenticationDescriptor(provider -> builder.credential(eventHubProperties.getFQDN(),
                                                                              eventHubProperties.getEventHubName(),
                                                                              provider.getCredential()))
         );

@@ -1,5 +1,5 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.azure.spring.autoconfigure.keyvault.KeyVaultAutoConfiguration, \
-com.azure.spring.autoconfigure.messaging.eventhub.EventhubAutoConfiguration, \
+com.azure.spring.autoconfigure.eventhub.EventhubAutoConfiguration, \
 com.azure.spring.autoconfigure.storage.blob.AzureStorageBlobAutoConfiguration

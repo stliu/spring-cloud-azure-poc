@@ -1,10 +1,10 @@
-package com.azure.spring.autoconfigure.keyvault.secret;
+package com.azure.spring.autoconfigure.keyvault.certificate;
 
 import com.azure.identity.ClientCertificateCredential;
 import com.azure.identity.ClientSecretCredential;
-import com.azure.security.keyvault.secrets.SecretClient;
-import com.azure.security.keyvault.secrets.SecretClientBuilder;
-import com.azure.security.keyvault.secrets.models.KeyVaultSecret;
+import com.azure.security.keyvault.certificates.CertificateClient;
+import com.azure.security.keyvault.certificates.CertificateClientBuilder;
+import com.azure.security.keyvault.certificates.models.KeyVaultCertificateWithPolicy;
 import com.azure.spring.autoconfigure.AzureServiceClientBuilderFactoryTestBase;
 import com.azure.spring.autoconfigure.core.TestHttpClient;
 import com.azure.spring.autoconfigure.core.TestHttpClientProvider;
@@ -21,70 +21,67 @@ import static org.mockito.Mockito.verify;
 /**
  * @author Xiaolu Dai, 2021/8/25.
  */
-public class AzureSecretClientBuilderFactoryTest extends AzureServiceClientBuilderFactoryTestBase<SecretClientBuilder, 
-                                                                                                  AzureKeyVaultSecretProperties, 
-                                                                                                  SecretClientBuilderFactory> {
+public class AzureCertificateClientBuilderFactoryTest extends AzureServiceClientBuilderFactoryTestBase<CertificateClientBuilder, 
+                                                                                                          AzureKeyVaultCertificateProperties, 
+                                                                                                          CertificateClientBuilderFactory> {
     private static final String ENDPOINT = "https://test.vault.azure.net/";
 
     @Test
     public void testMinimalSettings() {
-        AzureKeyVaultSecretProperties properties = createMinimalServiceProperties();
-        properties.setCredential(buildClientSecretTokenCredentialProperties());
+        AzureKeyVaultCertificateProperties properties = createMinimalServiceProperties();
+        properties.setCredential(buildClientCertificateTokenCredentialProperties());
 
-        final SecretClientBuilder clientBuilder = new SecretClientBuilderFactory(properties).build();
-        final SecretClient client = clientBuilder.buildClient();
+        final CertificateClientBuilder clientBuilder = new CertificateClientBuilderFactory(properties).build();
+        clientBuilder.buildClient();
     }
 
     @Test
     public void testClientSecretTokenCredentialConfigured() {
-        AzureKeyVaultSecretProperties properties = createMinimalServiceProperties();
+        AzureKeyVaultCertificateProperties properties = createMinimalServiceProperties();
 
         TokenCredentialProperties tokenCredentialProperties = buildClientSecretTokenCredentialProperties();
         properties.setCredential(tokenCredentialProperties);
 
-        final SecretClientBuilder builder = new SecretClientBuilderFactoryExt(properties).build();
-        final SecretClient client = builder.buildClient();
+        final CertificateClientBuilder builder = new CertificateClientBuilderFactoryExt(properties).build();
 
         verify(builder, times(1)).credential(any(ClientSecretCredential.class));
     }
 
     @Test
     public void testClientCertificateTokenCredentialConfigured() {
-        AzureKeyVaultSecretProperties properties = createMinimalServiceProperties();
+        AzureKeyVaultCertificateProperties properties = createMinimalServiceProperties();
 
         TokenCredentialProperties tokenCredentialProperties = buildClientCertificateTokenCredentialProperties();
         properties.setCredential(tokenCredentialProperties);
 
-        final SecretClientBuilder builder = new SecretClientBuilderFactoryExt(properties).build();
+        final CertificateClientBuilder builder = new CertificateClientBuilderFactoryExt(properties).build();
         verify(builder, times(1)).credential(any(ClientCertificateCredential.class));
     }
 
     @Test
     public void testHttpClientConfigured() {
-        AzureKeyVaultSecretProperties properties = createMinimalServiceProperties();
+        AzureKeyVaultCertificateProperties properties = createMinimalServiceProperties();
 
-        final SecretClientBuilderFactory builderFactory = new SecretClientBuilderFactoryExt(properties);
+        final CertificateClientBuilderFactory builderFactory = new CertificateClientBuilderFactoryExt(properties);
 
         builderFactory.setHttpClientProvider(new TestHttpClientProvider());
 
-        final SecretClientBuilder builder = builderFactory.build();
-        final SecretClient client = builder.buildClient();
+        final CertificateClientBuilder builder = builderFactory.build();
 
         verify(builder).httpClient(any(TestHttpClient.class));
     }
 
     @Test
     public void testDefaultHttpPipelinePoliciesConfigured() {
-        AzureKeyVaultSecretProperties properties = createMinimalServiceProperties();
+        AzureKeyVaultCertificateProperties properties = createMinimalServiceProperties();
 
-        final SecretClientBuilderFactory builderFactory = new SecretClientBuilderFactoryExt(properties);
+        final CertificateClientBuilderFactory builderFactory = new CertificateClientBuilderFactoryExt(properties);
 
         builderFactory.addHttpPipelinePolicy(new TestPerCallHttpPipelinePolicy());
         builderFactory.addHttpPipelinePolicy(new TestPerRetryHttpPipelinePolicy());
 
 
-        final SecretClientBuilder builder = builderFactory.build();
-        final SecretClient client = builder.buildClient();
+        final CertificateClientBuilder builder = builderFactory.build();
 
         verify(builder, times(1)).addPolicy(any(TestPerCallHttpPipelinePolicy.class));
         verify(builder, times(1)).addPolicy(any(TestPerRetryHttpPipelinePolicy.class));
@@ -92,10 +89,10 @@ public class AzureSecretClientBuilderFactoryTest extends AzureServiceClientBuild
 
     @Test
     public void testCallService() {
-        AzureKeyVaultSecretProperties properties = createMinimalServiceProperties();
+        AzureKeyVaultCertificateProperties properties = createMinimalServiceProperties();
         properties.setCredential(buildClientSecretTokenCredentialProperties());
 
-        final SecretClientBuilderFactory builderFactory = new SecretClientBuilderFactory(properties);
+        final CertificateClientBuilderFactory builderFactory = new CertificateClientBuilderFactory(properties);
 
         final TestPerCallHttpPipelinePolicy perCallPolicy = new TestPerCallHttpPipelinePolicy();
         final TestPerRetryHttpPipelinePolicy perRetryPolicy = new TestPerRetryHttpPipelinePolicy();
@@ -103,11 +100,11 @@ public class AzureSecretClientBuilderFactoryTest extends AzureServiceClientBuild
         builderFactory.addHttpPipelinePolicy(perCallPolicy);
         builderFactory.addHttpPipelinePolicy(perRetryPolicy);
 
-        final SecretClientBuilder builder = builderFactory.build();
-        final SecretClient client = builder.buildClient();
+        final CertificateClientBuilder builder = builderFactory.build();
+        final CertificateClient client = builder.buildClient();
 
         try {
-            final KeyVaultSecret test = client.getSecret("test");
+            final KeyVaultCertificateWithPolicy test = client.getCertificate("test");
         } catch (Exception ignore) {
 
         }
@@ -123,22 +120,22 @@ public class AzureSecretClientBuilderFactoryTest extends AzureServiceClientBuild
     }
 
     @Override
-    protected AzureKeyVaultSecretProperties createMinimalServiceProperties() {
-        AzureKeyVaultSecretProperties properties = new AzureKeyVaultSecretProperties();
+    protected AzureKeyVaultCertificateProperties createMinimalServiceProperties() {
+        AzureKeyVaultCertificateProperties properties = new AzureKeyVaultCertificateProperties();
 
         properties.setVaultUrl(ENDPOINT);
         return properties;
     }
 
-    static class SecretClientBuilderFactoryExt extends SecretClientBuilderFactory {
+    static class CertificateClientBuilderFactoryExt extends CertificateClientBuilderFactory {
 
-        public SecretClientBuilderFactoryExt(AzureKeyVaultSecretProperties secretProperties) {
+        public CertificateClientBuilderFactoryExt(AzureKeyVaultCertificateProperties secretProperties) {
             super(secretProperties);
         }
 
         @Override
-        public SecretClientBuilder createBuilderInstance() {
-            return mock(SecretClientBuilder.class);
+        public CertificateClientBuilder createBuilderInstance() {
+            return mock(CertificateClientBuilder.class);
         }
     }
 

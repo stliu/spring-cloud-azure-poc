@@ -10,9 +10,7 @@ import com.azure.spring.core.properties.credential.TokenCredentialProperties;
 public abstract class AzureServiceClientBuilderFactoryTestBase<B, P extends AzureProperties,
                                                                   T extends AzureServiceClientBuilderFactory<B>> {
 
-    protected abstract T createBuilderFactory(P properties);
-    
-    protected abstract P createMinimalProperties();
+    protected abstract P createMinimalServiceProperties();
     
     protected TokenCredentialProperties buildClientSecretTokenCredentialProperties() {
         TokenCredentialProperties properties = new TokenCredentialProperties();

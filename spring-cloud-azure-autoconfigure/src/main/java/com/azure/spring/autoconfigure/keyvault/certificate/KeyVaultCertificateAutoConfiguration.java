@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(CertificateClientBuilder.class)
 @ConditionalOnProperty(prefix = "spring.cloud.azure.keyvault.certificate", name = "enabled", matchIfMissing = true)
-@EnableConfigurationProperties(KeyVaultCertificateProperties.class)
+@EnableConfigurationProperties(AzureKeyVaultCertificateProperties.class)
 public class KeyVaultCertificateAutoConfiguration {
 
     @Bean

@@ -27,6 +27,7 @@ public abstract class AbstractAzureAmqpClientBuilderFactory<T> extends AbstractA
     @Override
     protected void configureCore(T builder) {
         configureAzureEnvironment(builder);
+        configureCredential(builder);
         configureAmqpClient(builder);
     }
 

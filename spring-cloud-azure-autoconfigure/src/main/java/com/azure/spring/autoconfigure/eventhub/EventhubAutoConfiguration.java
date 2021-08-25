@@ -1,4 +1,4 @@
-package com.azure.spring.autoconfigure.messaging.eventhub;
+package com.azure.spring.autoconfigure.eventhub;
 
 import com.azure.messaging.eventhubs.EventHubClientBuilder;
 import com.azure.messaging.eventhubs.EventHubConsumerAsyncClient;
@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(EventHubClientBuilder.class)
 @ConditionalOnProperty(prefix = "spring.cloud.azure.eventhub", name = "enabled", matchIfMissing = true)
-@EnableConfigurationProperties(EventHubProperties.class)
+@EnableConfigurationProperties(AzureEventHubProperties.class)
 @AutoConfigureAfter
 public class EventhubAutoConfiguration {
 
@@ -46,13 +46,13 @@ public class EventhubAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public AzureEventHubClientBuilderFactory factory(EventHubProperties properties) {
-        return new AzureEventHubClientBuilderFactory(properties);
+    public EventHubClientBuilderFactory factory(AzureEventHubProperties properties) {
+        return new EventHubClientBuilderFactory(properties);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public EventHubClientBuilder eventHubClientBuilder(AzureEventHubClientBuilderFactory factory) {
+    public EventHubClientBuilder eventHubClientBuilder(EventHubClientBuilderFactory factory) {
         return factory.build();
     }
 }

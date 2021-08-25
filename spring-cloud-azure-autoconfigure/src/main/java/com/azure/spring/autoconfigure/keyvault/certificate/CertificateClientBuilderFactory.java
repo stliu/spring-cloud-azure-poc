@@ -4,22 +4,24 @@ import com.azure.core.http.HttpClient;
 import com.azure.core.http.policy.HttpPipelinePolicy;
 import com.azure.core.util.Configuration;
 import com.azure.security.keyvault.certificates.CertificateClientBuilder;
-import com.azure.spring.autoconfigure.keyvault.KeyVaultProperties;
 import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
+import com.azure.spring.core.credential.descriptor.TokenAuthenticationDescriptor;
 import com.azure.spring.core.factory.AbstractAzureHttpClientBuilderFactory;
 import com.azure.spring.core.properties.AzureProperties;
+import org.springframework.boot.context.properties.PropertyMapper;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
 
 
-public class KeyVaultCertificateServiceClientBuilderFactory extends AbstractAzureHttpClientBuilderFactory<CertificateClientBuilder> {
+public class CertificateClientBuilderFactory extends AbstractAzureHttpClientBuilderFactory<CertificateClientBuilder> {
 
-    private final KeyVaultProperties keyVaultProperties;
+    private final AzureKeyVaultCertificateProperties certificateProperties;
 
 
-    public KeyVaultCertificateServiceClientBuilderFactory(KeyVaultProperties keyVaultProperties) {
-        this.keyVaultProperties = keyVaultProperties;
+    public CertificateClientBuilderFactory(AzureKeyVaultCertificateProperties certificateProperties) {
+        this.certificateProperties = certificateProperties;
     }
 
     @Override
@@ -39,17 +41,20 @@ public class KeyVaultCertificateServiceClientBuilderFactory extends AbstractAzur
 
     @Override
     protected AzureProperties getAzureProperties() {
-        return this.keyVaultProperties;
+        return this.certificateProperties;
     }
 
     @Override
     protected List<AuthenticationDescriptor<?>> getAuthenticationDescriptors(CertificateClientBuilder builder) {
-        return null;
+        return Arrays.asList(
+            new TokenAuthenticationDescriptor(provider -> builder.credential(provider.getCredential()))
+        );
     }
 
     @Override
     protected void configureService(CertificateClientBuilder builder) {
-
+        PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
+        map.from(certificateProperties.getVaultUrl()).to(builder::vaultUrl);
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.azure.spring.autoconfigure.keyvault;
 
 import com.azure.spring.core.properties.AzureProperties;
 
-public class KeyVaultProperties extends AzureProperties {
+public class AzureKeyVaultProperties extends AzureProperties {
 
     private String vaultUrl;
 
