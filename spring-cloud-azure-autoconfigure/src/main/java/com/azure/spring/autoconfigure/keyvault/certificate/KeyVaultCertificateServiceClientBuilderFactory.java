@@ -1,6 +1,7 @@
 package com.azure.spring.autoconfigure.keyvault.certificate;
 
 import com.azure.core.http.HttpClient;
+import com.azure.core.http.policy.HttpPipelinePolicy;
 import com.azure.core.util.Configuration;
 import com.azure.security.keyvault.certificates.CertificateClientBuilder;
 import com.azure.spring.autoconfigure.keyvault.KeyVaultProperties;
@@ -24,6 +25,11 @@ public class KeyVaultCertificateServiceClientBuilderFactory extends AbstractAzur
     @Override
     protected BiConsumer<CertificateClientBuilder, HttpClient> consumeHttpClient() {
         return CertificateClientBuilder::httpClient;
+    }
+
+    @Override
+    protected BiConsumer<CertificateClientBuilder, HttpPipelinePolicy> consumeHttpPipelinePolicy() {
+        return CertificateClientBuilder::addPolicy;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.azure.spring.autoconfigure.keyvault.secret;
 
 import com.azure.core.http.HttpClient;
+import com.azure.core.http.policy.HttpPipelinePolicy;
 import com.azure.core.util.Configuration;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
 import com.azure.spring.autoconfigure.keyvault.KeyVaultProperties;
@@ -9,7 +10,6 @@ import com.azure.spring.core.credential.descriptor.TokenAuthenticationDescriptor
 import com.azure.spring.core.factory.AbstractAzureHttpClientBuilderFactory;
 import com.azure.spring.core.properties.AzureProperties;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -25,6 +25,11 @@ public class KeyVaultSecretServiceClientBuilderFactory extends AbstractAzureHttp
     @Override
     protected BiConsumer<SecretClientBuilder, HttpClient> consumeHttpClient() {
         return SecretClientBuilder::httpClient;
+    }
+
+    @Override
+    protected BiConsumer<SecretClientBuilder, HttpPipelinePolicy> consumeHttpPipelinePolicy() {
+        return SecretClientBuilder::addPolicy;
     }
 
     @Override

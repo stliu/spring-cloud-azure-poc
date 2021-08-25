@@ -13,6 +13,7 @@ import com.azure.spring.core.properties.client.ClientProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -96,12 +97,14 @@ public abstract class AbstractAzureServiceClientBuilderFactory<T> implements Azu
     }
 
 
-    protected AzureServiceClientBuilderCustomizer<T> getBuilderCustomizer() {
-        return new NoOpAzureServiceClientBuilderCustomizer<>();
+    protected List<AzureServiceClientBuilderCustomizer<T>> getBuilderCustomizers() {
+        return Collections.singletonList(new NoOpAzureServiceClientBuilderCustomizer<>());
     }
 
     protected void customizeBuilder(T builder) {
-        getBuilderCustomizer().customize(builder);
+        for (AzureServiceClientBuilderCustomizer<T> customizer : getBuilderCustomizers()) {
+            customizer.customize(builder);
+        }
     }
 
     private AzureCredentialProvider<?> resolveAzureCredential(AzureProperties azureProperties,

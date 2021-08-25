@@ -1,6 +1,7 @@
 package com.azure.spring.core.factory;
 
 import com.azure.core.http.HttpClient;
+import com.azure.core.http.policy.HttpPipelinePolicy;
 import com.azure.core.util.Configuration;
 import com.azure.identity.implementation.IdentityClientBuilder;
 import com.azure.identity.implementation.IdentityClientOptions;
@@ -10,6 +11,8 @@ import com.azure.spring.core.properties.AzureProperties;
 import com.azure.spring.core.properties.IdentityClientProperties;
 import com.azure.spring.core.properties.credential.TokenCredentialProperties;
 import com.azure.spring.core.properties.retry.RetryProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.Collections;
@@ -17,6 +20,8 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 public class AzureIdentityClientBuilderFactory extends AbstractAzureHttpClientBuilderFactory<IdentityClientBuilder> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AzureIdentityClientBuilderFactory.class);
 
     private final IdentityClientProperties properties;
     private final IdentityClientOptions identityClientOptions = new IdentityClientOptions();
@@ -28,6 +33,13 @@ public class AzureIdentityClientBuilderFactory extends AbstractAzureHttpClientBu
     @Override
     protected BiConsumer<IdentityClientBuilder, HttpClient> consumeHttpClient() {
         return (b, c) -> identityClientOptions.setHttpClient(c);
+    }
+
+    @Override
+    protected BiConsumer<IdentityClientBuilder, HttpPipelinePolicy> consumeHttpPipelinePolicy() {
+        return (a, b) -> {
+            LOGGER.warn("HttpPipelinePolicy is not supported to configure in the identity client builder.");
+        };
     }
 
     @Override
