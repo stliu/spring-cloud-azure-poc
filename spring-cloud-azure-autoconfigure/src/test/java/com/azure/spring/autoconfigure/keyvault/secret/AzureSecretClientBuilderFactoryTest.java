@@ -4,10 +4,12 @@ import com.azure.identity.ClientCertificateCredential;
 import com.azure.identity.ClientSecretCredential;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
-import com.azure.spring.autoconfigure.AzureHttpClientBuilderFactoryTestBase;
+import com.azure.spring.autoconfigure.AzureServiceClientBuilderFactoryTestBase;
 import com.azure.spring.autoconfigure.core.TestHttpClient;
+import com.azure.spring.autoconfigure.core.TestHttpClientProvider;
 import com.azure.spring.autoconfigure.core.TestPerCallHttpPipelinePolicy;
 import com.azure.spring.autoconfigure.core.TestPerRetryHttpPipelinePolicy;
+import com.azure.spring.core.properties.credential.TokenCredentialProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +21,7 @@ import static org.mockito.Mockito.verify;
 /**
  * @author Xiaolu Dai, 2021/8/25.
  */
-public class AzureSecretClientBuilderFactoryTest extends AzureHttpClientBuilderFactoryTestBase<SecretClientBuilder, 
+public class AzureSecretClientBuilderFactoryTest extends AzureServiceClientBuilderFactoryTestBase<SecretClientBuilder, 
                                                                                                   AzureKeyVaultSecretProperties, 
                                                                                                   SecretClientBuilderFactory> {
 
@@ -40,7 +42,12 @@ public class AzureSecretClientBuilderFactoryTest extends AzureHttpClientBuilderF
 
     @Test
     public void testClientSecretTokenCredentialConfigured() {
-        final SecretClientBuilder builder = configureClientSecretTokenCredential();
+        AzureKeyVaultSecretProperties properties = createMinimalProperties();
+
+        TokenCredentialProperties tokenCredentialProperties = buildClientSecretTokenCredentialProperties();
+        properties.setCredential(tokenCredentialProperties);
+
+        final SecretClientBuilder builder = createBuilderFactory(properties).build();
         final SecretClient client = builder.buildClient();
 
         verify(builder, times(1)).credential(any(ClientSecretCredential.class));
@@ -48,13 +55,24 @@ public class AzureSecretClientBuilderFactoryTest extends AzureHttpClientBuilderF
 
     @Test
     public void testClientCertificateTokenCredentialConfigured() {
-        final SecretClientBuilder builder = configureClientCertificateTokenCredential();
+        AzureKeyVaultSecretProperties properties = createMinimalProperties();
+
+        TokenCredentialProperties tokenCredentialProperties = buildClientCertificateTokenCredentialProperties();
+        properties.setCredential(tokenCredentialProperties);
+
+        final SecretClientBuilder builder = createBuilderFactory(properties).build();
         verify(builder, times(1)).credential(any(ClientCertificateCredential.class));
     }
 
     @Test
     public void testHttpClientConfigured() {
-        final SecretClientBuilder builder = configureHttpClient();
+        AzureKeyVaultSecretProperties properties = createMinimalProperties();
+
+        final SecretClientBuilderFactory builderFactory = createBuilderFactory(properties);
+
+        builderFactory.setHttpClientProvider(new TestHttpClientProvider());
+
+        final SecretClientBuilder builder = builderFactory.build();
         final SecretClient client = builder.buildClient();
 
         verify(builder).httpClient(any(TestHttpClient.class));
@@ -62,11 +80,25 @@ public class AzureSecretClientBuilderFactoryTest extends AzureHttpClientBuilderF
 
     @Test
     public void testDefaultHttpPipelinePoliciesConfigured() {
-        final SecretClientBuilder builder = configureDefaultHttpPipelinePolicies();
+        AzureKeyVaultSecretProperties properties = createMinimalProperties();
+
+        final SecretClientBuilderFactory builderFactory = createBuilderFactory(properties);
+
+        builderFactory.addHttpPipelinePolicy(new TestPerCallHttpPipelinePolicy());
+        builderFactory.addHttpPipelinePolicy(new TestPerRetryHttpPipelinePolicy());
+
+
+        final SecretClientBuilder builder = builderFactory.build();
         final SecretClient client = builder.buildClient();
 
         verify(builder, times(1)).addPolicy(any(TestPerCallHttpPipelinePolicy.class));
         verify(builder, times(1)).addPolicy(any(TestPerRetryHttpPipelinePolicy.class));
+    }
+
+    @Test
+    public void testServicePropertiesConfigured() {
+        
+        
     }
     
     @Override
