@@ -8,6 +8,7 @@ import com.azure.spring.core.credential.descriptor.AuthenticationDescriptor;
 import com.azure.spring.core.credential.descriptor.TokenAuthenticationDescriptor;
 import com.azure.spring.core.factory.AbstractAzureHttpClientBuilderFactory;
 import com.azure.spring.core.properties.AzureProperties;
+import org.springframework.boot.context.properties.PropertyMapper;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,10 +16,10 @@ import java.util.function.BiConsumer;
 
 public class SecretClientBuilderFactory extends AbstractAzureHttpClientBuilderFactory<SecretClientBuilder> {
 
-    private final AzureKeyVaultSecretProperties keyVaultProperties;
+    private final AzureKeyVaultSecretProperties secretProperties;
 
     public SecretClientBuilderFactory(AzureKeyVaultSecretProperties keyVaultProperties) {
-        this.keyVaultProperties = keyVaultProperties;
+        this.secretProperties = keyVaultProperties;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class SecretClientBuilderFactory extends AbstractAzureHttpClientBuilderFa
 
     @Override
     protected AzureProperties getAzureProperties() {
-        return this.keyVaultProperties;
+        return this.secretProperties;
     }
 
     @Override
@@ -49,7 +50,8 @@ public class SecretClientBuilderFactory extends AbstractAzureHttpClientBuilderFa
 
     @Override
     protected void configureService(SecretClientBuilder builder) {
-
+        PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
+        map.from(secretProperties.getVaultUrl()).to(builder::vaultUrl);
     }
 
     @Override
