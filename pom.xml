@@ -14,7 +14,9 @@
 
   <modules>
     <module>spring-cloud-azure-dependencies</module>
+    <module>spring-cloud-azure-core-http-client</module>
     <module>spring-cloud-azure-core</module>
+
     <module>spring-cloud-azure-autoconfigure</module>
     <module>spring-cloud-azure-resourcemanager</module>
     <module>spring-cloud-azure-starter</module>
