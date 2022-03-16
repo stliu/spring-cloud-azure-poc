@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.azure.spring</groupId>
+    <artifactId>spring-cloud-azure-starters</artifactId>
+    <version>4.0.0-beta.4-SNAPSHOT</version>
+  </parent>
+  <artifactId>spring-cloud-azure-starter-storage-file-share</artifactId>
+  <version>4.0.0-beta.4-SNAPSHOT</version>
+
+  <name>Spring Cloud Azure Starter Storage File Share</name>
+  <description>Spring Cloud Azure Starter Storage File Share</description>
+
+
+  <dependencies>
+    <dependency>
+      <groupId>com.azure.spring</groupId>
+      <artifactId>spring-cloud-azure-starter</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.azure</groupId>
+      <artifactId>azure-storage-file-share</artifactId>
+    </dependency>
+  </dependencies>
+
+
+</project>

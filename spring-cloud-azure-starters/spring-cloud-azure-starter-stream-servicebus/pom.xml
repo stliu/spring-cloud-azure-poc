@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.azure.spring</groupId>
+    <artifactId>spring-cloud-azure-starters</artifactId>
+    <version>4.0.0-beta.4-SNAPSHOT</version>
+  </parent>
+  <artifactId>spring-cloud-azure-starter-stream-servicebus</artifactId>
+  <version>4.0.0-beta.4-SNAPSHOT</version>
+
+  <name>Spring Cloud Azure Starter Stream Service Bus</name>
+  <description>Spring Cloud Azure Starter Stream Service Bus</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.azure.spring</groupId>
+      <artifactId>spring-cloud-azure-stream-binder-servicebus</artifactId>
+    </dependency>
+  </dependencies>
+</project>

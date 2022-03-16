@@ -59,37 +59,18 @@
     <module>spring-integration-azure-storage-queue</module>
     <module>spring-cloud-azure-core</module>
     <module>spring-cloud-azure-service</module>
-    <!--    <module>spring-cloud-azure-resourcemanager</module>-->
-    <!--    <module>spring-cloud-azure-actuator</module>-->
-    <!--    <module>spring-cloud-azure-actuator-autoconfigure</module>-->
-    <!--    <module>spring-cloud-azure-autoconfigure</module>-->
-    <!--    <module>spring-cloud-azure-starter-active-directory</module>-->
-    <!--    <module>spring-cloud-azure-starter-active-directory-b2c</module>-->
-    <!--    <module>spring-cloud-azure-starter-actuator</module>-->
-    <!--    <module>spring-cloud-azure-starter-appconfiguration</module>-->
-    <!--    <module>spring-cloud-azure-starter-cosmos</module>-->
-    <!--    <module>spring-cloud-azure-starter-data-cosmos</module>-->
-    <!--    <module>spring-cloud-azure-starter-eventhubs</module>-->
-    <!--    <module>spring-cloud-azure-starter-keyvault-certificates</module>-->
-    <!--    <module>spring-cloud-azure-starter-keyvault-secrets</module>-->
-    <!--    <module>spring-cloud-azure-starter-servicebus-jms</module>-->
-    <!--    <module>spring-cloud-azure-starter-servicebus</module>-->
-    <!--    <module>spring-cloud-azure-starter-storage-blob</module>-->
-    <!--    <module>spring-cloud-azure-starter-storage-file-share</module>-->
-    <!--    <module>spring-cloud-azure-starter-storage-queue</module>-->
-    <!--    <module>spring-cloud-azure-starter-integration-eventhubs</module>-->
-    <!--    <module>spring-cloud-azure-starter-integration-servicebus</module>-->
-    <!--    <module>spring-cloud-azure-starter-integration-storage-queue</module>-->
-    <!--    <module>spring-cloud-azure-starter-stream-eventhubs</module>-->
-    <!--    <module>spring-cloud-azure-starter-stream-servicebus</module>-->
-    <!--    <module>spring-cloud-azure-starter</module>-->
-    <!--    <module>spring-cloud-azure-stream-binder-eventhubs-core</module>-->
-    <!--    <module>spring-cloud-azure-stream-binder-eventhubs</module>-->
-    <!--    <module>spring-cloud-azure-stream-binder-servicebus-core</module>-->
-    <!--    <module>spring-cloud-azure-stream-binder-servicebus</module>-->
-    <!--    <module>spring-cloud-azure-test-eventhubs-binder</module>-->
-    <!--    <module>spring-cloud-azure-test-servicebus-binder</module>-->
-    <!--    <module>spring-cloud-azure-trace-sleuth</module>-->
+    <module>spring-cloud-azure-starters</module>
+    <module>spring-cloud-azure-resourcemanager</module>
+    <module>spring-cloud-azure-actuator</module>
+    <module>spring-cloud-azure-actuator-autoconfigure</module>
+    <module>spring-cloud-azure-autoconfigure</module>
+    <module>spring-cloud-azure-stream-binder-eventhubs-core</module>
+    <module>spring-cloud-azure-stream-binder-eventhubs</module>
+    <module>spring-cloud-azure-stream-binder-servicebus-core</module>
+    <module>spring-cloud-azure-stream-binder-servicebus</module>
+    <module>spring-cloud-azure-test-eventhubs-binder</module>
+    <module>spring-cloud-azure-test-servicebus-binder</module>
+    <module>spring-cloud-azure-trace-sleuth</module>
   </modules>
 
   <dependencyManagement>
@@ -221,7 +202,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.2.0</version>
         <configuration>
           <links>
             <link>https://docs.oracle.com/javase/8/docs/api/</link>
@@ -327,7 +307,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
-            <version>3.0.0-M5</version>
             <configuration combine.self="override">
               <groups>aws-integration-test</groups>
               <excludedGroups/>
@@ -343,7 +322,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>${maven-gpg-plugin.version}</version>
             <configuration>
               <!-- Prevent gpg from using pinentry programs -->
               <gpgArguments>
@@ -366,11 +344,5 @@
     </profile>
   </profiles>
 
-  <distributionManagement>
-    <repository>
-      <id>ossrh-awspring</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
 
 </project>
