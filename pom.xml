@@ -1,200 +1,243 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
   <groupId>com.azure.spring</groupId>
   <artifactId>spring-cloud-azure</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
-
-  <name>Spring Cloud Azure</name>
-  <description>Spring Cloud Azure</description>
-  <url>https://spring.io/projects/spring-cloud-azure</url>
+  <name>Spring Cloud Azure Aggregator</name>
   <packaging>pom</packaging>
+  <version>1.0.0</version><!-- Need not change for every release-->
 
-  <modules>
-    <module>spring-cloud-azure-dependencies</module>
-    <module>spring-cloud-azure-core</module>
-    <module>spring-cloud-azure-autoconfigure</module>
-    <module>spring-cloud-azure-resourcemanager</module>
-    <module>spring-cloud-azure-starter</module>
-  </modules>
-  <distributionManagement>
-    <repository>
-      <id>github</id>
-      <name>GitHub Packages</name>
-      <url>https://maven.pkg.github.com/stliu/spring-cloud-azure</url>
-    </repository>
-    <snapshotRepository>
-      <id>github</id>
-      <name>GitHub Packages</name>
-      <url>https://maven.pkg.github.com/stliu/spring-cloud-azure</url>
-    </snapshotRepository>
-  </distributionManagement>
+  <profiles>
+    <profile>
+      <id>coverage</id>
+      <modules>
+        <module>spring-messaging-azure</module>
+        <module>spring-messaging-azure-eventhubs</module>
+        <module>spring-messaging-azure-servicebus</module>
+        <module>spring-messaging-azure-storage-queue</module>
+        <module>spring-integration-azure-core</module>
+        <module>spring-integration-azure-eventhubs</module>
+        <module>spring-integration-azure-servicebus</module>
+        <module>spring-integration-azure-storage-queue</module>
+        <module>spring-cloud-azure-core</module>
+        <module>spring-cloud-azure-service</module>
+        <module>spring-cloud-azure-resourcemanager</module>
+        <module>spring-cloud-azure-actuator</module>
+        <module>spring-cloud-azure-actuator-autoconfigure</module>
+        <module>spring-cloud-azure-autoconfigure</module>
+        <module>spring-cloud-azure-stream-binder-eventhubs-core</module>
+        <module>spring-cloud-azure-stream-binder-eventhubs</module>
+        <module>spring-cloud-azure-stream-binder-servicebus-core</module>
+        <module>spring-cloud-azure-stream-binder-servicebus</module>
+        <module>spring-cloud-azure-trace-sleuth</module>
+      </modules>
+      <dependencies>
+        <dependency>
+          <groupId>com.azure.spring</groupId>
+          <artifactId>spring-messaging-azure</artifactId>
+          <version>4.0.0-beta.4</version> <!-- {x-version-update;com.azure.spring:spring-messaging-azure;current} -->
+        </dependency>
+        <dependency>
+          <groupId>com.azure.spring</groupId>
+          <artifactId>spring-messaging-azure-eventhubs</artifactId>
+          <version>4.0.0-beta.4</version> <!-- {x-version-update;com.azure.spring:spring-messaging-azure-eventhubs;current} -->
+        </dependency>
+        <dependency>
+          <groupId>com.azure.spring</groupId>
+          <artifactId>spring-messaging-azure-servicebus</artifactId>
+          <version>4.0.0-beta.4</version> <!-- {x-version-update;com.azure.spring:spring-messaging-azure-servicebus;current} -->
+        </dependency>
+        <dependency>
+          <groupId>com.azure.spring</groupId>
+          <artifactId>spring-messaging-azure-storage-queue</artifactId>
+          <version>4.0.0-beta.4</version> <!-- {x-version-update;com.azure.spring:spring-messaging-azure-storage-queue;current} -->
+        </dependency>
+        <dependency>
+          <groupId>com.azure.spring</groupId>
+          <artifactId>spring-integration-azure-core</artifactId>
+          <version>4.0.0-beta.4</version> <!-- {x-version-update;com.azure.spring:spring-integration-azure-core;current} -->
+        </dependency>
+        <dependency>
+          <groupId>com.azure.spring</groupId>
+          <artifactId>spring-integration-azure-eventhubs</artifactId>
+          <version>4.0.0-beta.4</version> <!-- {x-version-update;com.azure.spring:spring-integration-azure-eventhubs;current} -->
+        </dependency>
+        <dependency>
+          <groupId>com.azure.spring</groupId>
+          <artifactId>spring-integration-azure-servicebus</artifactId>
+          <version>4.0.0-beta.4</version> <!-- {x-version-update;com.azure.spring:spring-integration-azure-servicebus;current} -->
+        </dependency>
+        <dependency>
+          <groupId>com.azure.spring</groupId>
+          <artifactId>spring-integration-azure-storage-queue</artifactId>
+          <version>4.0.0-beta.4</version> <!-- {x-version-update;com.azure.spring:spring-integration-azure-storage-queue;current} -->
+        </dependency>
+        <dependency>
+          <groupId>com.azure.spring</groupId>
+          <artifactId>spring-cloud-azure-core</artifactId>
+          <version>4.0.0-beta.4</version> <!-- {x-version-update;com.azure.spring:spring-cloud-azure-core;current} -->
+        </dependency>
+        <dependency>
+          <groupId>com.azure.spring</groupId>
+          <artifactId>spring-cloud-azure-service</artifactId>
+          <version>4.0.0-beta.4</version> <!-- {x-version-update;com.azure.spring:spring-cloud-azure-service;current} -->
+        </dependency>
+        <dependency>
+          <groupId>com.azure.spring</groupId>
+          <artifactId>spring-cloud-azure-resourcemanager</artifactId>
+          <version>4.0.0-beta.4</version> <!-- {x-version-update;com.azure.spring:spring-cloud-azure-resourcemanager;current} -->
+        </dependency>
+        <dependency>
+          <groupId>com.azure.spring</groupId>
+          <artifactId>spring-cloud-azure-autoconfigure</artifactId>
+          <version>4.0.0-beta.4</version> <!-- {x-version-update;com.azure.spring:spring-cloud-azure-autoconfigure;current} -->
+        </dependency>
+        <dependency>
+          <groupId>com.azure.spring</groupId>
+          <artifactId>spring-cloud-azure-stream-binder-eventhubs-core</artifactId>
+          <version>4.0.0-beta.4</version> <!-- {x-version-update;com.azure.spring:spring-cloud-azure-stream-binder-eventhubs-core;current} -->
+        </dependency>
+        <dependency>
+          <groupId>com.azure.spring</groupId>
+          <artifactId>spring-cloud-azure-stream-binder-eventhubs</artifactId>
+          <version>4.0.0-beta.4</version> <!-- {x-version-update;com.azure.spring:spring-cloud-azure-stream-binder-eventhubs;current} -->
+        </dependency>
+        <dependency>
+          <groupId>com.azure.spring</groupId>
+          <artifactId>spring-cloud-azure-stream-binder-servicebus-core</artifactId>
+          <version>4.0.0-beta.4</version> <!-- {x-version-update;com.azure.spring:spring-cloud-azure-stream-binder-servicebus-core;current} -->
+        </dependency>
+        <dependency>
+          <groupId>com.azure.spring</groupId>
+          <artifactId>spring-cloud-azure-stream-binder-servicebus</artifactId>
+          <version>4.0.0-beta.4</version> <!-- {x-version-update;com.azure.spring:spring-cloud-azure-stream-binder-servicebus;current} -->
+        </dependency>
+        <dependency>
+          <groupId>com.azure.spring</groupId>
+          <artifactId>spring-cloud-azure-trace-sleuth</artifactId>
+          <version>4.0.0-beta.4</version> <!-- {x-version-update;com.azure.spring:spring-cloud-azure-trace-sleuth;current} -->
+        </dependency>
+      </dependencies>
 
-  <properties>
-    <app-engine-maven-plugin.version>2.4.0</app-engine-maven-plugin.version>
-    <asciidoctor-maven-plugin.version>2.0.0</asciidoctor-maven-plugin.version>
-    <errorprone.version>2.6.0</errorprone.version>
-    <integration-test.pattern>**/*IntegrationTest*</integration-test.pattern>
-    <java-cfenv.version>2.3.0</java-cfenv.version>
-    <javadoc.failOnError>false</javadoc.failOnError>
-    <javadoc.failOnWarnings>false</javadoc.failOnWarnings>
-    <maven-checkstyle-plugin.failOnViolation>true</maven-checkstyle-plugin.failOnViolation>
-    <maven-checkstyle-plugin.failsOnError>true</maven-checkstyle-plugin.failsOnError>
-    <maven-checkstyle-plugin.skip>false</maven-checkstyle-plugin.skip>
-    <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
-    <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-    <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
-    <maven-failsafe-plugin.version>2.22.1</maven-failsafe-plugin.version>
-    <maven-flatten-plugin.version>1.2.7</maven-flatten-plugin.version>
-    <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
-    <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
-    <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
-    <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-    <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <nexus-staging-plugin.version>1.6.8</nexus-staging-plugin.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <skip.failsafe.tests>${skipTests}</skip.failsafe.tests>
-    <skip.surefire.tests>${skipTests}</skip.surefire.tests>
-    <skipTests>false</skipTests>
-    <spring-cloud-build.version>3.0.2</spring-cloud-build.version>
-    <spring-cloud-dependencies.version>2020.0.2</spring-cloud-dependencies.version>
-    <spring-javaformat-checkstyle.version>0.0.28</spring-javaformat-checkstyle.version>
-  </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.8.7</version> <!-- {x-version-update;org.jacoco:jacoco-maven-plugin;external_dependency} -->
+            <executions>
+              <execution>
+                <id>report-aggregate</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>report-aggregate</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.reporting.outputDirectory}/test-coverage</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>spring-messaging-azure</module>
+        <module>spring-messaging-azure-eventhubs</module>
+        <module>spring-messaging-azure-servicebus</module>
+        <module>spring-messaging-azure-storage-queue</module>
+        <module>spring-integration-azure-core</module>
+        <module>spring-integration-azure-eventhubs</module>
+        <module>spring-integration-azure-servicebus</module>
+        <module>spring-integration-azure-storage-queue</module>
+        <module>spring-cloud-azure-core</module>
+        <module>spring-cloud-azure-service</module>
+        <module>spring-cloud-azure-resourcemanager</module>
+        <module>spring-cloud-azure-actuator</module>
+        <module>spring-cloud-azure-actuator-autoconfigure</module>
+        <module>spring-cloud-azure-autoconfigure</module>
+        <module>spring-cloud-azure-starter-active-directory</module>
+        <module>spring-cloud-azure-starter-active-directory-b2c</module>
+        <module>spring-cloud-azure-starter-actuator</module>
+        <module>spring-cloud-azure-starter-appconfiguration</module>
+        <module>spring-cloud-azure-starter-cosmos</module>
+        <module>spring-cloud-azure-starter-data-cosmos</module>
+        <module>spring-cloud-azure-starter-eventhubs</module>
+        <module>spring-cloud-azure-starter-keyvault-certificates</module>
+        <module>spring-cloud-azure-starter-keyvault-secrets</module>
+        <module>spring-cloud-azure-starter-servicebus-jms</module>
+        <module>spring-cloud-azure-starter-servicebus</module>
+        <module>spring-cloud-azure-starter-storage-blob</module>
+        <module>spring-cloud-azure-starter-storage-file-share</module>
+        <module>spring-cloud-azure-starter-storage-queue</module>
+        <module>spring-cloud-azure-starter-integration-eventhubs</module>
+        <module>spring-cloud-azure-starter-integration-servicebus</module>
+        <module>spring-cloud-azure-starter-integration-storage-queue</module>
+        <module>spring-cloud-azure-starter-stream-eventhubs</module>
+        <module>spring-cloud-azure-starter-stream-servicebus</module>
+        <module>spring-cloud-azure-starter</module>
+        <module>spring-cloud-azure-stream-binder-eventhubs-core</module>
+        <module>spring-cloud-azure-stream-binder-eventhubs</module>
+        <module>spring-cloud-azure-stream-binder-servicebus-core</module>
+        <module>spring-cloud-azure-stream-binder-servicebus</module>
+        <module>spring-cloud-azure-test-eventhubs-binder</module>
+        <module>spring-cloud-azure-test-servicebus-binder</module>
+        <module>spring-cloud-azure-trace-sleuth</module>
+      </modules>
+    </profile>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>com.azure.spring</groupId>
-        <artifactId>spring-cloud-azure-dependencies</artifactId>
-        <version>${project.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-build-dependencies</artifactId>
-        <version>${spring-cloud-build.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
+    <profile>
+      <id>dev</id>
+      <modules>
+        <module>../../eng/code-quality-reports</module>
+        <module>../keyvault/azure-security-keyvault-jca</module>
+        <module>spring-messaging-azure</module>
+        <module>spring-messaging-azure-eventhubs</module>
+        <module>spring-messaging-azure-servicebus</module>
+        <module>spring-messaging-azure-storage-queue</module>
+        <module>spring-integration-azure-core</module>
+        <module>spring-integration-azure-eventhubs</module>
+        <module>spring-integration-azure-servicebus</module>
+        <module>spring-integration-azure-storage-queue</module>
+        <module>spring-cloud-azure-core</module>
+        <module>spring-cloud-azure-service</module>
+        <module>spring-cloud-azure-resourcemanager</module>
+        <module>spring-cloud-azure-actuator</module>
+        <module>spring-cloud-azure-actuator-autoconfigure</module>
+        <module>spring-cloud-azure-autoconfigure</module>
+        <module>spring-cloud-azure-starter-active-directory</module>
+        <module>spring-cloud-azure-starter-active-directory-b2c</module>
+        <module>spring-cloud-azure-starter-actuator</module>
+        <module>spring-cloud-azure-starter-appconfiguration</module>
+        <module>spring-cloud-azure-starter-cosmos</module>
+        <module>spring-cloud-azure-starter-data-cosmos</module>
+        <module>spring-cloud-azure-starter-eventhubs</module>
+        <module>spring-cloud-azure-starter-keyvault-certificates</module>
+        <module>spring-cloud-azure-starter-keyvault-secrets</module>
+        <module>spring-cloud-azure-starter-servicebus-jms</module>
+        <module>spring-cloud-azure-starter-servicebus</module>
+        <module>spring-cloud-azure-starter-storage-blob</module>
+        <module>spring-cloud-azure-starter-storage-file-share</module>
+        <module>spring-cloud-azure-starter-storage-queue</module>
+        <module>spring-cloud-azure-starter-integration-eventhubs</module>
+        <module>spring-cloud-azure-starter-integration-servicebus</module>
+        <module>spring-cloud-azure-starter-integration-storage-queue</module>
+        <module>spring-cloud-azure-starter</module>
+        <module>spring-cloud-azure-stream-binder-eventhubs-core</module>
+        <module>spring-cloud-azure-stream-binder-eventhubs</module>
+        <module>spring-cloud-azure-stream-binder-servicebus-core</module>
+        <module>spring-cloud-azure-stream-binder-servicebus</module>
+        <module>spring-cloud-azure-starter-stream-eventhubs</module>
+        <module>spring-cloud-azure-starter-stream-servicebus</module>
+        <module>spring-cloud-azure-trace-sleuth</module>
+      </modules>
+    </profile>
 
-      <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-dependencies</artifactId>
-        <version>${spring-cloud-dependencies.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.awaitility</groupId>
-      <artifactId>awaitility</artifactId>
-      <version>4.0.3</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <!-- Needed to run JUnit4 tests while inheriting from spring-cloud-build parent pom -->
-    <dependency>
-      <groupId>org.junit.vintage</groupId>
-      <artifactId>junit-vintage-engine</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>${maven-surefire-plugin.version}</version>
-          <configuration>
-            <argLine>-Xms512m -Xmx512m</argLine>
-            <skip>${skip.surefire.tests}</skip>
-            <excludes>
-              <exclude>${integration-test.pattern}</exclude>
-            </excludes>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-failsafe-plugin</artifactId>
-          <version>${maven-failsafe-plugin.version}</version>
-          <configuration>
-            <skip>${skip.failsafe.tests}</skip>
-            <includes>
-              <include>${integration-test.pattern}</include>
-            </includes>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>${maven-jar-plugin.version}</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifest>
-              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-            </manifest>
-          </archive>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>com.google.cloud.tools</groupId>
-        <artifactId>appengine-maven-plugin</artifactId>
-        <version>${app-engine-maven-plugin.version}</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>integration-test</goal>
-              <goal>verify</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-
-
+  </profiles>
 </project>
