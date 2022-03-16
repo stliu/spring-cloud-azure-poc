@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.azure.spring</groupId>
+    <artifactId>spring-cloud-azure</artifactId>
+    <version>4.0.0-beta.4-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  <packaging>pom</packaging>
+  <name>Spring Cloud Azure Boots</name>
+  <description>Spring Cloud Azure Boots</description>
+  <artifactId>spring-boots</artifactId>
+
+  <properties>
+    <main.basedir>${basedir}/..</main.basedir>
+  </properties>
+  <modules>
+    <module>spring-cloud-azure-actuator</module>
+    <module>spring-cloud-azure-actuator-autoconfigure</module>
+    <module>spring-cloud-azure-autoconfigure</module>
+    <module>spring-cloud-azure-starters</module>
+  </modules>
+</project>
