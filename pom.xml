@@ -53,10 +53,10 @@
     <module>spring-messaging-azure-eventhubs</module>
     <module>spring-messaging-azure-servicebus</module>
     <module>spring-messaging-azure-storage-queue</module>
-    <!--    <module>spring-integration-azure-core</module>-->
-    <!--    <module>spring-integration-azure-eventhubs</module>-->
-    <!--    <module>spring-integration-azure-servicebus</module>-->
-    <!--    <module>spring-integration-azure-storage-queue</module>-->
+    <module>spring-integration-azure-core</module>
+    <module>spring-integration-azure-eventhubs</module>
+    <module>spring-integration-azure-servicebus</module>
+    <module>spring-integration-azure-storage-queue</module>
     <module>spring-cloud-azure-core</module>
     <module>spring-cloud-azure-service</module>
     <!--    <module>spring-cloud-azure-resourcemanager</module>-->

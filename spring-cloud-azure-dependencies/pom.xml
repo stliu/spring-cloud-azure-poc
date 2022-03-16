@@ -194,6 +194,38 @@
         <version>${project.version}</version>
         <type>test-jar</type>
       </dependency>
+      <dependency>
+        <groupId>com.azure.spring</groupId>
+        <artifactId>spring-integration-azure-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.azure.spring</groupId>
+        <artifactId>spring-integration-azure-core</artifactId>
+        <version>${project.version}</version>
+        <type>test-jar</type>
+      </dependency>
+      <dependency>
+        <groupId>com.azure.spring</groupId>
+        <artifactId>spring-messaging-azure-eventhubs</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.azure.spring</groupId>
+        <artifactId>spring-messaging-azure-servicebus</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.azure.spring</groupId>
+        <artifactId>spring-messaging-azure-servicebus</artifactId>
+        <version>${project.version}</version>
+        <type>test-jar</type>
+      </dependency>
+      <dependency>
+        <groupId>com.azure.spring</groupId>
+        <artifactId>spring-messaging-azure-storage-queue</artifactId>
+        <version>${project.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <profiles>
