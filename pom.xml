@@ -45,7 +45,7 @@
     <spring-cloud-commons.version>3.1.0</spring-cloud-commons.version>
     <spring-javaformat.version>0.0.25</spring-javaformat.version>
     <spring-cloud-dependencies.version>2021.0.0</spring-cloud-dependencies.version>
-    <spring-boot-dependencies.version>2.6.4</spring-boot-dependencies.version>
+    <spring-boot-dependencies.version>2.6.8</spring-boot-dependencies.version>
   </properties>
   <modules>
     <module>spring-cloud-azure-dependencies</module>
